@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@500;700&family=Comic+Neue:wght@700&display=swap');
+
+.home {
+  direction: rtl;
+  text-align: center;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ffe6cc, #fff0f5, #ccf2ff);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cairo', 'Comic Neue', cursive;
+  overflow: hidden;
+  position: relative;
+}
+img{
+  border-radius: 60px;
+}
+
+/* Titles */
+.title {
+  font-size: 2.5rem;
+  color: #ff6f61;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px #ffd1c1;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: #3b3b98;
+  margin-bottom: 25px;
+}
+
+/* Logo Image */
+.home-image img {
+  width: 250px;
+  height: 200px;
+  object-fit: contain;
+  /* border-radius: 50%; */
+  /* background: transparent; */
+  /* box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+  padding: 15px;*/
+  transition: transform 0.4s ease; 
+}
+
+.home-image img:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Buttons container */
+.btns {
+  display: flex;
+  gap: 25px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Buttons */
+.home-button {
+  background: linear-gradient(135deg, #ffb6b9, #ffde7d);
+  border: none;
+  border-radius: 20px;
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  color: #000;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-family: 'Comic Neue', cursive;
+}
+
+.home-button:hover {
+  transform: translateY(-5px);
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* For small screens (mobile-friendly) */
+@media (max-width: 600px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+  }
+
+  .home-image img {
+    width: 280px;
+    height: 210px;
+  }
+
+  .home-button {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+
+  .btns {
+    gap: 15px;
+  }
+}
