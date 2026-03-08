@@ -1,145 +1,145 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@500;700&display=swap');
 
-:root{
-  --primary:#6366f1;
-  --primary-light:#818cf8;
-  --primary-dark:#4f46e5;
-  --text:#e5e7eb;
+:root {
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --text: #e5e7eb;
 }
 
 /* الصفحة */
-
-.home{
+.home {
   direction: rtl;
-  text-align:center;
-  min-height:100vh;
+  text-align: center;
+  min-height: 100vh;
 
   background: radial-gradient(circle at top,
-  #1f2937,
-  #111827,
-  #020617);
+    #1f2937,
+    #111827,
+    #020617);
 
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  font-family:'Cairo',sans-serif;
-  color:var(--text);
-  position:relative;
+  font-family: 'Cairo', sans-serif;
+  color: var(--text);
+  position: relative;
+  padding: 1rem;
 }
 
 /* صورة */
+.home-image img {
+  width: 230px;
+  height: 180px;
+  object-fit: contain;
 
-.home-image img{
-  width:230px;
-  height:180px;
-  object-fit:contain;
+  border-radius: 20px;
 
-  border-radius:20px;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.6));
 
-  filter:drop-shadow(0 8px 20px rgba(0,0,0,0.6));
-
-  transition:0.4s;
+  transition: 0.4s;
 }
 
-.home-image img:hover{
-  transform:scale(1.08) rotate(3deg);
+.home-image img:hover {
+  transform: scale(1.08) rotate(3deg);
 }
 
 /* العناوين */
+.title {
+  font-size: 2.6rem;
+  font-weight: 700;
 
-.title{
-  font-size:2.6rem;
-  font-weight:700;
+  background: linear-gradient(90deg, #818cf8, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 
-  background:linear-gradient(90deg,#818cf8,#a78bfa);
-  -webkit-background-clip:text;
-  color:transparent;
+  background-size: 100%;
+  background-repeat: no-repeat;
 
-  margin-bottom:10px;
+  margin-bottom: 10px;
+  min-width: 200px;
+  white-space: normal;
+  word-break: break-word;
 }
 
-.subtitle{
-  font-size:1.3rem;
-  color:#9ca3af;
-  margin-bottom:35px;
+.subtitle {
+  font-size: 1.3rem;
+  color: #9ca3af;
+  margin-bottom: 35px;
 }
 
 /* buttons */
-
-.btns{
-  display:flex;
-  gap:25px;
-  flex-wrap:wrap;
-  justify-content:center;
+.btns {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 /* button */
+.home-button {
+  border: none;
+  padding: 12px 28px;
 
-.home-button{
-  border:none;
-  padding:12px 28px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
 
-  border-radius:10px;
-  font-size:1rem;
-  font-weight:600;
+  color: white;
+  cursor: pointer;
 
-  color:white;
-  cursor:pointer;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
 
-  background:linear-gradient(90deg,#6366f1,#a855f7);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
 
-  box-shadow:0 8px 18px rgba(0,0,0,0.35);
-
-  transition:0.25s;
+  transition: 0.25s;
 }
 
-.home-button:hover{
-  transform:translateY(-4px);
-  box-shadow:0 12px 22px rgba(0,0,0,0.5);
-  opacity:0.95;
+.home-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.5);
+  opacity: 0.95;
 }
 
-/* responsive */
-
-@media(max-width:768px){
-
-  .title{
-    font-size:2rem;
+/* responsive: portrait phones */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
   }
 
-  .subtitle{
-    font-size:1.1rem;
+  .subtitle {
+    font-size: 1.1rem;
   }
 
-  .home-image img{
-    width:200px;
-    height:160px;
+  .home-image img {
+    width: 200px;
+    height: 160px;
   }
 
-  .btns{
-    gap:15px;
+  .btns {
+    gap: 15px;
   }
 
-  .home-button{
-    padding:10px 20px;
-    font-size:0.95rem;
+  .home-button {
+    padding: 10px 20px;
+    font-size: 0.95rem;
   }
-
 }
 
-/* Landscape mobile fix */
+/* responsive: landscape phones */
 @media (max-width: 1024px) and (orientation: landscape) {
-  
   .home {
-    min-height: 80vh; /* reduce vertical height for landscape */
+    min-height: 80vh;
     padding: 1rem;
   }
 
   .title {
-    font-size: 1.8rem;
+    font-size: 2rem;
     margin-bottom: 8px;
+    min-width: 180px;
   }
 
   .subtitle {
@@ -160,4 +160,9 @@
     padding: 8px 16px;
     font-size: 0.9rem;
   }
+}
+
+/* optional: allow horizontal scroll if too small */
+.home {
+  overflow-x: auto;
 }
