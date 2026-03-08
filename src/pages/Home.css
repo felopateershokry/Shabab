@@ -133,7 +133,8 @@
 @media (max-width: 1024px) and (orientation: landscape) {
   .home {
     min-height: 80vh;
-    padding: 1rem;
+        padding-top: 80px; /* space below navbar */
+
   }
 
   .title {
@@ -165,4 +166,6 @@
 /* optional: allow horizontal scroll if too small */
 .home {
   overflow-x: auto;
+  justify-content: flex-start; /* was center */
+  padding-top: 90px;
 }
