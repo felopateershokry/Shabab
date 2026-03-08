@@ -60,6 +60,11 @@ function Navbar() {
               الأكثر حضورًا
             </Link>
           </li>
+          <li>
+            <Link onClick={closeMenu} to="/month-attendance" className="disable">
+              حضور الشهر
+            </Link>
+          </li>
         </ul>
 
         {/* Button */}

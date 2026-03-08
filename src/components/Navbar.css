@@ -135,9 +135,14 @@
 }
 
 /* mobile */
-
+.disable{
+  display:none;
+}
 @media(max-width:768px){
 
+  .disable{
+    display:block;
+  }
   .hamburger{
     display:flex;
   }
