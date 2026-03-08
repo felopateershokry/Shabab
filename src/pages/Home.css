@@ -165,7 +165,7 @@
 
 /* optional: allow horizontal scroll if too small */
 .home {
-  overflow-x: auto;
+  /* overflow-x: auto; */
   /* justify-content: flex-start; was center */
   padding-top: 90px;
 }
