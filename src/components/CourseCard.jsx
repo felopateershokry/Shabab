@@ -52,6 +52,7 @@ const CourseCard = ({ course }) => {
         <img src={course.image || assets.felo} alt={course.name} />
         <div className="card-body">
           <h3>{course.name}</h3>
+          <p>اخر حضور : {course.lastVisit || "لم يحضر"}</p>
         </div>
       </Link>
       <div className="course-card-actions">

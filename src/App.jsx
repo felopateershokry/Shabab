@@ -10,6 +10,7 @@ import AddMakhdom from './pages/AddMakhdom';
 import AddPage from './pages/AddPage';
 import TodayAttendance from './pages/TodayAttendance'
 import MostAttendance from './pages/MostAttendance'
+import MonthAttendance from './pages/MonthAttendance'
 function App() {
 
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/single-khodam/:id" element={<Single5odam />} />
         <Route path="/today-attendance" element={<TodayAttendance />} />
         <Route path="/most-attendance" element={<MostAttendance />} />
+        <Route path="/month-attendance" element={<MonthAttendance />} />
       </Routes>
     </>
   )

@@ -38,7 +38,7 @@ function MostAttendance() {
     <>
       <Navbar />
     <div className="attendance-container">
-      <h2 className="attendance-title">الطلاب حسب عدد الحضور</h2>
+      <h2 className="attendance-title">الترتيب حسب عدد الحضور</h2>
       <table className="attendance-table">
         <thead>
           <tr>

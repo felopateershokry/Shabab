@@ -1,37 +1,72 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { assets } from "../assets/assets";
 
 function Navbar() {
   const location = useLocation();
-  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <nav className="navbar">
-      <div className="navbar-logo">
-        <img src={assets.felo} alt="Logo" />
-        <span>خدمة شباب</span>
-      </div>
+      <div className="navbar-container">
+        {/* Logo */}
+        <div className="navbar-logo" onClick={() => navigate("/")}>
+          <img src={assets.felo} alt="logo" />
+          <span>خدمة شباب</span>
+        </div>
 
-      <div className="navbar-toggle" onClick={() => setOpen(!open)}>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+        {/* Hamburger */}
+        <div
+          className={`hamburger ${menuOpen ? "active" : ""}`}
+          onClick={toggleMenu}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
 
-      <ul className={`navbar-links ${open ? "show" : ""}`}>
-        <li
-          className={location.pathname === "/today-attendance" ? "active" : ""}
-        >
-          <Link to="/today-attendance">حضور اليوم</Link>
-        </li>
-        <li
-          className={location.pathname === "/most-attendance" ? "active" : ""}
-        >
-          <Link to="/most-attendance">الأكثر حضورًا</Link>
-        </li>
-      </ul>
+        {/* Links */}
+        <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
+          <li className={location.pathname === "/" ? "active" : ""}>
+            <Link onClick={closeMenu} to="/">
+              الرئيسية
+            </Link>
+          </li>
+
+          <li
+            className={
+              location.pathname === "/today-attendance" ? "active" : ""
+            }
+          >
+            <Link onClick={closeMenu} to="/today-attendance">
+              حضور اليوم
+            </Link>
+          </li>
+
+          <li
+            className={location.pathname === "/most-attendance" ? "active" : ""}
+          >
+            <Link onClick={closeMenu} to="/most-attendance">
+              الأكثر حضورًا
+            </Link>
+          </li>
+        </ul>
+
+        {/* Button */}
+        <div className="navbar-button">
+          <button onClick={() => navigate("/month-attendance")}>حضور الشهر</button>
+        </div>
+      </div>
     </nav>
   );
 }

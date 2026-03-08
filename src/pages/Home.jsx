@@ -9,8 +9,8 @@ function Home() {
         <>
             <Navbar />
         <div className="home">
-          <h1 className="title"> خدمة شباب كنيسة ابانوب النهيسي </h1>
-          {/* <h2 className='subtitle'>اسرة اولى ابتدائي</h2> */}
+          <h1 className="title"> اجتماع سان جيوفاني للشباب </h1>
+          <h2 className='subtitle'> كنيسة الشهيد ابانوب النهيسي بالمندرة </h2>
           <div className="home-image">
             <img src={assets.felo} alt="" />
           </div>
