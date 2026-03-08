@@ -20,7 +20,7 @@ const SinglePage = () => {
   const [loading, setLoading] = useState(true);
   const [showVisits, setShowVisits] = useState(false);
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("en-CA");
   const dropdownRef = useRef();
 
   useEffect(() => {
@@ -146,7 +146,7 @@ const SinglePage = () => {
           <p>
             <span> آخر حضور:</span>
             <span className="last-attend">
-              {student.lastVisit || "لم يسجل حضور بعد"}
+              {(student.lastVisit && student.visits.length !== 0) ? student.lastVisit : "لم يسجل حضور بعد"}
             </span>
           </p>
 
