@@ -119,7 +119,7 @@ function MostAttendance() {
               <th>الاسم</th>
               <th className="disable1">عدد الحضور</th>
               <th className="disable1">اخر حضور</th>
-              <th>حضور</th>
+              <th>حضور اليوم</th>
             </tr>
           </thead>
 
