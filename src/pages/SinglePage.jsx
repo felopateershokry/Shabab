@@ -147,7 +147,7 @@ const SinglePage = () => {
             <span> آخر حضور:</span>
             <span className="last-attend">
               {student.lastVisit && student.visits.length !== 0
-                ? student.lastVisit
+                ? student.visits[student.visits.length - 1]
                 : "لم يسجل حضور بعد"}
             </span>
           </p>

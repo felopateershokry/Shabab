@@ -55,7 +55,12 @@ const today = new Date().toLocaleDateString("en-CA");
         <img src={course.image || assets.felo} alt={course.name} />
         <div className="card-body">
           <h3>{course.name}</h3>
-          <p>اخر حضور : {(course.lastVisit && course.visits.length != 0) ? course.lastVisit : "لم يحضر"}</p>
+          <p>
+            اخر حضور :
+            {course.lastVisit && course.visits.length != 0
+              ? course.visits[course.visits.length - 1]
+              : "لم يحضر"}
+          </p>
         </div>
       </Link>
 

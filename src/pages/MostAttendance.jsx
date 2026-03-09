@@ -140,7 +140,7 @@ function MostAttendance() {
 
                   <td className="disable1">
                     {student.lastVisit && student.visits.length !== 0
-                      ? student.lastVisit
+                      ? student.visits[student.visits.length - 1]
                       : "لم يحضر"}
                   </td>
 
