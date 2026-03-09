@@ -6,7 +6,7 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
     <div className="search-bar-container">
       <input
         type="text"
-        placeholder="ابحث عن المخدوم بالاسم أو رقم الهوية..."
+        placeholder="ابحث عن المخدوم بالاسم أو رقم المخدوم..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="search-input"

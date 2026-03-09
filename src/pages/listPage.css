@@ -63,6 +63,8 @@
 .course-list-header-content {
   display: flex;
   align-items: center;
+  flex-direction: row ;
+  
   gap: 15px;
   flex-wrap: wrap;
   
@@ -107,7 +109,7 @@
 /* Search input */
 .search-input {
   width: 220px;
-  max-width: 100%; 
+  max-width: 70%; 
   padding: 10px 16px; 
   border-radius: 12px;
   border: 1px solid #d1d5db;
@@ -224,6 +226,6 @@
   }
 
   .search-input {
-    width: 100%;
+    max-width: 100%;
   }
 }

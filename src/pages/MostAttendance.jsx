@@ -11,9 +11,11 @@ import {
 import "./MostAttendance.css";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "../components/SearchBar";
 
 function MostAttendance() {
   const [students, setStudents] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   const today = new Date().toLocaleDateString("en-CA");
@@ -65,7 +67,7 @@ function MostAttendance() {
           s.id === student.id
             ? {
                 ...s,
-                visits: [today, ...(s.visits || [])],
+                visits: [...(s.visits || []), today],
                 lastVisit: today,
                 visitCount: (s.visitCount || 0) + 1,
               }
@@ -93,7 +95,7 @@ function MostAttendance() {
             return {
               ...s,
               visits: newVisits,
-              lastVisit: newVisits[0] || null,
+              lastVisit: newVisits[newVisits.length - 1] || null,
               visitCount: Math.max((s.visitCount || 1) - 1, 0),
             };
           }
@@ -105,12 +107,20 @@ function MostAttendance() {
     }
   };
 
+  const filteredStudents = students.filter(
+    (student) =>
+      student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      student.customId?.toString().includes(searchTerm),
+  );
+
   return (
     <>
       <Navbar />
 
       <div className="attendance-container">
         <h2 className="attendance-title">الترتيب حسب عدد الحضور</h2>
+
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
         <table className="attendance-table">
           <thead>
@@ -124,7 +134,7 @@ function MostAttendance() {
           </thead>
 
           <tbody>
-            {students.map((student, index) => {
+            {filteredStudents.map((student) => {
               const visitedToday = student.visits?.includes(today);
 
               return (
@@ -132,7 +142,7 @@ function MostAttendance() {
                   key={student.id}
                   onClick={() => navigate(`/single-makhdom/${student.id}`)}
                 >
-                  <td> {student.customId}</td>
+                  <td>{student.customId}</td>
 
                   <td>{student.name}</td>
 
@@ -170,10 +180,10 @@ function MostAttendance() {
               );
             })}
 
-            {students.length === 0 && (
+            {filteredStudents.length === 0 && (
               <tr>
                 <td colSpan="5" className="no-data">
-                  لا يوجد طلاب
+                  لا يوجد نتائج
                 </td>
               </tr>
             )}
