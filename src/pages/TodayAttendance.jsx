@@ -3,10 +3,13 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import "./TodayAttendance.css";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
+
 
 function TodayAttendance() {
   const [attendees, setAttendees] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -72,7 +75,7 @@ function TodayAttendance() {
             </thead>
             <tbody>
               {attendees.map((attendee, index) => (
-                <tr key={attendee.id}>
+                <tr key={attendee.id} onClick={() => navigate(`/single-makhdom/${attendee.id}`)}>
                   <td>{index + 1}</td>
                   <td>{attendee.name}</td>
                   <td>{todayStr}</td>

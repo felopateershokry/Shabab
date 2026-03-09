@@ -138,6 +138,7 @@ function AddMakhdom() {
           name="dateOfBirth"
           value={formData.dateOfBirth}
           onChange={handleChange}
+          placeholder="تاريخ الميلاد"
           required
         />
 

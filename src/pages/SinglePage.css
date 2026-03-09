@@ -106,6 +106,7 @@
   display: flex;
   gap: 12px;
   margin-top: 12px;
+  
 }
 
 .visit-btn,
@@ -206,6 +207,10 @@
   margin-top: 8px;
 }
 
+.left-align {
+  justify-content: flex-start !important;
+}
+
 /* Animations */
 @keyframes fadeUp {
   0% {
@@ -232,5 +237,8 @@
   .visits-dropdown {
     right: 50%;
     transform: translateX(50%);
+  }
+  .left-align{
+    justify-content: center !important;
   }
 }

@@ -1,4 +1,13 @@
 /* Card */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@500;700&display=swap');
+
+:root {
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --text: #e5e7eb;
+}
+
 .course-card {
   display: flex;
   flex-direction: column;
@@ -7,9 +16,14 @@
   max-width: 260px;
   border-radius: 20px;
   overflow: hidden;
-  background: #ffffff;
-  text-decoration: none;
-  color: #1f2937;
+    /* background: radial-gradient(circle at top,
+    #34455f,
+    #19243c,
+    #07113c); */
+    background: linear-gradient(90deg , #202c47, #030b33);
+
+      text-decoration: none;
+  color: var(--text);
   box-shadow: 0 8px 22px rgba(0,0,0,0.08);
   transition: transform 0.35s ease, box-shadow 0.35s ease;
   position: relative;
@@ -49,7 +63,7 @@
 .card-body h3 {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #1e3a8a;
+  color: var(--primary-light);
   margin-bottom: 6px;
   transition: color 0.3s ease;
 }

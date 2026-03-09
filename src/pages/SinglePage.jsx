@@ -101,12 +101,12 @@ const SinglePage = () => {
         />
 
         <div className="student-info">
+          <h1 className="student-name">{student.name}</h1>
+
           <p>
             <span>الرقم التعريفي:</span> {student.customId}
           </p>
-
-          <h1 className="student-name">{student.name}</h1>
-
+          
           <p>
             <span> الهاتف:</span> {student.phone}
             <a
@@ -146,7 +146,9 @@ const SinglePage = () => {
           <p>
             <span> آخر حضور:</span>
             <span className="last-attend">
-              {(student.lastVisit && student.visits.length !== 0) ? student.lastVisit : "لم يسجل حضور بعد"}
+              {student.lastVisit && student.visits.length !== 0
+                ? student.lastVisit
+                : "لم يسجل حضور بعد"}
             </span>
           </p>
 
@@ -154,7 +156,7 @@ const SinglePage = () => {
             <span> ملاحظات:</span> {student.notes || "لا توجد ملاحظات"}
           </p>
 
-          <div className="visit-actions">
+          <div className="visit-actions left-align">
             {!visitedToday ? (
               <button onClick={addVisit} className="visit-btn">
                 حضور

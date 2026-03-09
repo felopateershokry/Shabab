@@ -47,7 +47,7 @@ function ListPage() {
           <div className="course-list-header-content">
             <p className="course-list-breadcrumb">
               <span className="breadcrumb-home" onClick={() => navigate("/")}>الرئيسية</span> /{" "}
-              <span>المخدومين</span>
+              <span className="breadcrumb-current">المخدومين</span>
             </p>
 
             <button
