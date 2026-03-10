@@ -20,6 +20,12 @@ function MostAttendance() {
 
   const today = new Date().toLocaleDateString("en-CA");
 
+  const getDateString = (visit) => {
+    if (!visit) return null;
+    if (typeof visit === "string") return visit;
+    return visit.toDate().toLocaleDateString("en-CA");
+  };
+
   useEffect(() => {
     const fetchAttendanceCounts = async () => {
       try {
@@ -90,7 +96,9 @@ function MostAttendance() {
       setStudents((prev) =>
         prev.map((s) => {
           if (s.id === student.id) {
-            const newVisits = (s.visits || []).filter((v) => v !== today);
+            const newVisits = (s.visits || []).filter(
+              (v) => getDateString(v) !== today,
+            );
 
             return {
               ...s,
@@ -135,7 +143,16 @@ function MostAttendance() {
 
           <tbody>
             {filteredStudents.map((student) => {
-              const visitedToday = student.visits?.includes(today);
+              const visitedToday = student.visits?.some(
+                (v) => getDateString(v) === today,
+              );
+
+              const lastVisitValue =
+                student.visits?.[student.visits.length - 1];
+
+              const lastVisit = lastVisitValue
+                ? getDateString(lastVisitValue)
+                : null;
 
               return (
                 <tr
@@ -149,9 +166,7 @@ function MostAttendance() {
                   <td className="disable1">{student.visitCount}</td>
 
                   <td className="disable1">
-                    {student.lastVisit && student.visits.length !== 0
-                      ? student.visits[student.visits.length - 1]
-                      : "لم يحضر"}
+                    {lastVisit ? lastVisit : "لم يحضر"}
                   </td>
 
                   <td>

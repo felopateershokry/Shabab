@@ -8,41 +8,65 @@ import { assets } from "../assets/assets";
 const CourseCard = ({ course }) => {
   const navigate = useNavigate();
   const [visitedToday, setVisitedToday] = useState(false);
-  const [lastVisit, setLastVisit] = useState(course.lastVisit || null);
+  const [lastVisit, setLastVisit] = useState(null);
+  const today = new Date().toLocaleDateString("en-CA");
 
-const today = new Date().toLocaleDateString("en-CA");
+  // دالة لتحويل التاريخ
+  const getDateString = (visit) => {
+    if (!visit) return null;
+    if (typeof visit === "string") return visit;
+    if (visit.toDate) return visit.toDate().toLocaleDateString("en-CA");
+    return visit;
+  };
+
   useEffect(() => {
-    setVisitedToday(course.visits?.includes(today) || false);
-    setLastVisit(course.lastVisit || null);
-  }, [course.visits, course.lastVisit, today]);
+    setVisitedToday(
+      course.visits?.some((v) => getDateString(v) === today) || false,
+    );
+    setLastVisit(
+      course.visits && course.visits.length > 0
+        ? getDateString(course.visits[course.visits.length - 1])
+        : null,
+    );
+  }, [course.visits, today]);
 
   const addVisit = async (e) => {
     e.preventDefault();
+    try {
+      await updateDoc(doc(db, "makhdom", course.id), {
+        visits: arrayUnion(today),
+        lastVisit: today,
+      });
 
-    await updateDoc(doc(db, "makhdom", course.id), {
-      visits: arrayUnion(today),
-      lastVisit: today,
-    });
-
-    setVisitedToday(true);
-    setLastVisit(today);
+      // تحديث الـ state بعد إضافة الحضور
+      setVisitedToday(true);
+      setLastVisit(today);
+    } catch (err) {
+      console.error("خطأ أثناء إضافة الحضور:", err);
+    }
   };
 
   const undoVisit = async (e) => {
     e.preventDefault();
+    try {
+      await updateDoc(doc(db, "makhdom", course.id), {
+        visits: arrayRemove(today),
+      });
 
-    const newVisits = (course.visits || []).filter((v) => v !== today);
-    const newLastVisit = newVisits.length
-      ? [...newVisits].sort().reverse()[0]
-      : null;
+      // حساب آخر حضور بعد التراجع
+      const newVisits = (course.visits || []).filter(
+        (v) => getDateString(v) !== today,
+      );
+      const newLastVisit =
+        newVisits.length > 0
+          ? getDateString(newVisits[newVisits.length - 1])
+          : null;
 
-    await updateDoc(doc(db, "makhdom", course.id), {
-      visits: arrayRemove(today),
-      lastVisit: newLastVisit,
-    });
-
-    setVisitedToday(false);
-    setLastVisit(newLastVisit);
+      setVisitedToday(false);
+      setLastVisit(newLastVisit);
+    } catch (err) {
+      console.error("خطأ أثناء التراجع عن الحضور:", err);
+    }
   };
 
   return (
@@ -55,12 +79,7 @@ const today = new Date().toLocaleDateString("en-CA");
         <img src={course.image || assets.felo} alt={course.name} />
         <div className="card-body">
           <h3>{course.name}</h3>
-          <p>
-            اخر حضور :
-            {course.lastVisit && course.visits.length != 0
-              ? course.visits[course.visits.length - 1]
-              : "لم يحضر"}
-          </p>
+          <p>اخر حضور : {lastVisit || "لم يحضر"}</p>
         </div>
       </Link>
 
