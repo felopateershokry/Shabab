@@ -11,26 +11,26 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { assets } from "../assets/assets";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./ScanAttendance.css";
 
 function ScanAttendance() {
   useEffect(() => {
     const startScan = async () => {
       if (!("NDEFReader" in window)) {
-        alert("NFC غير مدعوم في هذا الجهاز");
+        toast.error("NFC غير مدعوم في هذا الجهاز");
         return;
       }
 
       try {
         const reader = new NDEFReader();
-
         await reader.scan();
 
         console.log("Waiting for NFC card...");
 
         reader.onreading = async (event) => {
           const uid = event.serialNumber;
-
           console.log("Card UID:", uid);
 
           // البحث عن المخدوم
@@ -38,11 +38,10 @@ function ScanAttendance() {
             collection(db, "makhdom"),
             where("nfcUID", "==", uid),
           );
-
           const querySnapshot = await getDocs(q);
 
           if (querySnapshot.empty) {
-            alert("الكارت غير مسجل");
+            toast.warning("الكارت غير مسجل");
             return;
           }
 
@@ -55,10 +54,11 @@ function ScanAttendance() {
             lastVisit: Timestamp.now(),
           });
 
-          alert("تم تسجيل حضور" + studentDoc.data().name);
+          toast.success("تم تسجيل حضور " + studentDoc.data().name);
         };
       } catch (error) {
         console.error("NFC Error:", error);
+        toast.error("حدث خطأ أثناء قراءة الكارت");
       }
     };
 
@@ -72,6 +72,19 @@ function ScanAttendance() {
         <h1 className="nfc-title">مرر كارت NFC لتسجيل الحضور</h1>
         <p className="nfc-subtitle">ضع الكارت بالقرب من الهاتف أو القارئ</p>
       </div>
+
+      {/* ToastContainer لازم يكون موجود مرة واحدة على الأقل */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 }

@@ -15,6 +15,8 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AddMakhdom() {
   const navigate = useNavigate();
@@ -66,7 +68,7 @@ function AddMakhdom() {
 
   const scanNFC = async () => {
     if (!("NDEFReader" in window)) {
-      alert("الموبايل لا يدعم NFC");
+      toast.error("الموبايل لا يدعم NFC");
       return;
     }
 
@@ -87,7 +89,7 @@ function AddMakhdom() {
 
         setScanning(false);
 
-        alert("تم قراءة الكارت بنجاح");
+        toast.success("تم قراءة الكارت بنجاح");
       };
     } catch (error) {
       console.error("NFC error:", error);

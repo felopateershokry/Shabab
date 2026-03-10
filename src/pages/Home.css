@@ -98,7 +98,25 @@
   transform: translateY(-4px);
   box-shadow: 0 12px 22px rgba(0,0,0,0.5);
 }
+.scan-btn{
+  margin-top: 15px;
+  border: none;
+  padding: 12px 28px;
 
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+
+  color: white;
+  cursor: pointer;
+
+background: radial-gradient(circle at center, #293c55,
+    #405a93,
+    #020617);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+  transition: 0.25s;
+  width: 220px;
+}
 /* mobile */
 
 @media (max-width:768px) {
@@ -124,5 +142,8 @@
     padding: 10px 20px;
     font-size: 0.95rem;
   }
-
+ .scan-btn{
+    
+    width: 175px;
+ }
 }
