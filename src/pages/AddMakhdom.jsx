@@ -66,105 +66,127 @@ function AddMakhdom() {
   // قراءة NFC
   // =========================
 
-  const scanNFC = async () => {
-    if (!("NDEFReader" in window)) {
-      toast.error("الموبايل لا يدعم NFC");
-      return;
-    }
+const scanNFC = async () => {
+  if (!("NDEFReader" in window)) {
+    toast.error("الموبايل لا يدعم NFC");
+    return;
+  }
 
-    try {
-      setScanning(true);
+  try {
+    setScanning(true);
 
-      const reader = new NDEFReader();
+    const reader = new NDEFReader();
+    await reader.scan();
 
-      await reader.scan();
+    reader.onreading = async (event) => {
+      const uid = event.serialNumber;
 
-      reader.onreading = (event) => {
-        const uid = event.serialNumber;
+      // تحقق إذا كان الـ UID موجود بالفعل
+      const q = query(collection(db, "makhdom"), where("nfcUID", "==", uid));
+      const querySnapshot = await getDocs(q);
 
-        setFormData((prev) => ({
-          ...prev,
-          nfcUID: uid,
-        }));
-
+      if (!querySnapshot.empty) {
+        toast.error("الكارت مسجل بالفعل لشخص آخر!");
         setScanning(false);
+        return;
+      }
 
-        toast.success("تم قراءة الكارت بنجاح");
-      };
-    } catch (error) {
-      console.error("NFC error:", error);
+      // لو جديد
+      setFormData((prev) => ({
+        ...prev,
+        nfcUID: uid,
+      }));
+
       setScanning(false);
+      toast.success("تم قراءة الكارت بنجاح");
+    };
+  } catch (error) {
+    console.error("NFC error:", error);
+    setScanning(false);
+  }
+};
+
+// =========================
+// حفظ البيانات
+// =========================
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    // تحقق مرة ثانية قبل الحفظ
+    if (formData.nfcUID) {
+      const q = query(
+        collection(db, "makhdom"),
+        where("nfcUID", "==", formData.nfcUID),
+      );
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty && (!id || querySnapshot.docs[0].id !== id)) {
+        toast.error("الكارت مستخدم بالفعل لمخدوم آخر!");
+        return;
+      }
     }
-  };
 
-  // =========================
-  // حفظ البيانات
-  // =========================
+    let imageURL = formData.imagePreview;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (formData.image) {
+      const imageRef = ref(
+        storage,
+        `makhdom/${Date.now()}-${formData.image.name}`,
+      );
+      await uploadBytes(imageRef, formData.image);
+      imageURL = await getDownloadURL(imageRef);
+    }
 
-    try {
-      let imageURL = formData.imagePreview;
-
-      if (formData.image) {
-        const imageRef = ref(
-          storage,
-          `makhdom/${Date.now()}-${formData.image.name}`
-        );
-        await uploadBytes(imageRef, formData.image);
-        imageURL = await getDownloadURL(imageRef);
+    if (id) {
+      // تعديل
+      await updateDoc(doc(db, "makhdom", id), {
+        name: formData.name,
+        phone: formData.phone,
+        dateOfBirth: formData.dateOfBirth,
+        address: formData.address,
+        notes: formData.notes,
+        image: imageURL,
+        nfcUID: formData.nfcUID,
+        updatedAt: Timestamp.now(),
+      });
+    } else {
+      // إنشاء ID تلقائي
+      const q = query(
+        collection(db, "makhdom"),
+        orderBy("customId", "desc"),
+        limit(1),
+      );
+      const querySnapshot = await getDocs(q);
+      let nextId = 101;
+      if (!querySnapshot.empty) {
+        const lastStudent = querySnapshot.docs[0].data();
+        nextId = (lastStudent.customId || 100) + 1;
       }
 
-      if (id) {
-        // تعديل
-        await updateDoc(doc(db, "makhdom", id), {
-          name: formData.name,
-          phone: formData.phone,
-          dateOfBirth: formData.dateOfBirth,
-          address: formData.address,
-          notes: formData.notes,
-          image: imageURL,
-          nfcUID: formData.nfcUID,
-          updatedAt: Timestamp.now(),
-        });
-      } else {
-        // إنشاء ID تلقائي
-        const q = query(
-          collection(db, "makhdom"),
-          orderBy("customId", "desc"),
-          limit(1)
-        );
-
-        const querySnapshot = await getDocs(q);
-
-        let nextId = 101;
-
-        if (!querySnapshot.empty) {
-          const lastStudent = querySnapshot.docs[0].data();
-          nextId = (lastStudent.customId || 100) + 1;
-        }
-
-        await addDoc(collection(db, "makhdom"), {
-          customId: nextId,
-          name: formData.name,
-          phone: formData.phone,
-          dateOfBirth: formData.dateOfBirth,
-          address: formData.address,
-          notes: formData.notes,
-          image: imageURL,
-          nfcUID: formData.nfcUID, // 👈 تخزين UID
-          visits: [],
-          lastVisit: null,
-          createdAt: Timestamp.now(),
-        });
-      }
-
-      navigate("/list-makhdom");
-    } catch (error) {
-      console.error("Firebase error:", error);
+      await addDoc(collection(db, "makhdom"), {
+        customId: nextId,
+        name: formData.name,
+        phone: formData.phone,
+        dateOfBirth: formData.dateOfBirth,
+        address: formData.address,
+        notes: formData.notes,
+        image: imageURL,
+        nfcUID: formData.nfcUID,
+        visits: [],
+        lastVisit: null,
+        createdAt: Timestamp.now(),
+      });
     }
-  };
+
+    toast.success("تم حفظ البيانات بنجاح");
+    navigate("/list-makhdom");
+  } catch (error) {
+    console.error("Firebase error:", error);
+    toast.error("حدث خطأ أثناء الحفظ");
+  }
+};
 
   return (
     <div className="add-khodam-container">
