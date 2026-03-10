@@ -1,0 +1,71 @@
+/* NFCPage.css - Dark Mode Edition */
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+:root {
+  --primary-dark: #1f1f2e;
+  --accent: #6366f1;
+  --accent-light: #818cf8;
+  --card-bg: rgba(30, 30, 45, 0.85);
+  --text-main: #f5f5f5;
+  --text-secondary: rgba(245, 245, 245, 0.7);
+}
+
+.nfc-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f1a, #1a1a2e);
+  font-family: 'Cairo', sans-serif;
+  color: var(--text-main);
+  padding: 20px;
+}
+
+.nfc-card-container {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 60px 40px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nfc-card-container:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+}
+
+.nfc-icon {
+  width: 130px;
+  margin-bottom: 30px;
+  filter: drop-shadow(0 0 10px var(--accent));
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.nfc-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-main);
+}
+
+.nfc-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+/* Optional: glowing border on hover */
+.nfc-card-container:hover {
+  border: 1px solid var(--accent);
+  box-shadow: 0 20px 40px var(--accent-light);
+}

@@ -10,6 +10,8 @@ import {
   arrayUnion,
   Timestamp,
 } from "firebase/firestore";
+import { assets } from "../assets/assets";
+import "./ScanAttendance.css";
 
 function ScanAttendance() {
   useEffect(() => {
@@ -53,7 +55,7 @@ function ScanAttendance() {
             lastVisit: Timestamp.now(),
           });
 
-          alert("تم تسجيل الحضور");
+          alert("تم تسجيل حضور" + studentDoc.data().name);
         };
       } catch (error) {
         console.error("NFC Error:", error);
@@ -64,8 +66,12 @@ function ScanAttendance() {
   }, []);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "100px" }}>
-      <h1>مرر كارت NFC لتسجيل الحضور</h1>
+    <div className="nfc-page">
+      <div className="nfc-card-container">
+        <img src={assets.felo} alt="NFC Icon" className="nfc-icon" />
+        <h1 className="nfc-title">مرر كارت NFC لتسجيل الحضور</h1>
+        <p className="nfc-subtitle">ضع الكارت بالقرب من الهاتف أو القارئ</p>
+      </div>
     </div>
   );
 }
