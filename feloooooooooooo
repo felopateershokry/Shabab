@@ -28,10 +28,7 @@ function AddMakhdom() {
     notes: "",
     image: null,
     imagePreview: null,
-    nfcUID: "", // 👈 UID الخاص بالكارت
   });
-
-  const [scanning, setScanning] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -48,7 +45,6 @@ function AddMakhdom() {
             notes: docSnap.data().notes || "",
             image: null,
             imagePreview: docSnap.data().image || null,
-            nfcUID: docSnap.data().nfcUID || "",
           });
         }
       };
@@ -60,45 +56,6 @@ function AddMakhdom() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // =========================
-  // قراءة NFC
-  // =========================
-
-  const scanNFC = async () => {
-    if (!("NDEFReader" in window)) {
-      alert("الموبايل لا يدعم NFC");
-      return;
-    }
-
-    try {
-      setScanning(true);
-
-      const reader = new NDEFReader();
-
-      await reader.scan();
-
-      reader.onreading = (event) => {
-        const uid = event.serialNumber;
-
-        setFormData((prev) => ({
-          ...prev,
-          nfcUID: uid,
-        }));
-
-        setScanning(false);
-
-        alert("تم قراءة الكارت بنجاح");
-      };
-    } catch (error) {
-      console.error("NFC error:", error);
-      setScanning(false);
-    }
-  };
-
-  // =========================
-  // حفظ البيانات
-  // =========================
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -108,14 +65,14 @@ function AddMakhdom() {
       if (formData.image) {
         const imageRef = ref(
           storage,
-          `makhdom/${Date.now()}-${formData.image.name}`
+          `makhdom/${Date.now()}-${formData.image.name}`,
         );
         await uploadBytes(imageRef, formData.image);
         imageURL = await getDownloadURL(imageRef);
       }
 
       if (id) {
-        // تعديل
+        // تعديل المخدوم
         await updateDoc(doc(db, "makhdom", id), {
           name: formData.name,
           phone: formData.phone,
@@ -123,20 +80,17 @@ function AddMakhdom() {
           address: formData.address,
           notes: formData.notes,
           image: imageURL,
-          nfcUID: formData.nfcUID,
           updatedAt: Timestamp.now(),
         });
       } else {
-        // إنشاء ID تلقائي
+
         const q = query(
           collection(db, "makhdom"),
           orderBy("customId", "desc"),
-          limit(1)
+          limit(1),
         );
-
         const querySnapshot = await getDocs(q);
-
-        let nextId = 101;
+        let nextId = 101; 
 
         if (!querySnapshot.empty) {
           const lastStudent = querySnapshot.docs[0].data();
@@ -144,14 +98,13 @@ function AddMakhdom() {
         }
 
         await addDoc(collection(db, "makhdom"), {
-          customId: nextId,
+          customId: nextId, 
           name: formData.name,
           phone: formData.phone,
           dateOfBirth: formData.dateOfBirth,
           address: formData.address,
           notes: formData.notes,
           image: imageURL,
-          nfcUID: formData.nfcUID, // 👈 تخزين UID
           visits: [],
           lastVisit: null,
           createdAt: Timestamp.now(),
@@ -185,6 +138,7 @@ function AddMakhdom() {
           name="dateOfBirth"
           value={formData.dateOfBirth}
           onChange={handleChange}
+          placeholder="تاريخ الميلاد"
           required
         />
 
@@ -211,23 +165,6 @@ function AddMakhdom() {
           onChange={handleChange}
           rows="4"
         />
-
-        {/* NFC UID */}
-        <input
-          type="text"
-          name="nfcUID"
-          placeholder="NFC UID"
-          value={formData.nfcUID}
-          readOnly
-        />
-
-        <button
-          type="button"
-          className="scan-btn"
-          onClick={scanNFC}
-        >
-          {scanning ? "Scanning..." : "Scan NFC Card"}
-        </button>
 
         <div className="form-actions">
           <button type="submit" className="save-btn">

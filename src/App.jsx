@@ -11,6 +11,7 @@ import AddPage from './pages/AddPage';
 import TodayAttendance from './pages/TodayAttendance'
 import MostAttendance from './pages/MostAttendance'
 import MonthAttendance from './pages/MonthAttendance'
+import ScanAttendance from './pages/ScanAttendance'
 function App() {
 
   return (
@@ -28,9 +29,10 @@ function App() {
         <Route path="/today-attendance" element={<TodayAttendance />} />
         <Route path="/most-attendance" element={<MostAttendance />} />
         <Route path="/month-attendance" element={<MonthAttendance />} />
+        <Route path="/scan" element={<ScanAttendance />} />
       </Routes>
     </>
-  )
+  );
 }
 
 export default App

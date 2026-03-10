@@ -21,6 +21,9 @@ function Home() {
             <Link to={"/list-makhdom"}>
               <button className="home-button">المخدومين</button>
             </Link>
+            <Link to={"/scan"}>
+              <button className="home-button">مسح البطاقة</button>
+            </Link>
           </div>
         </div>
       </>
