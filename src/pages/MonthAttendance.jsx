@@ -2,30 +2,28 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import "./MonthAttendance.css";
-import Navbar from "../components/Navbar"; // افترض Navbar موجود
+import Navbar from "../components/Navbar";
 
 const MonthAttendance = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Get current month info
   const today = new Date();
   const year = today.getFullYear();
-  const month = today.getMonth(); // 0-based
-  const firstDay = new Date(year, month, 1);
+  const month = today.getMonth();
   const lastDay = new Date(year, month + 1, 0);
   const totalDays = lastDay.getDate();
 
-  // Divide month into weeks
+  // تقسيم الشهر لأسابيع
   const weeks = [];
   let start = 1;
+
   while (start <= totalDays) {
     const end = Math.min(start + 6, totalDays);
     weeks.push({ start, end });
     start += 7;
   }
 
-  // Check if 5th week contains Friday (day 5)
   const fifthWeekExists =
     weeks.length === 5 &&
     Array.from(
@@ -33,43 +31,78 @@ const MonthAttendance = () => {
       (_, i) => weeks[4].start + i,
     ).some((day) => {
       const d = new Date(year, month, day);
-      return d.getDay() === 5; // 5 = Friday in JS
+      return d.getDay() === 5;
     });
 
   const displayedWeeks = fifthWeekExists ? weeks : weeks.slice(0, 4);
 
   useEffect(() => {
     const fetchStudents = async () => {
-      const querySnapshot = await getDocs(collection(db, "makhdom"));
-      const studentsData = [];
-      querySnapshot.forEach((doc) => {
-        studentsData.push({ id: doc.id, ...doc.data() });
-      });
+      try {
+        const snapshot = await getDocs(collection(db, "makhdom"));
 
-      // Sort by total visits in the month
-      const monthStr = (month + 1).toString().padStart(2, "0"); // e.g. "03"
-      studentsData.sort((a, b) => {
-        const aCount = (a.visits || []).filter((v) =>
-          v.startsWith(`${year}-${monthStr}`),
-        ).length;
-        const bCount = (b.visits || []).filter((v) =>
-          v.startsWith(`${year}-${monthStr}`),
-        ).length;
-        return bCount - aCount;
-      });
+        const studentsData = snapshot.docs.map((doc) => {
+          const data = doc.data();
 
-      setStudents(studentsData);
-      setLoading(false);
+          // تحويل visits إلى Date
+          const visits = (data.visits || []).map((v) => {
+            if (v?.seconds) {
+              return new Date(v.seconds * 1000); // Firestore Timestamp
+            }
+            return new Date(v);
+          });
+
+          // الحضور في هذا الشهر
+          const visitsThisMonth = visits.filter(
+            (date) => date.getMonth() === month && date.getFullYear() === year,
+          );
+
+          return {
+            id: doc.id,
+            ...data,
+            visits,
+            visitsThisMonth,
+          };
+        });
+
+        // ترتيب حسب أكثر حضور
+        studentsData.sort(
+          (a, b) => b.visitsThisMonth.length - a.visitsThisMonth.length,
+        );
+
+        setStudents(studentsData);
+      } catch (error) {
+        console.error("Error loading students:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchStudents();
   }, [month, year]);
-
-  if (loading) return <p style={{ textAlign: "center" }}>جارٍ التحميل...</p>;
+  
+if (loading) {
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "white",
+        fontSize: "20px",
+        background: "radial-gradient(circle at top, #1f2937, #111827, #020617)",
+      }}
+    >
+      جارٍ التحميل...
+    </div>
+  );
+}
 
   return (
     <>
-      <Navbar sticky /> {/* navbar sticky */}
+      <Navbar sticky />
+
       <div className="month-container">
         <h1 className="month-title">
           سجل الحضور لشهر{" "}
@@ -81,49 +114,48 @@ const MonthAttendance = () => {
             <thead>
               <tr>
                 <th>الاسم</th>
+
                 {displayedWeeks.map((week, idx) => (
                   <th key={idx}>
                     أسبوع {idx + 1} <br />({week.start}-{week.end})
                   </th>
                 ))}
+
                 <th>حضر الشهر كله؟</th>
               </tr>
             </thead>
-            <tbody>
-              {students.map((student) => {
-                const monthStr = (month + 1).toString().padStart(2, "0");
-                const visitsThisMonth = (student.visits || []).filter((v) =>
-                  v.startsWith(`${year}-${monthStr}`),
-                );
 
-                return (
-                  <tr key={student.id}>
-                    <td>{student.name}</td>
-                    {displayedWeeks.map((week, idx) => {
-                      const weekVisits = visitsThisMonth.filter((v) => {
-                        const day = parseInt(v.split("-")[2], 10);
-                        return day >= week.start && day <= week.end;
-                      });
-                      return (
-                        <td key={idx}>
-                          {weekVisits.length > 0 ? (
-                            <span className="present">✔</span>
-                          ) : (
-                            <span className="absent">-</span>
-                          )}
-                        </td>
-                      );
-                    })}
-                    <td>
-                      {visitsThisMonth.length === displayedWeeks.length ? (
-                        <span className="full-month">✔</span>
-                      ) : (
-                        <span className="absent">-</span>
-                      )}
-                    </td>{" "}
-                  </tr>
-                );
-              })}
+            <tbody>
+              {students.map((student) => (
+                <tr key={student.id}>
+                  <td>{student.name}</td>
+
+                  {displayedWeeks.map((week, idx) => {
+                    const hasVisit = student.visitsThisMonth.some((date) => {
+                      const day = date.getDate();
+                      return day >= week.start && day <= week.end;
+                    });
+
+                    return (
+                      <td key={idx}>
+                        {hasVisit ? (
+                          <span className="present">✔</span>
+                        ) : (
+                          <span className="absent">-</span>
+                        )}
+                      </td>
+                    );
+                  })}
+
+                  <td>
+                    {student.visitsThisMonth.length >= displayedWeeks.length ? (
+                      <span className="full-month">✔</span>
+                    ) : (
+                      <span className="absent">-</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
