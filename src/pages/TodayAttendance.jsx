@@ -21,21 +21,23 @@ function TodayAttendance() {
         const attendanceRef = collection(db, "makhdom");
         const querySnapshot = await getDocs(attendanceRef);
 
+        const getDateString = (visit) => {
+          if (!visit) return null;
+          if (typeof visit === "string") return visit;
+          return visit.toDate().toLocaleDateString("en-CA");
+        };
+
         const data = querySnapshot.docs
-          .map((doc) => ({ id: doc.id, ...doc.data() }))
+          .map((docSnap) => ({
+            id: docSnap.id,
+            ...docSnap.data(),
+          }))
           .filter((person) => {
-            if (Array.isArray(person.visits)) {
-              return person.visits.some((visit) => {
-                if (typeof visit === "string") {
-                  return visit === todayStr;
-                } else if (visit && visit.seconds) {
-                  const visitDate = new Date(visit.seconds * 1000);
-                  return visitDate.toISOString().split("T")[0] === todayStr;
-                }
-                return false;
-              });
-            }
-            return false;
+            if (!Array.isArray(person.visits)) return false;
+
+            return person.visits.some(
+              (visit) => getDateString(visit) === todayStr,
+            );
           })
           .sort((a, b) => a.name.localeCompare(b.name));
 
