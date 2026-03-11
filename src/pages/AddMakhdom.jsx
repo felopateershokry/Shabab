@@ -89,7 +89,7 @@ function AddMakhdom() {
 
         setScanning(false);
 
-        toast.success("تم قراءة الكارت بنجاح");
+        // toast.success("تم قراءة الكارت بنجاح");
       };
     } catch (error) {
       console.error("NFC error:", error);
