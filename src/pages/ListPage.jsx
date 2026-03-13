@@ -56,7 +56,9 @@ function ListPage() {
             >
               اضافة مخدوم +
             </button>
-
+            <button onClick={() => navigate("/search-by-date")} className="add-button">
+              تاريخ الميلاد
+            </button>
             <input
               type="text"
               placeholder="ابحث بالاسم أو رقم المخدوم..."

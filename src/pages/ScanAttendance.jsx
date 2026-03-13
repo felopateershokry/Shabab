@@ -17,6 +17,8 @@ import "./ScanAttendance.css";
 
 function ScanAttendance() {
   useEffect(() => {
+    const scannedUIDs = new Set(); // لتخزين الكروت الممسوحة مؤقتًا
+
     const startScan = async () => {
       if (!("NDEFReader" in window)) {
         toast.error("NFC غير مدعوم في هذا الجهاز");
@@ -31,6 +33,15 @@ function ScanAttendance() {
 
         reader.onreading = async (event) => {
           const uid = event.serialNumber;
+
+          // منع التكرار لو الكارت اتسحب مؤخراً
+          if (scannedUIDs.has(uid)) {
+            console.log("تم تسجيل هذا الكارت مؤخراً، تجاهل القراءة");
+            return;
+          }
+          scannedUIDs.add(uid);
+          setTimeout(() => scannedUIDs.delete(uid), 5000); // إزالة بعد 5 ثواني
+
           console.log("Card UID:", uid);
 
           // البحث عن المخدوم
@@ -47,6 +58,13 @@ function ScanAttendance() {
 
           const studentDoc = querySnapshot.docs[0];
           const studentId = studentDoc.id;
+
+          // فلترة حسب آخر زيارة لتجنب التكرار في قاعدة البيانات
+          const lastVisit = studentDoc.data().lastVisit?.toDate();
+          if (lastVisit && Date.now() - lastVisit.getTime() < 5000) {
+            toast.info("تم تسجيل الحضور مسبقاً للتو");
+            return;
+          }
 
           // تسجيل الحضور
           await updateDoc(doc(db, "makhdom", studentId), {
@@ -73,7 +91,6 @@ function ScanAttendance() {
         <p className="nfc-subtitle">ضع الكارت بالقرب من الهاتف أو القارئ</p>
       </div>
 
-      {/* ToastContainer لازم يكون موجود مرة واحدة على الأقل */}
       <ToastContainer
         position="top-center"
         autoClose={3000}
