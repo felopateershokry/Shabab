@@ -34,13 +34,13 @@ function ScanAttendance() {
         reader.onreading = async (event) => {
           const uid = event.serialNumber;
 
-          // منع التكرار لو الكارت اتسحب مؤخراً
+          // حماية مؤقتة على ال front-end (10 ثواني)
           if (scannedUIDs.has(uid)) {
-            console.log("تم تسجيل هذا الكارت مؤخراً، تجاهل القراءة");
+            console.log("تم مسح هذا الكارت مؤخراً، تجاهل القراءة");
             return;
           }
           scannedUIDs.add(uid);
-          setTimeout(() => scannedUIDs.delete(uid), 5000); // إزالة بعد 5 ثواني
+          setTimeout(() => scannedUIDs.delete(uid), 10000); // 10 ثواني
 
           console.log("Card UID:", uid);
 
@@ -59,16 +59,12 @@ function ScanAttendance() {
           const studentDoc = querySnapshot.docs[0];
           const studentId = studentDoc.id;
 
-          // فلترة حسب آخر زيارة لتجنب التكرار في قاعدة البيانات
-          const lastVisit = studentDoc.data().lastVisit?.toDate();
-          if (lastVisit && Date.now() - lastVisit.getTime() < 5000) {
-            toast.info("تم تسجيل الحضور مسبقاً للتو");
-            return;
-          }
+          // تسجيل الحضور مرة واحدة لكل يوم
+          const todayDate = new Date();
+          todayDate.setHours(0, 0, 0, 0); // بداية اليوم
 
-          // تسجيل الحضور
           await updateDoc(doc(db, "makhdom", studentId), {
-            visits: arrayUnion(Timestamp.now()),
+            visits: arrayUnion(todayDate), // يضيف اليوم مرة واحدة فقط
             lastVisit: Timestamp.now(),
           });
 
