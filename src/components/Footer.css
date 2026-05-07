@@ -1,0 +1,44 @@
+.footer {
+  width: 100%;
+  padding: 10px 6px;
+  text-align: center;
+
+  background: transparent;
+  border: none;
+}
+
+.footer-text {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  color: #e2e8f0;
+}
+
+.footer-link {
+  color: #9ca3af; /* gray */
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+/* Hover state */
+.footer-link:hover {
+  color: #9ca3af; /* keep text gray */
+}
+
+/* Blue underline effect */
+.footer-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 2px;
+  background-color: #0ea5e9; /* blue underline */
+  transition: width 0.25s ease;
+}
+
+.footer-link:hover::after {
+  width: 100%;
+}

@@ -13,6 +13,7 @@ import MostAttendance from './pages/MostAttendance'
 import MonthAttendance from './pages/MonthAttendance'
 import ScanAttendance from './pages/ScanAttendance'
 import SearchByDate from './pages/SearchByDate';
+import Footer from './components/Footer'
 function App() {
 
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/scan" element={<ScanAttendance />} />
         <Route path="/search-by-date" element={<SearchByDate />} />
       </Routes>
+      <Footer />
     </>
   );
 }
