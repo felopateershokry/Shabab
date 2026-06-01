@@ -14,10 +14,12 @@ import MonthAttendance from './pages/MonthAttendance'
 import ScanAttendance from './pages/ScanAttendance'
 import SearchByDate from './pages/SearchByDate';
 import Footer from './components/Footer'
+import Profile from './pages/Profile';
 function App() {
 
   return (
     <>
+      {/* <GeminiChat /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/list-makhdom" element={<ListPage />} />
@@ -33,6 +35,7 @@ function App() {
         <Route path="/month-attendance" element={<MonthAttendance />} />
         <Route path="/scan" element={<ScanAttendance />} />
         <Route path="/search-by-date" element={<SearchByDate />} />
+        <Route path="/profile/:customId" element={<Profile />} />
       </Routes>
       <Footer />
     </>

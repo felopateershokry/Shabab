@@ -128,6 +128,8 @@ const SinglePage = () => {
             <span>الرقم التعريفي:</span> {student.customId}
           </p>
 
+          <div className="coins-badge-single">🪙 {student.coins ?? 0}</div>
+
           <p>
             <span> الهاتف:</span> {student.phone}
             <a

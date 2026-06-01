@@ -14,7 +14,7 @@ const Footer = () => {
         >
           Felopateer Shokry
         </a>{" "}
-        — All rights reserved.
+        — All rights reserved
       </p>
     </footer>
   );

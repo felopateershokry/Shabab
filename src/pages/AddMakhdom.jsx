@@ -30,7 +30,9 @@ function AddMakhdom() {
     notes: "",
     image: null,
     imagePreview: null,
-    nfcUID: "", // 👈 UID الخاص بالكارت
+    nfcUID: "",
+    coins: 0,
+    password: "0000",
   });
 
   const [scanning, setScanning] = useState(false);
@@ -51,6 +53,8 @@ function AddMakhdom() {
             image: null,
             imagePreview: docSnap.data().image || null,
             nfcUID: docSnap.data().nfcUID || "",
+            coins: docSnap.data().coins ?? 0,
+            password: docSnap.data().password || "0000",
           });
         }
       };
@@ -126,6 +130,8 @@ function AddMakhdom() {
           notes: formData.notes,
           image: imageURL,
           nfcUID: formData.nfcUID,
+          coins: formData.coins,
+          password: formData.password,
           updatedAt: Timestamp.now(),
         });
       } else {
@@ -156,6 +162,8 @@ function AddMakhdom() {
           nfcUID: formData.nfcUID, // 👈 تخزين UID
           visits: [],
           lastVisit: null,
+          coins: 0, // NEW
+          password: "0000",
           createdAt: Timestamp.now(),
         });
       }
