@@ -33,6 +33,28 @@ function Profile() {
     fetchMakhdom();
   }, [customId]);
 
+  const formatDate = (value) => {
+    if (!value) return "-";
+
+    // Firestore Timestamp
+    if (value?.seconds) {
+      return new Date(value.seconds * 1000).toLocaleDateString("ar-EG");
+    }
+
+    return value;
+  };
+
+  const formatVisit = (visit) => {
+    if (!visit) return "-";
+
+    // Firestore Timestamp
+    if (visit?.seconds) {
+      return new Date(visit.seconds * 1000).toLocaleString("ar-EG");
+    }
+
+    return String(visit);
+  };
+
   if (loading) return <h2>Loading...</h2>;
 
   if (!makhdom) return <h2>Makhdom not found</h2>;
@@ -56,7 +78,7 @@ function Profile() {
         <div className="stats-grid">
           <div className="stat-card">
             <span>Date of Birth</span>
-            <strong>{makhdom.dateOfBirth}</strong>
+            <strong>{formatDate(makhdom.dateOfBirth)}</strong>
           </div>
 
           <div className="stat-card">
@@ -72,7 +94,7 @@ function Profile() {
             <div className="visits-list">
               {[...makhdom.visits].reverse().map((visit, index) => (
                 <div key={index} className="visit-item">
-                  {visit}
+                  {formatVisit(visit)}
                 </div>
               ))}
             </div>
