@@ -175,7 +175,7 @@
   font-size: 1.1rem;
 }
 
-.visits-list {
+.visits-list-profile {
   max-height: 280px;
   overflow-y: auto;
 
@@ -186,16 +186,16 @@
   padding-right: 5px;
 }
 
-.visits-list::-webkit-scrollbar {
+.visits-list-profile::-webkit-scrollbar {
   width: 8px;
 }
 
-.visits-list::-webkit-scrollbar-thumb {
+.visits-list-profile::-webkit-scrollbar-thumb {
   background: rgba(255,255,255,.2);
   border-radius: 10px;
 }
 
-.visit-item {
+.visit-card {
   padding: 14px 18px;
 
   border-radius: 14px;
@@ -207,7 +207,7 @@
   transition: all .25s ease;
 }
 
-.visit-item:hover {
+.visit-card:hover {
   background: rgba(255,255,255,.12);
 }
 
@@ -247,7 +247,7 @@
     text-align: center;
   }
 
-  .visit-item {
+  .visit-card {
     text-align: left;
   }
 }

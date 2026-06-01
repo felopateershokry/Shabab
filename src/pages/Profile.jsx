@@ -22,9 +22,12 @@ function Profile() {
 
         if (!querySnapshot.empty) {
           setMakhdom(querySnapshot.docs[0].data());
+        } else {
+          setMakhdom(null);
         }
       } catch (error) {
         console.error(error);
+        setMakhdom(null);
       } finally {
         setLoading(false);
       }
@@ -33,12 +36,12 @@ function Profile() {
     fetchMakhdom();
   }, [customId]);
 
+  // YYYY-MM-DD format (same as SinglePage)
   const formatDate = (value) => {
     if (!value) return "-";
 
-    // Firestore Timestamp
     if (value?.seconds) {
-      return new Date(value.seconds * 1000).toLocaleDateString("ar-EG");
+      return new Date(value.seconds * 1000).toLocaleDateString("en-CA");
     }
 
     return value;
@@ -47,9 +50,8 @@ function Profile() {
   const formatVisit = (visit) => {
     if (!visit) return "-";
 
-    // Firestore Timestamp
     if (visit?.seconds) {
-      return new Date(visit.seconds * 1000).toLocaleString("ar-EG");
+      return new Date(visit.seconds * 1000).toLocaleDateString("en-CA");
     }
 
     return String(visit);
@@ -91,9 +93,9 @@ function Profile() {
           <h3>📅 Visits History</h3>
 
           {makhdom.visits?.length ? (
-            <div className="visits-list">
+            <div className="visits-list-profile">
               {[...makhdom.visits].reverse().map((visit, index) => (
-                <div key={index} className="visit-item">
+                <div key={index} className="visit-card">
                   {formatVisit(visit)}
                 </div>
               ))}
