@@ -18,16 +18,15 @@ import Navbar from "../components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { startNFC, stopNFC } from "../services/nfcService"; // ✅ مهم جدًا
+
 function Send() {
   const [searchTerm, setSearchTerm] = useState("");
   const [coins, setCoins] = useState("");
   const [selected, setSelected] = useState([]);
   const [users, setUsers] = useState([]);
 
-  const ndefRef = useRef(null);
   const scanningRef = useRef(false);
-  const lastUidRef = useRef("");
-  const lastReadTimeRef = useRef(0);
 
   // =========================
   // Fetch users
@@ -45,6 +44,11 @@ function Send() {
 
   useEffect(() => {
     fetchUsers();
+
+    // ✅ important cleanup (fix double scan forever bug)
+    return () => {
+      stopNFC();
+    };
   }, []);
 
   // =========================
@@ -115,61 +119,17 @@ function Send() {
   };
 
   // =========================
-  // Reset scanner state
-  // =========================
-  const resetScanner = () => {
-    scanningRef.current = false;
-    lastUidRef.current = "";
-    lastReadTimeRef.current = 0;
-  };
-
-  // =========================
-  // NFC Scan
+  // NFC Scan (FIXED)
   // =========================
   const startNFCScan = async () => {
     try {
       const amount = getAmount();
       if (!amount) return;
 
-      if (!("NDEFReader" in window)) {
-        toast.error("Web NFC is not supported on this device");
-        return;
-      }
-
-      if (scanningRef.current) {
-        resetScanner();
-      }
-
-      const ndef = new window.NDEFReader();
-      await ndef.scan();
-
-      ndefRef.current = ndef;
-      scanningRef.current = true;
-
-      toast.success("NFC scanning started");
-
-      ndef.onreading = async (event) => {
-        const uid = event.serialNumber;
-
-        const now = Date.now();
-
-        if (
-          uid === lastUidRef.current &&
-          now - lastReadTimeRef.current < 1200
-        ) {
-          return;
-        }
-
-        lastUidRef.current = uid;
-        lastReadTimeRef.current = now;
-
-        console.log("Scanned UID:", uid);
-
+      await startNFC((uid) => {
         const user = users.find(
           (u) => normalizeUID(u.nfcUID) === normalizeUID(uid),
         );
-
-        console.log("Matched User:", user);
 
         if (!user) {
           toast.error("User not found");
@@ -178,17 +138,12 @@ function Send() {
 
         setSelected([user]);
         toast.success(`Selected: ${user.name}`);
+      });
 
-        // optional: reset after one scan
-        resetScanner();
-      };
-
-      ndef.onreadingerror = () => {
-        toast.error("Cannot read NFC tag");
-      };
+      toast.success("NFC scanning started");
     } catch (err) {
-      console.error("NFC Error:", err);
-      toast.error(err?.message || "NFC error");
+      console.error(err);
+      toast.error(err.message || "NFC error");
     }
   };
 
