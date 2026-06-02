@@ -1,6 +1,6 @@
 .add-khodam-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+  background: transparent;
   padding: 4rem 1.5rem;
   direction: rtl;
   font-family: 'Cairo', 'Poppins', sans-serif;
@@ -13,7 +13,7 @@
 .add-khodam-title {
   font-size: 2.2rem;
   font-weight: 800;
-  color: #1e3a8a;
+  color: #00a2ff;
   margin-bottom: 2.5rem;
   text-align: center;
 }
@@ -145,6 +145,17 @@ textarea {
 .image-clickable:hover .image-placeholder {
   transform: scale(1.05);
   box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
+}
+
+.scan-btn {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 @media (max-width: 600px) {

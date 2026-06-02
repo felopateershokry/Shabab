@@ -26,7 +26,7 @@ function Transfers() {
 
   return (
     <div className="transfers-container">
-      <h2 className="title">Transactions History</h2>
+      <h2 className="title">سجل المعاملات</h2>
 
       <div className="transfers-list">
         {transfers.map((t) => (
@@ -41,15 +41,15 @@ function Transfers() {
                 {t.type === "send" ? "إيداع" : "سحب"}
               </span>
 
-              <span className="amount">{t.amount} Coins</span>
+              <span className="amount">{t.amount} نسر جنية</span>
             </div>
 
             <div className="info">
               <p>
-                <strong>From:</strong> {t.fromName}
+                <strong>من:</strong> {t.fromName}
               </p>
               <p>
-                <strong>To:</strong> {t.toName}
+                <strong>إلى:</strong> {t.toName}
               </p>
             </div>
           </div>
