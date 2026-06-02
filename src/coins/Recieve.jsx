@@ -110,7 +110,7 @@ function Recieve() {
   };
 
   // =========================
-  // Reset NFC scanner state
+  // Reset scanner
   // =========================
   const resetScanner = () => {
     scanningRef.current = false;
@@ -147,7 +147,6 @@ function Recieve() {
 
         const now = Date.now();
 
-        // prevent duplicate scan spam
         if (
           uid === lastUidRef.current &&
           now - lastReadTimeRef.current < 1500
@@ -169,7 +168,7 @@ function Recieve() {
 
         await deductCoins(user);
 
-        // important: stop after successful scan
+        // important reset after success
         resetScanner();
       };
 
@@ -178,7 +177,7 @@ function Recieve() {
       };
     } catch (err) {
       console.error(err);
-      toast.error(err?.message || "NFC error");
+      toast.error("NFC error");
     }
   };
 
