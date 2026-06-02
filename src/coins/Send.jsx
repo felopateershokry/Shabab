@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "./Send.css";
 
 import { db } from "../firebase";
@@ -18,16 +18,13 @@ import Navbar from "../components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { startNFC } from "../services/nfcService";
+
 function Send() {
   const [searchTerm, setSearchTerm] = useState("");
   const [coins, setCoins] = useState("");
   const [selected, setSelected] = useState([]);
   const [users, setUsers] = useState([]);
-
-  const ndefRef = useRef(null);
-  const scanningRef = useRef(false);
-  const lastUidRef = useRef("");
-  const lastReadTimeRef = useRef(0);
 
   // =========================
   // Fetch users
@@ -70,7 +67,28 @@ function Send() {
   };
 
   // =========================
-  // Send coins
+  // Send coins to single user
+  // =========================
+  const sendToUser = async (user, amount) => {
+    const userRef = doc(db, "makhdom", user.id);
+
+    await updateDoc(userRef, {
+      coins: increment(amount),
+    });
+
+    await addDoc(collection(db, "transfers"), {
+      fromId: 1,
+      toId: user.customId || null,
+      fromName: "San Giovanni",
+      toName: user.name,
+      amount,
+      type: "send",
+      createdAt: serverTimestamp(),
+    });
+  };
+
+  // =========================
+  // Manual send
   // =========================
   const sendCoins = async () => {
     const amount = getAmount();
@@ -82,31 +100,12 @@ function Send() {
     }
 
     try {
-      await Promise.all(
-        selected.map(async (user) => {
-          const userRef = doc(db, "makhdom", user.id);
-
-          await updateDoc(userRef, {
-            coins: increment(amount),
-          });
-
-          await addDoc(collection(db, "transfers"), {
-            fromId: 1,
-            toId: user.customId || null,
-            fromName: "San Giovanni",
-            toName: user.name,
-            amount,
-            type: "send",
-            createdAt: serverTimestamp(),
-          });
-        }),
-      );
+      await Promise.all(selected.map((u) => sendToUser(u, amount)));
 
       toast.success("Coins sent successfully!");
 
       setCoins("");
       setSelected([]);
-
       await fetchUsers();
     } catch (err) {
       console.error(err);
@@ -115,80 +114,34 @@ function Send() {
   };
 
   // =========================
-  // Reset scanner state
-  // =========================
-  const resetScanner = () => {
-    scanningRef.current = false;
-    lastUidRef.current = "";
-    lastReadTimeRef.current = 0;
-  };
-
-  // =========================
-  // NFC Scan
+  // NFC Scan (SAFE SINGLETON)
   // =========================
   const startNFCScan = async () => {
     try {
       const amount = getAmount();
       if (!amount) return;
 
-      if (!("NDEFReader" in window)) {
-        toast.error("Web NFC is not supported on this device");
-        return;
-      }
-
-      if (scanningRef.current) {
-        resetScanner();
-      }
-
-      const ndef = new window.NDEFReader();
-      await ndef.scan();
-
-      ndefRef.current = ndef;
-      scanningRef.current = true;
-
-      toast.success("NFC scanning started");
-
-      ndef.onreading = async (event) => {
-        const uid = event.serialNumber;
-
-        const now = Date.now();
-
-        if (
-          uid === lastUidRef.current &&
-          now - lastReadTimeRef.current < 1200
-        ) {
-          return;
-        }
-
-        lastUidRef.current = uid;
-        lastReadTimeRef.current = now;
-
-        console.log("Scanned UID:", uid);
+      await startNFC(async (uid) => {
+        console.log("NFC UID:", uid);
 
         const user = users.find(
           (u) => normalizeUID(u.nfcUID) === normalizeUID(uid),
         );
-
-        console.log("Matched User:", user);
 
         if (!user) {
           toast.error("User not found");
           return;
         }
 
-        setSelected([user]);
-        toast.success(`Selected: ${user.name}`);
+        await sendToUser(user, amount);
 
-        // optional: reset after one scan
-        resetScanner();
-      };
+        toast.success(`Sent to ${user.name}`);
+      });
 
-      ndef.onreadingerror = () => {
-        toast.error("Cannot read NFC tag");
-      };
+      toast.success("NFC ready for sending");
     } catch (err) {
-      console.error("NFC Error:", err);
-      toast.error(err?.message || "NFC error");
+      console.error(err);
+      toast.error(err.message || "NFC error");
     }
   };
 
