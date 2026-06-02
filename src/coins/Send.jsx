@@ -151,7 +151,7 @@ function Send() {
         lastReadTimeRef.current = now;
 
         const user = users.find(
-          (u) => normalizeUID(u.nfcUid) === normalizeUID(uid),
+          (u) => normalizeUID(u.nfcUID) === normalizeUID(uid),
         );
 
         console.log("Found User:", user);
