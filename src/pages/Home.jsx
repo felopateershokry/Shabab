@@ -13,7 +13,10 @@ function Home() {
         {/* Hero Section */}
         <div className="hero-section">
           <div className="hero-content">
-            <span className="church-badge">🕯️كنيسة الشهيد العظيم ابانوب النهيسي بالمندرة</span>
+            <span className="church-badge">
+              {" "}
+              كنيسة الشهيد العظيم ابانوب النهيسي بالمندرة 🕯️
+            </span>
             <h1 className="hero-title">
               اجتماع <span className="highlight">سان جيوفاني</span>
             </h1>
