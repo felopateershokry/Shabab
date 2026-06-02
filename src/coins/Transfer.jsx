@@ -16,7 +16,7 @@ function Transfer() {
       </Link>
 
       {/* 🆕 Transactions page */}
-      <Link to="/transfers" className="transfer-card history">
+      <Link to="/transfers" className="transfer-card history transfer">
         <h2>العمليات</h2>
         <p>عرض سجل التحويلات</p>
       </Link>

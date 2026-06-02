@@ -1,90 +1,253 @@
-.transfers-container {
+@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap');
+
+:root {
+  --tr-bg:          #0c0c12;
+  --tr-card-bg:     #14141f;
+  --tr-border:      rgba(255,255,255,0.07);
+  --tr-border-md:   rgba(255,255,255,0.12);
+  --tr-text:        #eeeef5;
+  --tr-muted:       #8888aa;
+  --tr-dim:         #55556a;
+  --tr-gold:        #f6c90e;
+  --tr-gold-bg:     rgba(246,201,14,0.07);
+  --tr-gold-border: rgba(246,201,14,0.22);
+  --tr-blue:        #3b82f6;
+  --tr-blue-bg:     rgba(59,130,246,0.07);
+  --tr-blue-border: rgba(59,130,246,0.22);
+  --tr-green:       #22c55e;
+  --tr-red:         #ef4444;
+  --tr-radius:      16px;
+  --tr-transition:  0.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.tr-root {
   min-height: 100vh;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
+  background: var(--tr-bg);
+  font-family: 'Noto Kufi Arabic', sans-serif;
+  padding: 32px 20px 60px;
+  color: var(--tr-text);
+}
 
+/* ── Page header ─────────────────────────── */
+.tr-page-header {
   display: flex;
-  flex-direction: column;
   align-items: center;
-
-  background: transparent;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
-.title {
-  color: white;
-  margin-bottom: 20px;
-  font-size: 22px;
+.tr-page-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--tr-text);
 }
 
-/* list */
-.transfers-list {
+.tr-total-badge {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--tr-border-md);
+  border-radius: 100px;
+  padding: 3px 11px;
+  font-size: 0.75rem;
+  color: var(--tr-muted);
+}
+
+/* ── Two-column grid ─────────────────────── */
+.tr-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* On mobile: stack vertically */
+@media (max-width: 600px) {
+  .tr-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Section card ────────────────────────── */
+.tr-section {
+  border-radius: var(--tr-radius);
+  border: 1px solid var(--tr-border);
+  background: var(--tr-card-bg);
+  overflow: hidden;
+  transition: border-color var(--tr-transition);
+}
+
+/* Gold accent */
+.accent-gold { border-color: var(--tr-gold-border); }
+.accent-gold.is-closed { border-color: rgba(246,201,14,0.15); }
+
+/* Blue accent */
+.accent-blue { border-color: var(--tr-blue-border); }
+.accent-blue.is-closed { border-color: rgba(59,130,246,0.15); }
+
+/* ── Section header (button) ─────────────── */
+.tr-section-header {
   width: 100%;
-  max-width: 500px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: right;
+  border-bottom: 1px solid var(--tr-border);
+  transition: background var(--tr-transition);
+}
 
+/* Remove border-bottom when closed (no list below) */
+.is-closed .tr-section-header {
+  border-bottom: none;
+}
+
+.accent-gold .tr-section-header { background: var(--tr-gold-bg); border-bottom-color: var(--tr-gold-border); }
+.accent-blue .tr-section-header { background: var(--tr-blue-bg); border-bottom-color: var(--tr-blue-border); }
+
+.accent-gold.is-closed .tr-section-header { background: rgba(246,201,14,0.04); }
+.accent-blue.is-closed .tr-section-header { background: rgba(59,130,246,0.04); }
+
+.tr-section-header:hover {
+  filter: brightness(1.15);
+}
+
+.tr-section-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.tr-section-title {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--tr-text);
+  text-align: right;
+}
+
+.accent-gold .tr-section-title { color: var(--tr-gold); }
+.accent-blue .tr-section-title { color: var(--tr-blue); }
+
+.tr-section-count {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 100px;
+  border: 1px solid var(--tr-border-md);
+  color: var(--tr-muted);
+  background: rgba(255,255,255,0.04);
+  flex-shrink: 0;
+}
+
+.accent-gold .tr-section-count { border-color: var(--tr-gold-border); color: var(--tr-gold); background: rgba(246,201,14,0.08); }
+.accent-blue .tr-section-count { border-color: var(--tr-blue-border); color: var(--tr-blue); background: rgba(59,130,246,0.08); }
+
+/* Chevron */
+.tr-chevron {
+  font-size: 0.6rem;
+  color: var(--tr-dim);
+  flex-shrink: 0;
+  margin-right: 2px;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              color     0.2s ease;
+}
+
+.is-open .tr-chevron {
+  transform: rotate(0deg);
+}
+
+.is-closed .tr-chevron {
+  transform: rotate(-180deg);
+}
+
+/* ── Section list ────────────────────────── */
+/* ── Collapsible body animation ─────────────── */
+.tr-section-body {
+  display: grid;
+  transition:
+    grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity            0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.body-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.body-closed {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The inner div must have overflow:hidden for grid trick to work */
+.tr-section-list {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 3px;
+  padding: 8px;
 }
 
-/* card */
-.transfer-card {
-  padding: 15px;
-  border-radius: 15px;
-  color: white;
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-
-  transition: 0.2s ease;
+.tr-empty {
+  text-align: center;
+  color: var(--tr-dim);
+  font-size: 0.8rem;
+  padding: 24px 12px;
 }
 
-.transfer-card:hover {
-  transform: scale(1.02);
+/* ── Transfer card ───────────────────────── */
+.tr-card {
+  border-radius: 10px;
+  padding: 10px 12px;
+  border-right: 3px solid transparent;
+  transition: background var(--tr-transition);
 }
 
-/* types */
-.transfer-card.send {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-}
+.tr-card:hover { background: rgba(255,255,255,0.04); }
 
-.transfer-card.receive {
-  background: linear-gradient(135deg, #ef4444, #b91c1c);
-}
+.tr-card.deposit  { border-right-color: var(--tr-green); background: rgba(34,197,94,0.06);  }
+.tr-card.withdraw { border-right-color: var(--tr-red);   background: rgba(239,68,68,0.06);  }
+.tr-card.transfer { border-right-color: var(--tr-blue);  background: rgba(59,130,246,0.06); }
 
-/* top row */
-.top-row {
+.tr-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  font-weight: bold;
+  margin-bottom: 4px;
 }
 
-.amount {
-  font-size: 16px;
+.tr-type {
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
-/* info */
-.info {
-  margin-top: 10px;
-  font-size: 14px;
-  opacity: 0.9;
+.tr-card.deposit  .tr-type { color: var(--tr-green); }
+.tr-card.withdraw .tr-type { color: var(--tr-red);   }
+.tr-card.transfer .tr-type { color: var(--tr-blue);  }
+
+.tr-amount {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--tr-gold);
+  white-space: nowrap;
 }
 
-.info p {
-  margin: 4px 0;
+.tr-route {
+  font-size: 0.75rem;
+  color: var(--tr-muted);
+  line-height: 1.4;
 }
 
-/* mobile */
-@media (max-width: 768px) {
-  .transfers-list {
-    max-width: 100%;
-  }
-
-  .transfer-card {
-    padding: 18px;
-  }
+.tr-arrow {
+  color: var(--tr-dim);
+  margin: 0 1px;
 }
