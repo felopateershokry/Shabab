@@ -1,0 +1,90 @@
+.transfers-container {
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background: transparent;
+}
+
+.title {
+  color: white;
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+/* list */
+.transfers-list {
+  width: 100%;
+  max-width: 500px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* card */
+.transfer-card {
+  padding: 15px;
+  border-radius: 15px;
+  color: white;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+
+  transition: 0.2s ease;
+}
+
+.transfer-card:hover {
+  transform: scale(1.02);
+}
+
+/* types */
+.transfer-card.send {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.transfer-card.receive {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+}
+
+/* top row */
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-weight: bold;
+}
+
+.amount {
+  font-size: 16px;
+}
+
+/* info */
+.info {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.info p {
+  margin: 4px 0;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .transfers-list {
+    max-width: 100%;
+  }
+
+  .transfer-card {
+    padding: 18px;
+  }
+}

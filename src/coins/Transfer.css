@@ -1,0 +1,89 @@
+.transfer-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+
+  background: transparent;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Card Base */
+.transfer-card {
+  width: 320px;
+  max-width: 90%;
+  padding: 30px 20px;
+  border-radius: 20px;
+
+  text-decoration: none;
+  color: white;
+  text-align: center;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+  transition: 0.25s ease;
+  transform: scale(1);
+}
+
+.transfer-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Text */
+.transfer-card h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.transfer-card p {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* Types */
+.deposit {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.withdraw {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+}
+
+/* 🆕 History card */
+.history {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .transfer-container {
+    justify-content: space-evenly;
+    padding: 15px;
+  }
+
+  .transfer-card {
+    width: 100%;
+    min-height: 28vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .transfer-card h2 {
+    font-size: 28px;
+  }
+
+  .transfer-card p {
+    font-size: 16px;
+  }
+}

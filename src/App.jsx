@@ -15,6 +15,10 @@ import ScanAttendance from './pages/ScanAttendance'
 import SearchByDate from './pages/SearchByDate';
 import Footer from './components/Footer'
 import Profile from './pages/Profile';
+import Transfer from './coins/Transfer'
+import Send from './coins/Send'
+import Recieve from './coins/Recieve'
+import Transfers from './coins/Transfers'
 function App() {
 
   return (
@@ -36,6 +40,10 @@ function App() {
         <Route path="/scan" element={<ScanAttendance />} />
         <Route path="/search-by-date" element={<SearchByDate />} />
         <Route path="/profile/:customId" element={<Profile />} />
+        <Route path="/transfer" element={<Transfer />} />
+        <Route path="/transfers" element={<Transfers />} />
+        <Route path="/send-coins" element={<Send />} />
+        <Route path="/recieve-coins" element={<Recieve />} />
       </Routes>
       <Footer />
     </>

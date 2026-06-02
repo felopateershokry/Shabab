@@ -21,6 +21,9 @@ function Home() {
             <Link to={"/list-makhdom"}>
               <button className="home-button">المخدومين</button>
             </Link>
+            {/* <Link to={"/transfer"}>
+              <button className="home-button">نسر جنية</button>
+            </Link> */}
           </div>
           <div className="scan-div">
             <Link to={"/scan"}>
