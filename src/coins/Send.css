@@ -108,7 +108,7 @@
 
 /* ================= TABLE ================= */
 
-table {
+.table-container table {
   width: 100%;
   min-width: 650px;
 
@@ -127,7 +127,7 @@ table {
 
 /* ================= HEADER (FIXED ABOVE ROWS) ================= */
 
-thead {
+.table-container thead {
   position: sticky;
   top: 0;
   z-index: 20;
@@ -136,7 +136,7 @@ thead {
   backdrop-filter: blur(12px);
 }
 
-th {
+.table-container thead th {
   padding: 16px;
 
   font-size: 13px;
@@ -152,7 +152,7 @@ th {
 
 /* ================= TABLE CELLS ================= */
 
-td {
+.table-container td {
   padding: 14px;
 
   text-align: center;
@@ -169,48 +169,48 @@ td {
 /* ================= COLUMN FIX (IMPORTANT FOR YOUR IMAGE ISSUE) ================= */
 
 /* الاسم */
-th:nth-child(1),
-td:nth-child(1) {
+.table-container thead th:nth-child(1),
+.table-container td:nth-child(1) {
   width: 35%;
   text-align: right;
 }
 
 /* ID */
-th:nth-child(2),
-td:nth-child(2) {
+.table-container thead th:nth-child(2),
+.table-container td:nth-child(2) {
   width: 20%;
 }
 
 /* نسر جنسه / coins */
-th:nth-child(3),
-td:nth-child(3) {
+.table-container thead th:nth-child(3),
+.table-container td:nth-child(3) {
   width: 25%;
 }
 
 /* checkbox */
-th:nth-child(4),
-td:nth-child(4) {
+.table-container thead th:nth-child(4),
+.table-container td:nth-child(4) {
   width: 20%;
 }
 
 /* checkbox styling */
-td input[type="checkbox"] {
+.table-container td input[type="checkbox"] {
   transform: scale(1.2);
   cursor: pointer;
 }
 
 /* ================= ROWS ================= */
 
-tr {
+.table-container tbody tr {
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-tr:hover {
+.table-container tbody tr:hover {
   background: rgba(255, 255, 255, 0.06);
 }
 
-tr.active {
+.table-container tbody tr.active {
   background: rgba(34, 197, 94, 0.18);
   box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.3);
 }
@@ -231,11 +231,11 @@ tr.active {
     width: 100%;
   }
 
-  table {
+  .table-container table {
     min-width: 100%;
   }
 
-  th, td {
+  .table-container tbody th, .table-container tbody td {
     font-size: 12px;
     padding: 10px;
   }

@@ -66,7 +66,7 @@ function Recieve() {
     const amount = Number(coins);
 
     if (!amount || amount <= 0) {
-      toast.error("Enter valid amount first");
+      toast.error("اولا ادخل عدد صحيح أكبر من صفر");
       return null;
     }
 
@@ -81,7 +81,7 @@ function Recieve() {
     if (!amount) return;
 
     if ((user.coins || 0) < amount) {
-      toast.error("Not enough balance");
+      toast.error("رصيد غير كافٍ");
       return;
     }
 
@@ -102,7 +102,7 @@ function Recieve() {
         createdAt: serverTimestamp(),
       });
 
-      toast.success(`${amount} coins deducted from ${user.name}`);
+      toast.success(`${amount} نسر جنية تم سحبها من ${user.name}`);
 
       setCoins("");
       setSelectedUser(null);
@@ -110,7 +110,7 @@ function Recieve() {
       await fetchUsers();
     } catch (err) {
       console.error(err);
-      toast.error("Update failed");
+      toast.error("فشل في تحديث البيانات");
     }
   };
 
@@ -128,17 +128,17 @@ function Recieve() {
         );
 
         if (!user) {
-          toast.error("User not found");
+          toast.error("مستخدم غير معروف");
           return;
         }
 
         await deductCoins(user);
       });
 
-      toast.success("NFC Scanner Started");
+      toast.success( "قرب البطاقة الآن");
     } catch (err) {
       console.error(err);
-      toast.error(err.message || "NFC error");
+      toast.error(err.message || "خطأ في NFC");
     }
   };
 
@@ -147,7 +147,7 @@ function Recieve() {
   // =========================
   const handleManualWithdraw = async () => {
     if (!selectedUser) {
-      toast.error("Select a user first");
+      toast.error("اختر مستخدم أولاً");
       return;
     }
 
@@ -170,27 +170,29 @@ function Recieve() {
     <div className="send-container">
       <Navbar />
 
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
+      <div className="search-wrapper">
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      </div>
+      
       <ToastContainer position="top-right" autoClose={2500} />
 
       {/* Controls */}
       <div className="coins-box">
         <input
           type="number"
-          placeholder="Enter amount"
+          placeholder="ادخل عدد النسر جنية"
           value={coins}
           onChange={(e) => setCoins(e.target.value)}
         />
-
-        <button onClick={startNFCScan}>Scan NFC</button>
 
         <button
           onClick={handleManualWithdraw}
           style={{ background: "#d9534f" }}
         >
-          Manual Withdraw
+          سحب نسر جنية
         </button>
+
+        <button onClick={startNFCScan}>Scan NFC</button>
       </div>
 
       {/* Table */}
@@ -198,9 +200,9 @@ function Recieve() {
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>ID</th>
-              <th>Coins</th>
+              <th>الاسم</th>
+              <th className="coins-th">ID</th>
+              <th>نسر جنية</th>
             </tr>
           </thead>
 
@@ -212,7 +214,7 @@ function Recieve() {
                 className={selectedUser?.id === user.id ? "active" : ""}
               >
                 <td>{user.name}</td>
-                <td>{user.customId || "-"}</td>
+                <td className="coins-th">{user.customId || "-"}</td>
                 <td>{user.coins || 0}</td>
               </tr>
             ))}

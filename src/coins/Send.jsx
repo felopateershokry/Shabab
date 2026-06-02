@@ -66,7 +66,7 @@ function Send() {
     const amount = Number(coins);
 
     if (!amount || amount <= 0) {
-      toast.error("Enter valid coins amount first");
+      toast.error("اولا ادخل عدد صحيح أكبر من صفر");
       return null;
     }
 
@@ -81,7 +81,7 @@ function Send() {
     if (!amount) return;
 
     if (selected.length === 0) {
-      toast.error("Please select at least one user");
+      toast.error("حدد مستلم واحد على الأقل");
       return;
     }
 
@@ -106,7 +106,7 @@ function Send() {
         }),
       );
 
-      toast.success("Coins sent successfully!");
+      toast.success("تم ايداع " + amount + " نسر جنية");
 
       setCoins("");
       setSelected([]);
@@ -114,7 +114,7 @@ function Send() {
       await fetchUsers();
     } catch (err) {
       console.error(err);
-      toast.error("Something went wrong!");
+      toast.error("فشل في تحديث البيانات");
     }
   };
 
@@ -132,7 +132,7 @@ function Send() {
         );
 
         if (!user) {
-          toast.error("User not found");
+          toast.error("مستخدم غير معروف");
           return;
         }
 
@@ -140,10 +140,10 @@ function Send() {
         toast.success(`Selected: ${user.name}`);
       });
 
-      toast.success("NFC scanning started");
+      toast.success( "قرب البطاقة الآن");
     } catch (err) {
       console.error(err);
-      toast.error(err.message || "NFC error");
+      toast.error(err.message || "خطأ في NFC");
     }
   };
 
@@ -176,20 +176,22 @@ function Send() {
     <div className="send-container">
       <Navbar />
 
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
+      <div className="search-wrapper">
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      </div>
+      
       <ToastContainer position="top-right" autoClose={3000} />
 
       {/* Controls */}
       <div className="coins-box">
         <input
           type="number"
-          placeholder="Enter coins amount"
+          placeholder="ادخل عدد النسر جنية"
           value={coins}
           onChange={(e) => setCoins(e.target.value)}
         />
 
-        <button onClick={sendCoins}>Send Coins</button>
+        <button onClick={sendCoins}>ايداع نسر جنية</button>
 
         <button onClick={startNFCScan}>Scan NFC</button>
       </div>
@@ -199,10 +201,10 @@ function Send() {
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>ID</th>
-              <th>Coins</th>
-              <th>Select</th>
+              <th>الاسم</th>
+              <th className="coins-th">ID</th>
+              <th>نسر جنية</th>
+              <th className="coins-th">حدد</th>
             </tr>
           </thead>
 
@@ -216,9 +218,9 @@ function Send() {
                 }
               >
                 <td>{user.name}</td>
-                <td>{user.customId || "-"}</td>
+                <td className="coins-th">{user.customId || "-"}</td>
                 <td>{user.coins || 0}</td>
-                <td>
+                <td className="coins-th">
                   <input
                     type="checkbox"
                     checked={!!selected.find((u) => u.id === user.id)}
