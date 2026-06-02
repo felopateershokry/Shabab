@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Send.css";
+
 import { db } from "../firebase";
 import {
   collection,
   getDocs,
   updateDoc,
   doc,
-    increment,
-    addDoc,
-        serverTimestamp,
+  increment,
+  addDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import SearchBar from "../components/SearchBar";
@@ -20,10 +21,12 @@ import "react-toastify/dist/ReactToastify.css";
 function Recieve() {
   const [searchTerm, setSearchTerm] = useState("");
   const [coins, setCoins] = useState("");
-  const [selected, setSelected] = useState([]);
   const [users, setUsers] = useState([]);
 
-  // 📥 Fetch users
+  const scanningRef = useRef(false);
+  const lastUidRef = useRef("");
+  const lastReadTimeRef = useRef(0);
+
   const fetchUsers = async () => {
     const snapshot = await getDocs(collection(db, "makhdom"));
 
@@ -39,23 +42,17 @@ function Recieve() {
     fetchUsers();
   }, []);
 
-  // 🖱️ Manual select (fallback mode)
-  const toggleSelect = (user) => {
-    const exists = selected.find((u) => u.id === user.id);
-
-    if (exists) {
-      setSelected([]);
-    } else {
-      setSelected([user]); // single selection
-    }
+  const normalizeUID = (uid) => {
+    return String(uid || "")
+      .replace(/[:\s]/g, "")
+      .toLowerCase();
   };
 
-  // 💸 Deduct coins (shared logic)
   const deductCoins = async (user) => {
     const amount = Number(coins);
 
-    if (!amount) {
-      toast.error("Enter amount first");
+    if (!amount || amount <= 0) {
+      toast.error("Enter valid amount first");
       return;
     }
 
@@ -70,66 +67,93 @@ function Recieve() {
       await updateDoc(userRef, {
         coins: increment(-amount),
       });
-        
-        await addDoc(collection(db, "transfers"), {
-          fromId: user.customId,
-          toId: 1,
-          fromName: user.name,
-          toName: "San Giovanni",
-          amount: Number(coins),
-          type: "receive",
-          createdAt: serverTimestamp(),
-        });
+
+      await addDoc(collection(db, "transfers"), {
+        fromId: user.customId,
+        toId: 1,
+        fromName: user.name,
+        toName: "San Giovanni",
+        amount: amount,
+        type: "receive",
+        createdAt: serverTimestamp(),
+      });
 
       toast.success(`${amount} coins deducted from ${user.name}`);
 
       setCoins("");
-      setSelected([]);
-      fetchUsers();
+
+      await fetchUsers();
     } catch (err) {
       console.error(err);
       toast.error("Update failed");
     }
   };
 
-  // 📡 NFC scan → auto select only (NO auto deduct)
   const startNFCScan = async () => {
     try {
+      if (!coins || Number(coins) <= 0) {
+        toast.error("Enter amount first");
+        return;
+      }
+
+      if (!("NDEFReader" in window)) {
+        toast.error("NFC is not supported");
+        return;
+      }
+
+      if (scanningRef.current) {
+        toast.info("Scanner already running");
+        return;
+      }
+
       const ndef = new window.NDEFReader();
+
       await ndef.scan();
 
-      toast.info("Tap NFC card...");
+      scanningRef.current = true;
 
-      ndef.onreading = (event) => {
-        const nfcUid = event.serialNumber;
+      toast.success("NFC Scanner Started");
 
-        const user = users.find((u) => u.nfcUid === nfcUid);
+      ndef.onreading = async (event) => {
+        const uid = event.serialNumber;
 
-        if (!user) {
-          toast.error("User not found");
+        const now = Date.now();
+
+        if (
+          uid === lastUidRef.current &&
+          now - lastReadTimeRef.current < 1500
+        ) {
           return;
         }
 
-        setSelected([user]); // فقط تحديد
-        toast.success(`Selected: ${user.name}`);
+        lastUidRef.current = uid;
+        lastReadTimeRef.current = now;
+
+        console.log("Card UID:", uid);
+
+        const user = users.find(
+          (u) => normalizeUID(u.nfcUID) === normalizeUID(uid),
+        );
+
+        console.log("Found User:", user);
+
+        if (!user) {
+          toast.error(`User not found: ${uid}`);
+          return;
+        }
+
+        await deductCoins(user);
+      };
+
+      ndef.onreadingerror = () => {
+        toast.error("Cannot read NFC tag");
       };
     } catch (err) {
-      console.error(err);
-      toast.error("NFC not supported or denied");
+      console.error("NFC Error:", err);
+      toast.error(err?.message || "NFC permission denied");
     }
   };
 
-  // 🔥 Confirm deduct manually
-  const handleDeduct = async () => {
-    if (!selected.length) {
-      toast.error("Select a user first");
-      return;
-    }
-
-    await deductCoins(selected[0]);
-  };
-
-  // 🔍 search
   const filteredUsers = users.filter((u) => {
     const q = searchTerm.toLowerCase();
 
@@ -147,7 +171,6 @@ function Recieve() {
 
       <ToastContainer position="top-right" autoClose={2500} />
 
-      {/* INPUT */}
       <div className="coins-box">
         <input
           type="number"
@@ -156,12 +179,9 @@ function Recieve() {
           onChange={(e) => setCoins(e.target.value)}
         />
 
-        <button onClick={startNFCScan}>Scan NFC (Optional)</button>
-
-        <button onClick={handleDeduct}>Deduct Coins</button>
+        <button onClick={startNFCScan}>Scan NFC & Deduct</button>
       </div>
 
-      {/* TABLE */}
       <div className="table-container">
         <table>
           <thead>
@@ -174,13 +194,7 @@ function Recieve() {
 
           <tbody>
             {filteredUsers.map((user) => (
-              <tr
-                key={user.id}
-                onClick={() => toggleSelect(user)}
-                className={
-                  selected.find((u) => u.id === user.id) ? "active" : ""
-                }
-              >
+              <tr key={user.id}>
                 <td>{user.name}</td>
                 <td>{user.customId || "-"}</td>
                 <td>{user.coins || 0}</td>
