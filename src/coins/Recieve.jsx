@@ -22,12 +22,15 @@ function Recieve() {
   const [searchTerm, setSearchTerm] = useState("");
   const [coins, setCoins] = useState("");
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null); // ✅ NEW
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const scanningRef = useRef(false);
   const lastUidRef = useRef("");
   const lastReadTimeRef = useRef(0);
 
+  // =========================
+  // Fetch users
+  // =========================
   const fetchUsers = async () => {
     const snapshot = await getDocs(collection(db, "makhdom"));
 
@@ -43,21 +46,34 @@ function Recieve() {
     fetchUsers();
   }, []);
 
+  // =========================
+  // Normalize UID
+  // =========================
   const normalizeUID = (uid) =>
     String(uid || "")
       .replace(/[:\s]/g, "")
       .toLowerCase();
 
   // =========================
-  // Deduct logic (shared)
+  // Validate amount
   // =========================
-  const deductCoins = async (user) => {
+  const getAmount = () => {
     const amount = Number(coins);
 
     if (!amount || amount <= 0) {
       toast.error("Enter valid amount first");
-      return;
+      return null;
     }
+
+    return amount;
+  };
+
+  // =========================
+  // Deduct coins
+  // =========================
+  const deductCoins = async (user) => {
+    const amount = getAmount();
+    if (!amount) return;
 
     if ((user.coins || 0) < amount) {
       toast.error("Not enough balance");
@@ -85,6 +101,7 @@ function Recieve() {
 
       setCoins("");
       setSelectedUser(null);
+
       await fetchUsers();
     } catch (err) {
       console.error(err);
@@ -93,23 +110,29 @@ function Recieve() {
   };
 
   // =========================
-  // NFC
+  // Reset scanner
+  // =========================
+  const resetScanner = () => {
+    scanningRef.current = false;
+    lastUidRef.current = "";
+    lastReadTimeRef.current = 0;
+  };
+
+  // =========================
+  // NFC Scan
   // =========================
   const startNFCScan = async () => {
     try {
-      if (!coins || Number(coins) <= 0) {
-        toast.error("Enter amount first");
-        return;
-      }
+      const amount = getAmount();
+      if (!amount) return;
 
       if (!("NDEFReader" in window)) {
-        toast.error("NFC is not supported");
+        toast.error("NFC not supported");
         return;
       }
 
       if (scanningRef.current) {
-        toast.info("Scanner already running");
-        return;
+        resetScanner();
       }
 
       const ndef = new window.NDEFReader();
@@ -144,6 +167,9 @@ function Recieve() {
         }
 
         await deductCoins(user);
+
+        // important reset after success
+        resetScanner();
       };
 
       ndef.onreadingerror = () => {
@@ -156,7 +182,7 @@ function Recieve() {
   };
 
   // =========================
-  // Manual Withdraw
+  // Manual withdraw
   // =========================
   const handleManualWithdraw = async () => {
     if (!selectedUser) {
@@ -167,6 +193,9 @@ function Recieve() {
     await deductCoins(selectedUser);
   };
 
+  // =========================
+  // Filter users
+  // =========================
   const filteredUsers = users.filter((u) => {
     const q = searchTerm.toLowerCase();
 
@@ -184,7 +213,7 @@ function Recieve() {
 
       <ToastContainer position="top-right" autoClose={2500} />
 
-      {/* INPUT + ACTIONS */}
+      {/* Controls */}
       <div className="coins-box">
         <input
           type="number"
@@ -195,7 +224,6 @@ function Recieve() {
 
         <button onClick={startNFCScan}>Scan NFC</button>
 
-        {/* ✅ NEW BUTTON */}
         <button
           onClick={handleManualWithdraw}
           style={{ background: "#d9534f" }}
@@ -204,7 +232,7 @@ function Recieve() {
         </button>
       </div>
 
-      {/* TABLE */}
+      {/* Table */}
       <div className="table-container">
         <table>
           <thead>
@@ -219,7 +247,7 @@ function Recieve() {
             {filteredUsers.map((user) => (
               <tr
                 key={user.id}
-                onClick={() => setSelectedUser(user)} // ✅ select user
+                onClick={() => setSelectedUser(user)}
                 className={selectedUser?.id === user.id ? "active" : ""}
               >
                 <td>{user.name}</td>

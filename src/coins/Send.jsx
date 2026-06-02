@@ -26,11 +26,11 @@ function Send() {
 
   const ndefRef = useRef(null);
   const scanningRef = useRef(false);
-  const lastUidRef = useRef(null);
+  const lastUidRef = useRef("");
   const lastReadTimeRef = useRef(0);
 
   // =========================
-  // Fetch Users
+  // Fetch users
   // =========================
   const fetchUsers = async () => {
     const snapshot = await getDocs(collection(db, "makhdom"));
@@ -48,24 +48,36 @@ function Send() {
   }, []);
 
   // =========================
-  // Toggle Select
+  // Normalize UID
   // =========================
-  const toggleSelect = (user) => {
-    const exists = selected.find((u) => u.id === user.id);
+  const normalizeUID = (uid) =>
+    String(uid || "")
+      .replace(/[:\s]/g, "")
+      .toLowerCase();
 
-    if (exists) {
-      setSelected(selected.filter((u) => u.id !== user.id));
-    } else {
-      setSelected([...selected, user]);
+  // =========================
+  // Validate amount
+  // =========================
+  const getAmount = () => {
+    const amount = Number(coins);
+
+    if (!amount || amount <= 0) {
+      toast.error("Enter valid coins amount first");
+      return null;
     }
+
+    return amount;
   };
 
   // =========================
-  // Send Coins
+  // Send coins
   // =========================
   const sendCoins = async () => {
-    if (!coins || selected.length === 0) {
-      toast.error("Please select users and enter coins amount");
+    const amount = getAmount();
+    if (!amount) return;
+
+    if (selected.length === 0) {
+      toast.error("Please select at least one user");
       return;
     }
 
@@ -75,7 +87,7 @@ function Send() {
           const userRef = doc(db, "makhdom", user.id);
 
           await updateDoc(userRef, {
-            coins: increment(Number(coins)),
+            coins: increment(amount),
           });
 
           await addDoc(collection(db, "transfers"), {
@@ -83,7 +95,7 @@ function Send() {
             toId: user.customId || null,
             fromName: "San Giovanni",
             toName: user.name,
-            amount: Number(coins),
+            amount,
             type: "send",
             createdAt: serverTimestamp(),
           });
@@ -103,10 +115,12 @@ function Send() {
   };
 
   // =========================
-  // Normalize NFC UID
+  // Reset scanner state
   // =========================
-  const normalizeUID = (uid) => {
-    return uid?.replace(/[:\s]/g, "").toLowerCase();
+  const resetScanner = () => {
+    scanningRef.current = false;
+    lastUidRef.current = "";
+    lastReadTimeRef.current = 0;
   };
 
   // =========================
@@ -114,18 +128,19 @@ function Send() {
   // =========================
   const startNFCScan = async () => {
     try {
+      const amount = getAmount();
+      if (!amount) return;
+
       if (!("NDEFReader" in window)) {
         toast.error("Web NFC is not supported on this device");
         return;
       }
 
       if (scanningRef.current) {
-        toast.info("NFC scanner already running");
-        return;
+        resetScanner();
       }
 
       const ndef = new window.NDEFReader();
-
       await ndef.scan();
 
       ndefRef.current = ndef;
@@ -133,16 +148,14 @@ function Send() {
 
       toast.success("NFC scanning started");
 
-      ndef.onreading = (event) => {
+      ndef.onreading = async (event) => {
         const uid = event.serialNumber;
-
-        console.log("Scanned UID:", uid);
 
         const now = Date.now();
 
         if (
           uid === lastUidRef.current &&
-          now - lastReadTimeRef.current < 1000
+          now - lastReadTimeRef.current < 1200
         ) {
           return;
         }
@@ -150,18 +163,24 @@ function Send() {
         lastUidRef.current = uid;
         lastReadTimeRef.current = now;
 
+        console.log("Scanned UID:", uid);
+
         const user = users.find(
           (u) => normalizeUID(u.nfcUID) === normalizeUID(uid),
         );
 
-        console.log("Found User:", user);
+        console.log("Matched User:", user);
 
-        if (user) {
-          setSelected([user]);
-          toast.success(`User selected: ${user.name}`);
-        } else {
-          toast.error(`No user found for UID: ${uid}`);
+        if (!user) {
+          toast.error("User not found");
+          return;
         }
+
+        setSelected([user]);
+        toast.success(`Selected: ${user.name}`);
+
+        // optional: reset after one scan
+        resetScanner();
       };
 
       ndef.onreadingerror = () => {
@@ -169,13 +188,25 @@ function Send() {
       };
     } catch (err) {
       console.error("NFC Error:", err);
-
-      toast.error(err?.message || "NFC not supported or permission denied");
+      toast.error(err?.message || "NFC error");
     }
   };
 
   // =========================
-  // Search Filter
+  // Toggle select
+  // =========================
+  const toggleSelect = (user) => {
+    const exists = selected.find((u) => u.id === user.id);
+
+    if (exists) {
+      setSelected([]);
+    } else {
+      setSelected([user]);
+    }
+  };
+
+  // =========================
+  // Filter users
   // =========================
   const filteredUsers = users.filter((u) => {
     const q = searchTerm.toLowerCase();
@@ -194,6 +225,7 @@ function Send() {
 
       <ToastContainer position="top-right" autoClose={3000} />
 
+      {/* Controls */}
       <div className="coins-box">
         <input
           type="number"
@@ -207,14 +239,15 @@ function Send() {
         <button onClick={startNFCScan}>Scan NFC</button>
       </div>
 
+      {/* Table */}
       <div className="table-container">
         <table>
           <thead>
             <tr>
-              <th>الاسم</th>
-              <th className="coins-th">ID</th>
-              <th className="coins-th">Coins</th>
-              <th>حدد</th>
+              <th>Name</th>
+              <th>ID</th>
+              <th>Coins</th>
+              <th>Select</th>
             </tr>
           </thead>
 
@@ -228,8 +261,8 @@ function Send() {
                 }
               >
                 <td>{user.name}</td>
-                <td className="coins-th">{user.customId || "-"}</td>
-                <td className="coins-th">{user.coins || 0}</td>
+                <td>{user.customId || "-"}</td>
+                <td>{user.coins || 0}</td>
                 <td>
                   <input
                     type="checkbox"
