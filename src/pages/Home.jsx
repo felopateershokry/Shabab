@@ -1,10 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
 import Navbar from "./../components/Navbar";
 import "./Home.css";
+import { db } from "../firebase";
+import { collection, getCountFromServer } from "firebase/firestore"; // ✅
 
 function Home() {
+  const [makhdomCount, setMakhdomCount] = useState(null); // ✅
+
+  // ✅ جلب عدد المخدومين
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const snapshot = await getCountFromServer(collection(db, "makhdom"));
+        setMakhdomCount(snapshot.data().count);
+      } catch (err) {
+        console.error("خطأ في جلب العدد:", err);
+      }
+    };
+    fetchCount();
+  }, []);
+
   return (
     <div className="app-container">
       <Navbar />
@@ -14,7 +31,6 @@ function Home() {
         <div className="hero-section">
           <div className="hero-content">
             <span className="church-badge">
-              {" "}
               كنيسة الشهيد العظيم ابانوب النهيسي بالمندرة 🕯️
             </span>
             <h1 className="hero-title">
@@ -47,6 +63,10 @@ function Home() {
             <div className="menu-text">
               <span className="menu-title">المخدومين</span>
               <span className="menu-desc">إدارة بيانات المخدومين</span>
+            </div>
+            {/* ✅ عدد المخدومين */}
+            <div className="menu-count">
+              {makhdomCount !== null ? makhdomCount : "..."}
             </div>
             <div className="menu-arrow">›</div>
           </Link>

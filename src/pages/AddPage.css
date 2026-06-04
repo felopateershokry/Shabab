@@ -36,15 +36,19 @@
   box-shadow: 0 20px 50px rgba(0,0,0,0.12);
 }
 
+/* ✅ select اتضاف جنب input و textarea */
 .add-khodam-form input,
-.add-khodam-form textarea {
+.add-khodam-form textarea,
+.add-khodam-form select {
   padding: 0.85rem 1rem;
   font-size: 1rem;
   border-radius: 1rem;
   border: 1px solid #cbd5e1;
   background: #f0f9ff;
   color: #1e293b;
+  font-family: 'Cairo', 'Poppins', sans-serif;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 .add-khodam-form input::placeholder,
@@ -52,11 +56,37 @@
   color: #94a3b8;
 }
 
+/* ✅ focus للـ select كمان */
 .add-khodam-form input:focus,
-.add-khodam-form textarea:focus {
+.add-khodam-form textarea:focus,
+.add-khodam-form select:focus {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* ✅ تخصيص الـ select */
+.add-khodam-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233b82f6' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 14px center; /* ✅ شمال عشان RTL */
+  background-color: #f0f9ff;
+  padding-left: 2.2rem;
+}
+
+/* ✅ option styling */
+.add-khodam-form select option {
+  font-family: 'Cairo', 'Poppins', sans-serif;
+  color: #1e293b;
+  background: #f0f9ff;
+}
+
+/* ✅ placeholder للـ select */
+.add-khodam-form select option[value=""] {
+  color: #94a3b8;
 }
 
 textarea {
@@ -86,6 +116,14 @@ textarea {
   background: #2563eb;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+}
+
+/* ✅ disabled state للـ save button */
+.save-btn:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .cancel-btn {
@@ -156,6 +194,12 @@ textarea {
   border-radius: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
+}
+
+.scan-btn:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
 }
 
 @media (max-width: 600px) {

@@ -103,15 +103,15 @@
 }
 
 /* Visit Buttons */
-.visit-actions {
+.visit-actions-container {
   display: flex;
   gap: 12px;
   margin-top: 12px;
   
 }
 
-.visit-btn,
-.undo-btn {
+.visit-btn-single,
+.undo-btn-single {
   padding: 12px 35px;
   border-radius: 14px;
   font-size: 1.05rem;
@@ -123,18 +123,18 @@
   box-shadow: 0 6px 20px rgba(99,102,241,0.35);
   transition: all 0.3s ease;
 }
-.visit-btn {
+.visit-btn-single {
   background: linear-gradient(135deg, #818cf8, #4f46e5);
 }
-.undo-btn {
+.undo-btn-single {
   background: linear-gradient(135deg, #bbbaba, #5f5e5e);
   color: black;
 }
-/* .visit-btn:hover,
-.undo-btn:hover {
+.visit-btn-single:hover,
+.undo-btn-single:hover {
   transform: translateY(-3px);
   background: #4f46e5;
-} */
+}
 
 /* Last Attend */
 .last-attend {
@@ -208,7 +208,7 @@
   margin-top: 8px;
 }
 
-.left-align {
+.left-align-actions {
   justify-content: flex-start !important;
 }
 
@@ -278,7 +278,7 @@
     right: 50%;
     transform: translateX(50%);
   }
-  .left-align{
+  .left-align-actions{
     justify-content: center !important;
   }
   .coins-badge-single {

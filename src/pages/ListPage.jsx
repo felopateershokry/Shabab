@@ -11,14 +11,30 @@ function ListPage() {
   const [allStudents, setAllStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [khademFilter, setKhademFilter] = useState("");
+  const [khademList, setKhademList] = useState([]); // ✅ من collection khodam
 
-  // Fetch all students
+  // ✅ جلب الخدام من collection khodam
   useEffect(() => {
+    const fetchKhodam = async () => {
+      const snapshot = await getDocs(collection(db, "khodam"));
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setKhademList(data);
+    };
+    fetchKhodam();
+  }, []);
+
+  // جلب المخدومين
+  useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchStudents = async () => {
       const snapshot = await getDocs(collection(db, "makhdom"));
       const data = snapshot.docs.map((doc) => ({
-        id: doc.id, // Firestore doc id
-        ...doc.data(), // includes customId, name, etc.
+        id: doc.id,
+        ...doc.data(),
       }));
       setAllStudents(data);
       setFilteredStudents(data);
@@ -26,17 +42,23 @@ function ListPage() {
     fetchStudents();
   }, []);
 
-  // Filter by name or customId
+  // فلترة
   useEffect(() => {
     const term = searchTerm.toLowerCase();
-    const temp = allStudents.filter(
-      (student) =>
+    const temp = allStudents.filter((student) => {
+      const matchesSearch =
         (student.name && student.name.toLowerCase().includes(term)) ||
         (student.customId &&
-          student.customId.toString().toLowerCase().includes(term)),
-    );
+          student.customId.toString().toLowerCase().includes(term));
+
+      const matchesKhadem =
+        khademFilter === "" ||
+        (student.khadem && student.khadem === khademFilter);
+
+      return matchesSearch && matchesKhadem;
+    });
     setFilteredStudents(temp);
-  }, [searchTerm, allStudents]);
+  }, [searchTerm, khademFilter, allStudents]);
 
   return (
     <div className="course-list-container">
@@ -46,8 +68,10 @@ function ListPage() {
 
           <div className="course-list-header-content">
             <p className="course-list-breadcrumb">
-              <span className="breadcrumb-home" onClick={() => navigate("/")}>الرئيسية</span> /{" "}
-              <span className="breadcrumb-current">المخدومين</span>
+              <span className="breadcrumb-home" onClick={() => navigate("/")}>
+                الرئيسية
+              </span>{" "}
+              / <span className="breadcrumb-current">المخدومين</span>
             </p>
 
             <button
@@ -56,9 +80,14 @@ function ListPage() {
             >
               اضافة مخدوم +
             </button>
-            <button onClick={() => navigate("/search-by-date")} className="add-button">
+
+            <button
+              onClick={() => navigate("/search-by-date")}
+              className="add-button"
+            >
               تاريخ الميلاد
             </button>
+
             <input
               type="text"
               placeholder="ابحث بالاسم أو رقم المخدوم..."
@@ -66,6 +95,20 @@ function ListPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
             />
+
+            {/* ✅ فلتر الخادم من khodam collection */}
+            <select
+              value={khademFilter}
+              onChange={(e) => setKhademFilter(e.target.value)}
+              className="search-input"
+            >
+              <option value="">كل الخدام</option>
+              {khademList.map((k) => (
+                <option key={k.id} value={k.name}>
+                  {k.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </div>

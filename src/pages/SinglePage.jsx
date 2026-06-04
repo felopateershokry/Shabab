@@ -177,13 +177,13 @@ const SinglePage = () => {
             <span> ملاحظات:</span> {student.notes || "لا توجد ملاحظات"}
           </p>
 
-          <div className="visit-actions left-align">
+          <div className="visit-actions-container left-align-actions">
             {!visitedToday ? (
-              <button onClick={addVisit} className="visit-btn">
+              <button onClick={addVisit} className="visit-btn-single">
                 حضور
               </button>
             ) : (
-              <button onClick={undoVisit} className="undo-btn">
+              <button onClick={undoVisit} className="undo-btn-single">
                 تراجع
               </button>
             )}

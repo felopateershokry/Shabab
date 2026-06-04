@@ -1,5 +1,4 @@
-/* Card */
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
 
 :root {
   --primary: #6366f1;
@@ -8,185 +7,228 @@
   --text: #e5e7eb;
 }
 
+/* ===== Wrapper ===== */
+.course-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #1e2d45 0%, #0d1829 100%);
+  border: 1px solid rgba(99, 102, 241, 0.12);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  font-family: "Cairo", sans-serif;
+  direction: rtl;
+  padding-bottom: 18px;
+}
+
+.course-card-wrapper:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+/* ===== Glow overlay on hover ===== */
+.course-card-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.1), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.course-card-wrapper:hover::before {
+  opacity: 1;
+}
+
+/* ===== Visited badge ===== */
+.course-card-wrapper:has(.undo-btn)::after {
+  content: "✓ حضر اليوم";
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  color: #fff;
+  font-family: "Cairo", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  z-index: 3;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.45);
+  letter-spacing: 0.3px;
+}
+
+/* ===== Card Link ===== */
 .course-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 260px;
-  border-radius: 20px;
-  overflow: hidden;
-    /* background: radial-gradient(circle at top,
-    #34455f,
-    #19243c,
-    #07113c); */
-    background: linear-gradient(90deg , #202c47, #030b33);
-
-      text-decoration: none;
+  text-decoration: none;
   color: var(--text);
-  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
   position: relative;
-  padding-bottom: 18px;
-  
 }
 
-.course-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.15);
-}
-
-/* Avatar Image */
+/* ===== Avatar ===== */
 .course-card img {
-  width: 140px;
-  height: 140px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   object-fit: cover;
-  margin-top: 22px;
-  border: 5px solid #2563eb;
-  background: #f3f4f6;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  object-position: top;
+  margin-top: 28px;
+  border: 3px solid rgba(99, 102, 241, 0.5);
+  background: #1e2d45;
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-.course-card:hover img {
-  transform: scale(1.08);
-  box-shadow: 0 0 25px rgba(37, 99, 235, 0.35);
+.course-card-wrapper:hover .course-card img {
+  transform: scale(1.07);
+  border-color: var(--primary-light);
+  box-shadow: 0 0 22px rgba(99, 102, 241, 0.35);
 }
 
-/* Card Body */
+/* ===== Card Body ===== */
 .card-body {
-  padding: 16px;
+  padding: 14px 16px 6px;
   width: 100%;
   text-align: center;
 }
 
 .card-body h3 {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  color: var(--primary-light);
-  margin-bottom: 6px;
+  color: #f0f1f6;
+  margin: 0 0 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: color 0.3s ease;
 }
 
-.course-card:hover .card-body h3 {
-  color: #2563eb;
+.course-card-wrapper:hover .card-body h3 {
+  color: var(--primary-light);
 }
 
-/* Notes text */
+.card-body p,
 .card-body .amin {
-  font-size: 0.85rem;
-  color: #6b7280;
-  margin-top: 6px;
-  line-height: 1.4;
+  font-size: 0.78rem;
+  color: #4b5a72;
+  margin: 0;
+  line-height: 1.5;
 }
 
-/* Gradient hover highlight */
-.course-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(37,99,235,0.08), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.course-card:hover::before {
-  opacity: 1;
-}
-
-/* Buttons container */
+/* ===== Actions ===== */
 .course-card-actions {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  margin-top: 6px;
-  margin-right: -20px;
+  width: calc(100% - 32px);
+  margin-top: 10px;
 }
 
-/* Buttons */
+/* ===== Shared button base ===== */
 .visit-btn,
 .undo-btn {
-  min-width: 120px;
-  padding: 10px 22px;
+  width: 100%;
+  padding: 10px 20px;
   border-radius: 50px;
+  font-family: "Cairo", sans-serif;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: all 0.3s ease;
   letter-spacing: 0.3px;
+  transition: all 0.3s ease;
 }
 
-/* Visit Button */
+/* ===== Visit Button ===== */
 .visit-btn {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white;
-  box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
 }
 
 .visit-btn:hover {
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
   transform: translateY(-3px);
-  box-shadow: 0 14px 25px -5px rgba(37, 99, 235, 0.45);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.45);
 }
 
-/* Undo Button */
+/* ===== Undo Button ===== */
 .undo-btn {
-  background: #4376dc;
-  color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary-light);
+  border: 1px solid rgba(99, 102, 241, 0.25);
 }
 
 .undo-btn:hover {
-  background: #de2929;
-  color: #f5f5f5;
-  border-color: #fecaca;
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.15);
 }
 
-/* Click animation */
+/* ===== Click feedback ===== */
 .visit-btn:active,
 .undo-btn:active {
-  transform: scale(0.95);
+  transform: scale(0.96);
+  box-shadow: none;
+}
+
+/* ===== Divider ===== */
+.card-body::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  border-radius: 2px;
+  margin: 10px auto 0;
+  opacity: 0.4;
 }
 
 /* ========================= */
-/* Tablet */
+/* Tablet                    */
 /* ========================= */
-
 @media (max-width: 900px) {
-  .course-card {
-    max-width: 220px;
-  }
-
   .course-card img {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
   }
 
   .card-body h3 {
-    font-size: 1rem;
-  }
-  .course-card-actions{
-    margin-right: 0;
+    font-size: 0.95rem;
   }
 }
 
 /* ========================= */
-/* Mobile */
+/* Mobile                    */
 /* ========================= */
-
 @media (max-width: 500px) {
+  .course-card-wrapper {
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 14px;
+    gap: 12px;
+  }
 
   .course-card {
     flex-direction: row;
     align-items: center;
-    max-width: 100%;
-    padding: 12px;
-    gap: 14px;
+    gap: 12px;
+    flex: 1;
   }
 
   .course-card img {
@@ -194,37 +236,36 @@
   }
 
   .card-body {
-    text-align: center;
+    text-align: right;
     padding: 0;
+    flex: 1;
+  }
+
+  .card-body::after {
+    display: none;
   }
 
   .card-body h3 {
-    font-size: 1rem;
-  }
-
-  .card-body .amin {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
   }
 
   .course-card-actions {
-    justify-content: flex;
-    margin-right: 0;
+    width: auto;
+    margin-top: 0;
+    flex-shrink: 0;
   }
 
   .visit-btn,
   .undo-btn {
-    width: 50px;
-    padding: 7px 10px;
-    font-size: 0.75rem;
+    width: 70px;
+    padding: 8px 10px;
+    font-size: 0.78rem;
     border-radius: 10px;
   }
 }
-@media (max-width: 850px) and (min-width: 700px){
+
+@media (max-width: 850px) and (min-width: 501px) {
   .course-card-actions {
-    display: flex;
-    align-items: center;
     justify-content: center;
-    flex-direction: start;
-    margin-right: -40px;
   }
 }

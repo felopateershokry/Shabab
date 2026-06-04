@@ -10,18 +10,14 @@
   direction: rtl;
   min-height: 100vh;
   padding: 100px 30px 60px;
-  /* background: linear-gradient(180deg, var(--primary-light),var(--primary-dark)); */
   font-family: "Cairo", sans-serif;
-      background: radial-gradient(circle at top,
-    #2f3e53,
-    #111827,
-    #020617);
+  background: radial-gradient(circle at top, #2f3e53, #111827, #020617);
 }
 .felo {
   color: #2563eb;
   font-weight: 600;
 }
-/* Larger screens spacing */
+
 @media (min-width: 900px) {
   .course-list-container {
     padding-left: 120px;
@@ -29,7 +25,6 @@
   }
 }
 
-/* Header */
 .course-list-header {
   display: flex;
   flex-direction: column;
@@ -37,7 +32,6 @@
   margin-bottom: 35px;
 }
 
-/* Desktop header layout */
 @media (min-width: 768px) {
   .course-list-header {
     flex-direction: row;
@@ -46,31 +40,27 @@
   }
 }
 
-/* Title */
 .course-list-title {
-  font-size: clamp(2rem,4vw,2.6rem);
+  font-size: clamp(2rem, 4vw, 2.6rem);
   font-weight: 800;
   color: #f0f1f6;
   margin: 0;
   letter-spacing: .5px;
 }
+
 .breadcrumb-current {
   color: #bdc2cc;
   font-weight: 500;
 }
 
-/* Header content (breadcrumb + button + search) */
 .course-list-header-content {
   display: flex;
   align-items: center;
-  flex-direction: row ;
-  
+  flex-direction: row;
   gap: 15px;
   flex-wrap: wrap;
-  
 }
 
-/* Breadcrumb */
 .course-list-breadcrumb {
   font-size: .95rem;
   color: #64748b;
@@ -87,10 +77,8 @@
   color: #1d4ed8;
 }
 
-/* Add button */
 .add-button {
-    background:linear-gradient(90deg,#6366f1,#a855f7);
-
+  background: linear-gradient(90deg, #6366f1, #a855f7);
   color: #fff;
   border: none;
   padding: 10px 22px;
@@ -103,56 +91,74 @@
 .add-button:hover {
   background: #1d4ed8;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(37,99,235,.25);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, .25);
 }
 
-/* Search input */
+/* Search input + select ✅ */
 .search-input {
   width: 220px;
-  max-width: 70%; 
-  padding: 10px 16px; 
+  max-width: 70%;
+  padding: 10px 16px;
   border-radius: 12px;
   border: 1px solid #d1d5db;
   font-size: 1rem;
-  color: #111827; 
+  color: #111827;
   background: #f9fafb;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
   outline: none;
+  font-family: "Cairo", sans-serif;        /* ✅ فونت عربي للـ select */
   transition: all 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .search-input:focus {
   border-color: #2563eb;
-  box-shadow: 0 4px 15px rgba(37,99,235,0.2);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
 }
 
-/* Grid layout */
+/* ✅ تخصيص الـ select خصيصاً */
+select.search-input {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236366f1' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 14px center;   /* ✅ شمال عشان RTL */
+  background-color: #f9fafb;
+  padding-left: 2.2rem;
+}
+
+/* ✅ option styling */
+select.search-input option {
+  font-family: "Cairo", sans-serif;
+  color: #111827;
+  background: #f9fafb;
+  padding: 8px;
+}
+
 .course-list-grid {
   display: grid;
   gap: 25px;
   margin-top: 40px;
 }
 
-/* Responsive columns */
 @media (min-width: 500px) {
   .course-list-grid {
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 850px) {
   .course-list-grid {
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (min-width: 1200px) {
   .course-list-grid {
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
-/* Smooth card entrance */
 .course-list-grid > * {
   opacity: 0;
   transform: translateY(20px);
@@ -171,7 +177,6 @@
   }
 }
 
-/* Search Info Box */
 .search-info {
   display: inline-flex;
   align-items: center;
@@ -183,17 +188,16 @@
   border: 1px solid #e5e7eb;
   font-size: .9rem;
   color: #374151;
-  box-shadow: 0 5px 14px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.05);
   transition: all .25s ease;
 }
 
 .search-info:hover {
   transform: translateY(-2px);
   border-color: #2563eb;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* Close icon */
 .cross {
   cursor: pointer;
   font-weight: bold;
@@ -205,7 +209,6 @@
   transform: rotate(90deg);
 }
 
-/* Mobile adjustments */
 @media (max-width: 480px) {
   .course-list-title {
     font-size: 1.6rem;

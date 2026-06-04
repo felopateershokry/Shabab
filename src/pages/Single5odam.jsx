@@ -107,7 +107,7 @@ function Single5odam() {
 
           <div className="single-actions">
             <button
-              onClick={() => navigate(`/edit/${id}`)}
+              onClick={() => navigate(`/edit-khodam/${id}`)}
               className="edit-btn"
             >
               ✏️ تعديل

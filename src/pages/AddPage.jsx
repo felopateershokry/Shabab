@@ -11,6 +11,8 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AddPage() {
   const navigate = useNavigate();
@@ -25,20 +27,36 @@ function AddPage() {
     imagePreview: null,
   });
 
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(!!id); // ✅ show loading while fetching
+
   useEffect(() => {
     if (id) {
       const fetchKhodam = async () => {
-        const docRef = doc(db, "khodam", id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setFormData({
-            name: docSnap.data().name || "",
-            phone: docSnap.data().phone || "",
-            dateOfBirth: docSnap.data().dateOfBirth || "",
-            address: docSnap.data().address || "",
-            image: null,
-            imagePreview: docSnap.data().image || null,
-          });
+        try {
+          const docRef = doc(db, "khodam", id);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setFormData({
+              name: data.name || "",
+              phone: data.phone || "",
+              dateOfBirth: data.dateOfBirth || "",
+              address: data.address || "",
+              image: null,
+              imagePreview: data.image || null,
+            });
+          } else {
+            toast.error("لم يتم العثور على البيانات");
+            navigate("/list-khodam");
+          }
+        } catch (error) {
+          console.error("Fetch error:", error);
+          toast.error("حدث خطأ أثناء تحميل البيانات");
+          navigate("/list-khodam");
+        } finally {
+          setLoading(false); // ✅ done loading
         }
       };
       fetchKhodam();
@@ -46,16 +64,12 @@ function AddPage() {
   }, [id]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     setFormData({
       ...formData,
       image: file,
@@ -65,6 +79,8 @@ function AddPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (saving) return;
+    setSaving(true);
 
     try {
       let imageURL = formData.imagePreview;
@@ -87,6 +103,7 @@ function AddPage() {
           image: imageURL,
           updatedAt: Timestamp.now(),
         });
+        toast.success("تم التعديل بنجاح");
       } else {
         await addDoc(collection(db, "khodam"), {
           name: formData.name,
@@ -96,40 +113,33 @@ function AddPage() {
           image: imageURL,
           createdAt: Timestamp.now(),
         });
+        toast.success("تمت الإضافة بنجاح");
       }
 
-      navigate("/list-khodam");
+      setTimeout(() => navigate("/list-khodam"), 1000); // ✅ let toast show
     } catch (error) {
       console.error("Firebase error:", error);
+      toast.error("حدث خطأ أثناء الحفظ");
+      setSaving(false);
     }
   };
 
+  // ✅ Don't render form until data is loaded
+  if (loading) {
+    return (
+      <div className="add-khodam-container">
+        <p>جارٍ التحميل...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="add-khodam-container">
+      <ToastContainer />
       <h1 className="add-khodam-title">
         {id ? "تعديل بيانات الخادم" : "إضافة خادم جديد"}
       </h1>
-
       <form className="add-khodam-form" onSubmit={handleSubmit}>
-        {/* Image Upload */}
-        {/* <div className="image-upload">
-          <label htmlFor="imageInput" className="image-clickable">
-            {formData.imagePreview ? (
-              <img src={formData.imagePreview} alt="Preview" />
-            ) : (
-              <div className="image-placeholder">صورة الخادم</div>
-            )}
-          </label>
-
-          <input
-            id="imageInput"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            hidden
-          />
-        </div> */}
-
         <input
           type="text"
           name="name"
@@ -144,7 +154,6 @@ function AddPage() {
           name="dateOfBirth"
           value={formData.dateOfBirth}
           onChange={handleChange}
-          placeholder="تاريخ الميلاد"
           required
         />
 
@@ -164,9 +173,25 @@ function AddPage() {
           onChange={handleChange}
         />
 
+        {/* ✅ Image upload input was missing! */}
+        {/* <input type="file" accept="image/*" onChange={handleImageChange} />
+
+        {formData.imagePreview && (
+          <img
+            src={formData.imagePreview}
+            alt="معاينة"
+            style={{
+              width: "100px",
+              height: "100px",
+              objectFit: "cover",
+              borderRadius: "8px",
+            }}
+          />
+        )} */}
+
         <div className="form-actions">
-          <button type="submit" className="save-btn">
-            حفظ
+          <button type="submit" className="save-btn" disabled={saving}>
+            {saving ? "جارٍ الحفظ..." : "حفظ"}
           </button>
           <button
             type="button"

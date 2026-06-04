@@ -11,6 +11,7 @@ import {
   query,
   orderBy,
   limit,
+  where,
   updateDoc,
   Timestamp,
 } from "firebase/firestore";
@@ -33,9 +34,25 @@ function AddMakhdom() {
     nfcUID: "",
     coins: 0,
     password: "0000",
+    khadem: "",
   });
 
   const [scanning, setScanning] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [khademList, setKhademList] = useState([]); // ✅ قائمة الخدام من Firestore
+
+  // ✅ جلب الخدام من collection khodam
+  useEffect(() => {
+    const fetchKhodam = async () => {
+      const snapshot = await getDocs(collection(db, "khodam"));
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setKhademList(data);
+    };
+    fetchKhodam();
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -55,6 +72,7 @@ function AddMakhdom() {
             nfcUID: docSnap.data().nfcUID || "",
             coins: docSnap.data().coins ?? 0,
             password: docSnap.data().password || "0000",
+            khadem: docSnap.data().khadem || "",
           });
         }
       };
@@ -69,31 +87,19 @@ function AddMakhdom() {
   // =========================
   // قراءة NFC
   // =========================
-
   const scanNFC = async () => {
     if (!("NDEFReader" in window)) {
       toast.error("الموبايل لا يدعم NFC");
       return;
     }
-
     try {
       setScanning(true);
-
       const reader = new NDEFReader();
-
       await reader.scan();
-
       reader.onreading = (event) => {
         const uid = event.serialNumber;
-
-        setFormData((prev) => ({
-          ...prev,
-          nfcUID: uid,
-        }));
-
+        setFormData((prev) => ({ ...prev, nfcUID: uid }));
         setScanning(false);
-
-        // toast.success("تم قراءة الكارت بنجاح");
       };
     } catch (error) {
       console.error("NFC error:", error);
@@ -104,9 +110,10 @@ function AddMakhdom() {
   // =========================
   // حفظ البيانات
   // =========================
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (saving) return;
+    setSaving(true);
 
     try {
       let imageURL = formData.imagePreview;
@@ -121,7 +128,7 @@ function AddMakhdom() {
       }
 
       if (id) {
-        // تعديل
+        // تعديل — مفيش داعي نتحقق من customId لأنه مش بيتغير
         await updateDoc(doc(db, "makhdom", id), {
           name: formData.name,
           phone: formData.phone,
@@ -132,23 +139,32 @@ function AddMakhdom() {
           nfcUID: formData.nfcUID,
           coins: formData.coins,
           password: formData.password,
+          khadem: formData.khadem,
           updatedAt: Timestamp.now(),
         });
       } else {
-        // إنشاء ID تلقائي
+        // ✅ حساب الـ nextId
         const q = query(
           collection(db, "makhdom"),
           orderBy("customId", "desc"),
           limit(1),
         );
-
         const querySnapshot = await getDocs(q);
-
         let nextId = 101;
-
         if (!querySnapshot.empty) {
           const lastStudent = querySnapshot.docs[0].data();
           nextId = (lastStudent.customId || 100) + 1;
+        }
+
+        // ✅ التحقق إن الـ customId مش موجود قبل كده
+        const duplicateCheck = await getDocs(
+          query(collection(db, "makhdom"), where("customId", "==", nextId)),
+        );
+
+        if (!duplicateCheck.empty) {
+          toast.error("حدث تعارض في الرقم، حاول مرة أخرى");
+          setSaving(false);
+          return;
         }
 
         await addDoc(collection(db, "makhdom"), {
@@ -159,11 +175,12 @@ function AddMakhdom() {
           address: formData.address,
           notes: formData.notes,
           image: imageURL,
-          nfcUID: formData.nfcUID, // 👈 تخزين UID
+          nfcUID: formData.nfcUID,
           visits: [],
           lastVisit: null,
-          coins: 0, // NEW
+          coins: 0,
           password: "0000",
+          khadem: formData.khadem,
           createdAt: Timestamp.now(),
         });
       }
@@ -171,11 +188,14 @@ function AddMakhdom() {
       navigate("/list-makhdom");
     } catch (error) {
       console.error("Firebase error:", error);
+      toast.error("حدث خطأ أثناء الحفظ");
+      setSaving(false);
     }
   };
 
   return (
     <div className="add-khodam-container">
+      <ToastContainer />
       <h1 className="add-khodam-title">
         {id ? "تعديل بيانات المخدوم" : "إضافة مخدوم جديد"}
       </h1>
@@ -214,6 +234,21 @@ function AddMakhdom() {
           onChange={handleChange}
         />
 
+        {/* ✅ الخادم من قائمة khodam collection */}
+        <select
+          name="khadem"
+          value={formData.khadem}
+          onChange={handleChange}
+          className="search-input"
+        >
+          <option value="">اختر الخادم</option>
+          {khademList.map((k) => (
+            <option key={k.id} value={k.name}>
+              {k.name}
+            </option>
+          ))}
+        </select>
+
         <textarea
           name="notes"
           placeholder="ملاحظات"
@@ -222,7 +257,6 @@ function AddMakhdom() {
           rows="4"
         />
 
-        {/* NFC UID */}
         <input
           type="text"
           name="nfcUID"
@@ -236,8 +270,8 @@ function AddMakhdom() {
         </button>
 
         <div className="form-actions">
-          <button type="submit" className="save-btn">
-            حفظ
+          <button type="submit" className="save-btn" disabled={saving}>
+            {saving ? "جارٍ الحفظ..." : "حفظ"}
           </button>
 
           <button
