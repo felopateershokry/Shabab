@@ -7,7 +7,9 @@
   --text: #e5e7eb;
 }
 
-/* ===== Wrapper ===== */
+/* ============================================================
+   WRAPPER
+   ============================================================ */
 .course-card-wrapper {
   display: flex;
   flex-direction: column;
@@ -22,15 +24,19 @@
   font-family: "Cairo", sans-serif;
   direction: rtl;
   padding-bottom: 18px;
+
+  /* prevent content from overflowing on small screens */
+  min-width: 0;
+  width: 100%;
 }
 
 .course-card-wrapper:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-6px) scale(1.015);
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
   border-color: rgba(99, 102, 241, 0.35);
 }
 
-/* ===== Glow overlay on hover ===== */
+/* glow overlay */
 .course-card-wrapper::before {
   content: "";
   position: absolute;
@@ -39,31 +45,34 @@
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
+  z-index: 0;
 }
+.course-card-wrapper:hover::before { opacity: 1; }
 
-.course-card-wrapper:hover::before {
-  opacity: 1;
-}
-
-/* ===== Visited badge ===== */
+/* ============================================================
+   VISITED BADGE
+   ============================================================ */
 .course-card-wrapper:has(.undo-btn)::after {
   content: "✓ حضر اليوم";
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 10px;
+  left: 10px;
   background: linear-gradient(90deg, #6366f1, #a855f7);
   color: #fff;
   font-family: "Cairo", sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  padding: 3px 10px;
+  padding: 3px 9px;
   border-radius: 20px;
   z-index: 3;
   box-shadow: 0 2px 10px rgba(99, 102, 241, 0.45);
   letter-spacing: 0.3px;
+  white-space: nowrap;
 }
 
-/* ===== Card Link ===== */
+/* ============================================================
+   CARD LINK
+   ============================================================ */
 .course-card {
   display: flex;
   flex-direction: column;
@@ -72,19 +81,23 @@
   text-decoration: none;
   color: var(--text);
   position: relative;
+  z-index: 1;
 }
 
-/* ===== Avatar ===== */
+/* ============================================================
+   AVATAR
+   ============================================================ */
 .course-card img {
-  width: 130px;
-  height: 130px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
   object-position: top;
-  margin-top: 28px;
+  margin-top: 26px;
   border: 3px solid rgba(99, 102, 241, 0.5);
   background: #1e2d45;
   transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  flex-shrink: 0;   /* never squish the avatar */
 }
 
 .course-card-wrapper:hover .course-card img {
@@ -93,15 +106,18 @@
   box-shadow: 0 0 22px rgba(99, 102, 241, 0.35);
 }
 
-/* ===== Card Body ===== */
+/* ============================================================
+   CARD BODY
+   ============================================================ */
 .card-body {
   padding: 14px 16px 6px;
   width: 100%;
   text-align: center;
+  min-width: 0; /* allow text-overflow to kick in */
 }
 
 .card-body h3 {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #f0f1f6;
   margin: 0 0 5px;
@@ -111,9 +127,7 @@
   transition: color 0.3s ease;
 }
 
-.course-card-wrapper:hover .card-body h3 {
-  color: var(--primary-light);
-}
+.course-card-wrapper:hover .card-body h3 { color: var(--primary-light); }
 
 .card-body p,
 .card-body .amin {
@@ -121,18 +135,39 @@
   color: #4b5a72;
   margin: 0;
   line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* ===== Actions ===== */
+/* accent divider under body */
+.card-body::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  border-radius: 2px;
+  margin: 10px auto 0;
+  opacity: 0.4;
+}
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
 .course-card-actions {
   display: flex;
   justify-content: center;
   align-items: center;
   width: calc(100% - 32px);
   margin-top: 10px;
+  position: relative;
+  z-index: 1;
 }
 
-/* ===== Shared button base ===== */
+/* ============================================================
+   BUTTONS — shared
+   ============================================================ */
 .visit-btn,
 .undo-btn {
   width: 100%;
@@ -149,28 +184,33 @@
   gap: 6px;
   letter-spacing: 0.3px;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
-/* ===== Visit Button ===== */
+.visit-btn:active,
+.undo-btn:active {
+  transform: scale(0.96);
+  box-shadow: none;
+}
+
+/* visit */
 .visit-btn {
   background: linear-gradient(135deg, #6366f1, #a855f7);
   color: #fff;
   box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
 }
-
 .visit-btn:hover {
   background: linear-gradient(135deg, #4f46e5, #9333ea);
   transform: translateY(-3px);
   box-shadow: 0 10px 25px rgba(99, 102, 241, 0.45);
 }
 
-/* ===== Undo Button ===== */
+/* undo */
 .undo-btn {
   background: rgba(99, 102, 241, 0.1);
   color: var(--primary-light);
   border: 1px solid rgba(99, 102, 241, 0.25);
 }
-
 .undo-btn:hover {
   background: rgba(239, 68, 68, 0.12);
   color: #f87171;
@@ -179,93 +219,153 @@
   box-shadow: 0 6px 16px rgba(239, 68, 68, 0.15);
 }
 
-/* ===== Click feedback ===== */
-.visit-btn:active,
-.undo-btn:active {
-  transform: scale(0.96);
-  box-shadow: none;
-}
+/* ============================================================
+   DESKTOP  ≥ 901px  — original vertical card, full size
+   ============================================================ */
+@media (min-width: 901px) {
+  .course-card-wrapper {
+    border-radius: 20px;
+    padding-bottom: 18px;
+  }
 
-/* ===== Divider ===== */
-.card-body::after {
-  content: "";
-  display: block;
-  width: 40px;
-  height: 2px;
-  background: linear-gradient(90deg, #6366f1, #a855f7);
-  border-radius: 2px;
-  margin: 10px auto 0;
-  opacity: 0.4;
-}
-
-/* ========================= */
-/* Tablet                    */
-/* ========================= */
-@media (max-width: 900px) {
   .course-card img {
-    width: 110px;
-    height: 110px;
+    width: 130px;
+    height: 130px;
+    margin-top: 28px;
   }
 
-  .card-body h3 {
-    font-size: 0.95rem;
+  .card-body h3 { font-size: 1.05rem; }
+
+  .visit-btn,
+  .undo-btn {
+    font-size: 0.88rem;
+    padding: 10px 20px;
+    border-radius: 50px;
   }
 }
 
-/* ========================= */
-/* Mobile                    */
-/* ========================= */
+/* ============================================================
+   TABLET  501px – 900px  — vertical card, slightly compact
+   ============================================================ */
+@media (max-width: 900px) and (min-width: 501px) {
+  .course-card img {
+    width: 100px;
+    height: 100px;
+    margin-top: 22px;
+  }
+
+  .card-body {
+    padding: 12px 14px 6px;
+  }
+
+  .card-body h3 { font-size: 0.92rem; }
+
+  .card-body p,
+  .card-body .amin { font-size: 0.74rem; }
+
+  .course-card-actions {
+    width: calc(100% - 24px);
+    margin-top: 8px;
+  }
+
+  .visit-btn,
+  .undo-btn {
+    font-size: 0.82rem;
+    padding: 9px 16px;
+  }
+}
+
+/* ============================================================
+   MOBILE  ≤ 500px  — horizontal row layout
+   ============================================================ */
 @media (max-width: 500px) {
+  /* wrapper becomes a horizontal row */
   .course-card-wrapper {
     flex-direction: row;
     align-items: center;
-    padding: 12px 16px;
+    padding: 12px 14px;
     border-radius: 14px;
-    gap: 12px;
+    gap: 10px;
+    /* no extra bottom padding — content defines height */
+    padding-bottom: 12px;
   }
 
+  /* visited badge repositioned so it doesn't overlap avatar */
+  .course-card-wrapper:has(.undo-btn)::after {
+    top: auto;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    padding: 2px 8px;
+  }
+
+  /* card link = horizontal */
   .course-card {
     flex-direction: row;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     flex: 1;
+    min-width: 0; /* critical: let flex children shrink */
   }
 
-  .course-card img {
-    display: none;
-  }
+  /* hide avatar on mobile to save width */
+  .course-card img { display: none; }
 
+  /* text block */
   .card-body {
     text-align: right;
     padding: 0;
     flex: 1;
+    min-width: 0;
   }
 
-  .card-body::after {
-    display: none;
-  }
+  .card-body::after { display: none; }
 
   .card-body h3 {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
   }
 
+  .card-body p,
+  .card-body .amin { font-size: 0.72rem; }
+
+  /* action sits at the end of the row */
   .course-card-actions {
     width: auto;
     margin-top: 0;
     flex-shrink: 0;
   }
 
+  /* compact pill button */
   .visit-btn,
   .undo-btn {
-    width: 70px;
-    padding: 8px 10px;
-    font-size: 0.78rem;
+    width: auto;
+    min-width: 64px;
+    padding: 7px 12px;
+    font-size: 0.75rem;
     border-radius: 10px;
+    gap: 4px;
   }
 }
 
-@media (max-width: 850px) and (min-width: 501px) {
-  .course-card-actions {
-    justify-content: center;
+/* ============================================================
+   VERY SMALL PHONES  ≤ 360px
+   ============================================================ */
+@media (max-width: 360px) {
+  .course-card-wrapper {
+    padding: 10px 10px;
+    gap: 8px;
+  }
+
+  .card-body h3 { font-size: 0.82rem; }
+  .card-body p,
+  .card-body .amin { font-size: 0.68rem; }
+
+  .visit-btn,
+  .undo-btn {
+    min-width: 54px;
+    padding: 6px 9px;
+    font-size: 0.7rem;
   }
 }

@@ -1,0 +1,423 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
+/* ── Container ── */
+.dashboard-container {
+  direction: rtl;
+  min-height: 100vh;
+  padding: 100px 30px 60px;
+  font-family: "Cairo", sans-serif;
+  background: radial-gradient(circle at top, #2f3e53, #111827, #020617);
+  color: #e5e7eb;
+}
+
+@media (min-width: 900px) {
+  .dashboard-container {
+    padding-left: 80px;
+    padding-right: 80px;
+  }
+}
+
+/* ── Loading ── */
+.dashboard-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 16px;
+  font-family: "Cairo", sans-serif;
+  color: #818cf8;
+  background: radial-gradient(circle at top, #2f3e53, #111827, #020617);
+  font-size: 1rem;
+}
+
+.loading-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(129, 140, 248, 0.2);
+  border-top-color: #818cf8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Header ── */
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.dashboard-title {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 800;
+  color: #f0f1f6;
+  margin: 0 0 4px;
+  letter-spacing: 0.5px;
+}
+
+.dashboard-subtitle {
+  font-size: 0.88rem;
+  color: #4b5a72;
+  margin: 0;
+}
+
+.back-btn {
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  color: #818cf8;
+  padding: 9px 20px;
+  border-radius: 10px;
+  font-family: "Cairo", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.back-btn:hover {
+  background: rgba(99, 102, 241, 0.22);
+  transform: translateY(-2px);
+}
+
+/* ── Stat Cards ── */
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(145deg, #1e2a3a, #131f30);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: cardFadeIn 0.5s ease forwards;
+  opacity: 0;
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.05s; }
+.stat-card:nth-child(2) { animation-delay: 0.1s; }
+.stat-card:nth-child(3) { animation-delay: 0.15s; }
+.stat-card:nth-child(4) { animation-delay: 0.2s; }
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+.stat-purple { border-color: rgba(139, 92, 246, 0.25); }
+.stat-blue   { border-color: rgba(59, 130, 246, 0.25); }
+.stat-green  { border-color: rgba(34, 197, 94, 0.25); }
+.stat-orange { border-color: rgba(251, 146, 60, 0.25); }
+
+.stat-icon {
+  font-size: 2rem;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-purple .stat-icon { background: rgba(139, 92, 246, 0.15); }
+.stat-blue   .stat-icon { background: rgba(59, 130, 246, 0.15); }
+.stat-green  .stat-icon { background: rgba(34, 197, 94, 0.15); }
+.stat-orange .stat-icon { background: rgba(251, 146, 60, 0.15); }
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  color: #4b5a72;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #f0f1f6;
+}
+
+.stat-purple .stat-value { color: #a78bfa; }
+.stat-blue   .stat-value { color: #60a5fa; }
+.stat-green  .stat-value { color: #4ade80; }
+.stat-orange .stat-value { color: #fb923c; }
+
+/* ── Charts Row ── */
+.charts-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.chart-card {
+  background: linear-gradient(145deg, #1e2a3a, #131f30);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 24px;
+  animation: cardFadeIn 0.5s ease 0.25s forwards;
+  opacity: 0;
+}
+
+.chart-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #c4c9d4;
+  margin: 0 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── Bar Chart ── */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  height: 160px;
+  gap: 8px;
+}
+
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.bar-value {
+  font-size: 0.72rem;
+  color: #4b5a72;
+  font-weight: 600;
+  min-height: 16px;
+}
+
+.bar-track {
+  width: 100%;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.bar-fill {
+  width: 100%;
+  border-radius: 6px 6px 0 0;
+  transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  min-height: 4px;
+}
+
+.bar-fill-weekly {
+  background: linear-gradient(180deg, #6366f1, #4f46e5);
+}
+
+.bar-fill-monthly {
+  background: linear-gradient(180deg, #a855f7, #7c3aed);
+}
+
+.bar-label {
+  font-size: 0.7rem;
+  color: #4b5a72;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── Absent Card ── */
+.absent-card {
+  background: linear-gradient(145deg, #1e2a3a, #131f30);
+  border: 1px solid rgba(251, 146, 60, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+  animation: cardFadeIn 0.5s ease 0.35s forwards;
+  opacity: 0;
+}
+
+/* ✅ header row: title + show-all button */
+.absent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.absent-header .chart-title {
+  margin-bottom: 0;
+}
+
+/* ✅ زرار عرض الكل */
+.show-all-btn {
+  background: rgba(251, 146, 60, 0.1);
+  border: 1px solid rgba(251, 146, 60, 0.3);
+  color: #fb923c;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-family: "Cairo", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.show-all-btn:hover {
+  background: rgba(251, 146, 60, 0.2);
+  transform: translateY(-1px);
+}
+
+.absent-count {
+  margin-right: auto;
+  background: rgba(251, 146, 60, 0.15);
+  color: #fb923c;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.no-absent {
+  text-align: center;
+  color: #4ade80;
+  font-size: 0.95rem;
+  padding: 20px 0;
+  margin: 0;
+}
+
+.absent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.absent-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.absent-item:hover {
+  background: rgba(251, 146, 60, 0.07);
+  border-color: rgba(251, 146, 60, 0.2);
+  transform: translateX(-4px);
+}
+
+.absent-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(251, 146, 60, 0.3);
+  background: #1e2a3a;
+  flex-shrink: 0;
+}
+
+.absent-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.absent-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #e5e7eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.absent-sub {
+  font-size: 0.75rem;
+  color: #4b5a72;
+}
+
+.absent-days {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 44px;
+}
+
+.days-num {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fb923c;
+  line-height: 1;
+}
+
+.days-label {
+  font-size: 0.65rem;
+  color: #4b5a72;
+  font-weight: 500;
+}
+
+/* ── Mobile ── */
+@media (max-width: 500px) {
+  .dashboard-container {
+    padding: 80px 16px 40px;
+  }
+
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
+    border-radius: 10px;
+  }
+
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+
+  .bar-chart {
+    height: 130px;
+  }
+}

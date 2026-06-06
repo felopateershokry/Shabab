@@ -55,11 +55,11 @@ function TodayAttendance() {
     if (loading) {
       
         return (
-        
-      <div className="attendance-container">
-        <p>جارٍ التحميل...</p>
-      </div>
-    );
+          <div className="dashboard-loading">
+            <div className="loading-spinner" />
+            <p>جارٍ التحميل...</p>
+          </div>
+        );
   }
 
     return (

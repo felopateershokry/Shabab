@@ -12,9 +12,9 @@ const Footer = () => {
           rel="noopener noreferrer"
           className="footer-link"
         >
-          Felopateer Shokry
+          اجتماع سان جيوفاني للشباب
         </a>{" "}
-        — All rights reserved
+        — جميع الحقوق محفوظة ✦
       </p>
     </footer>
   );

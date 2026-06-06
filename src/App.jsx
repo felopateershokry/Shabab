@@ -19,6 +19,7 @@ import Transfer from './coins/Transfer'
 import Send from './coins/Send'
 import Recieve from './coins/Recieve'
 import Transfers from './coins/Transfers'
+import Dashboard from './pages/Dashboard'
 function App() {
 
   return (
@@ -44,6 +45,7 @@ function App() {
         <Route path="/transfers" element={<Transfers />} />
         <Route path="/send-coins" element={<Send />} />
         <Route path="/recieve-coins" element={<Recieve />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
     </>

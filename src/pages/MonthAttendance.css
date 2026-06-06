@@ -1,169 +1,407 @@
-/* Page Container */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
 
-.month-container{
+/* ══════════════════════════════
+   LOADING
+══════════════════════════════ */
+.ma-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-family: "Cairo", sans-serif;
+  color: #818cf8;
+  font-size: 1rem;
+  background: radial-gradient(circle at top, #2f3e53, #111827, #020617);
+}
+
+.ma-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(129, 140, 248, 0.15);
+  border-top-color: #818cf8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ══════════════════════════════
+   CONTAINER
+══════════════════════════════ */
+.ma-container {
   direction: rtl;
   min-height: 100vh;
-  padding: 110px 20px 40px;
-
-  font-family: 'Cairo', sans-serif;
-
-  background:
-  radial-gradient(circle at top,#1f2937,#111827,#020617);
-
-  color:#e5e7eb;
+  padding: 100px 24px 60px;
+  font-family: "Cairo", sans-serif;
+  background: radial-gradient(circle at top, #2f3e53, #111827, #020617);
+  color: #e5e7eb;
 }
 
-/* Title */
-
-.month-title{
-  text-align:center;
-  font-size:28px;
-  font-weight:800;
-  margin-bottom:35px;
-
-  background:linear-gradient(90deg,#818cf8,#a78bfa);
-  -webkit-background-clip:text;
-  color:transparent;
+@media (min-width: 900px) {
+  .ma-container { padding-left: 60px; padding-right: 60px; }
 }
 
-/* Table wrapper */
-
-.month-table-container{
-  max-width:1200px;
-  margin:auto;
-
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(14px);
-
-  border-radius:16px;
-  padding:20px;
-
-  box-shadow:0 10px 40px rgba(0,0,0,0.45);
-
-  overflow-x:auto;
+/* ══════════════════════════════
+   HEADER
+══════════════════════════════ */
+.ma-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 32px;
 }
 
-/* Table */
-
-.month-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:700px;
+.ma-title {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 800;
+  color: #f0f1f6;
+  margin: 0 0 4px;
 }
 
-/* Table Header */
-
-.month-table thead{
-  background:linear-gradient(90deg,#6366f1,#8b5cf6);
+.ma-subtitle {
+  font-size: 0.9rem;
+  color: #4b5a72;
+  margin: 0;
 }
 
-.month-table th{
-  padding:14px 16px;
-  font-size:15px;
-  color:white;
-  font-weight:700;
+/* ── Friday Control ── */
+.ma-friday-control {
+  background: linear-gradient(145deg, #1e2a3a, #131f30);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 180px;
 }
 
-/* Table cells */
-
-.month-table td{
-  padding:13px 16px;
-  font-size:14px;
-
-  border-bottom:1px solid rgba(255,255,255,0.08);
+.ma-friday-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #818cf8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Student name column */
-
-.month-table td:first-child{
-  font-weight:700;
-  color:#c7d2fe;
+.ma-friday-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* Zebra rows */
-
-.month-table tbody tr:nth-child(even){
-  background:rgba(255,255,255,0.03);
+.ma-counter-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  background: rgba(99, 102, 241, 0.1);
+  color: #818cf8;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 1;
 }
 
-/* Hover effect */
-
-.month-table tbody tr:hover{
-  background:rgba(99,102,241,0.18);
-  transition:0.25s;
+.ma-counter-btn:hover {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: rgba(99, 102, 241, 0.5);
 }
 
-/* Attendance icons */
-
-.month-table td span{
-  font-size:18px;
+.ma-friday-input {
+  width: 56px;
+  height: 36px;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  background: rgba(99, 102, 241, 0.08);
+  color: #f0f1f6;
+  font-family: "Cairo", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  outline: none;
+  -moz-appearance: textfield;
 }
 
-/* Success */
-
-.present{
-  color:#22c55e;
-  font-weight:800;
+.ma-friday-input::-webkit-outer-spin-button,
+.ma-friday-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 
-/* Absent */
-
-.absent{
-  color:#ef4444;
+.ma-friday-input:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2);
 }
 
-/* Month complete column */
-
-.full-month{
-  font-weight:800;
-  color:#22c55e;
+.ma-friday-hint {
+  font-size: 0.72rem;
+  color: #4b5a72;
+  margin: 0;
 }
 
-/* Scrollbar */
-
-.month-table-container::-webkit-scrollbar{
-  height:6px;
+/* ══════════════════════════════
+   SUMMARY CARDS
+══════════════════════════════ */
+.ma-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
 }
 
-.month-table-container::-webkit-scrollbar-thumb{
-  background:rgba(255,255,255,0.2);
-  border-radius:4px;
+.ma-summary-card {
+  background: linear-gradient(145deg, #1e2a3a, #131f30);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  animation: fadeUp 0.5s ease forwards;
+  opacity: 0;
 }
 
-/* Responsive */
+.ma-summary-card:nth-child(1) { animation-delay: 0.05s; }
+.ma-summary-card:nth-child(2) { animation-delay: 0.1s;  }
+.ma-summary-card:nth-child(3) { animation-delay: 0.15s; }
+.ma-summary-card:nth-child(4) { animation-delay: 0.2s;  }
 
-@media (max-width:900px){
-
-.month-title{
-  font-size:24px;
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.month-table th,
-.month-table td{
-  padding:10px;
-  font-size:13px;
+.ma-summary-green { border-color: rgba(34, 197, 94, 0.2); }
+.ma-summary-red   { border-color: rgba(239, 68, 68, 0.2); }
+.ma-summary-purple{ border-color: rgba(168, 85, 247, 0.2); }
+
+.ma-summary-val {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #f0f1f6;
+}
+.ma-summary-green .ma-summary-val  { color: #4ade80; }
+.ma-summary-red   .ma-summary-val  { color: #f87171; }
+.ma-summary-purple .ma-summary-val { color: #c084fc; }
+
+.ma-summary-label {
+  font-size: 0.75rem;
+  color: #4b5a72;
+  text-align: center;
+  font-weight: 500;
 }
 
+/* ══════════════════════════════
+   TABLE WRAPPER
+══════════════════════════════ */
+.ma-table-wrapper {
+  overflow-x: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(145deg, #1a2336, #0f1929);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
-/* Mobile */
-
-@media (max-width:600px){
-
-.month-container{
-  padding:100px 10px 30px;
+/* ══════════════════════════════
+   TABLE
+══════════════════════════════ */
+.ma-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
 }
 
-.month-table-container{
-  padding:12px;
+/* ── Header ── */
+.ma-table thead tr {
+  background: rgba(99, 102, 241, 0.08);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.15);
 }
 
-.month-table{
-  min-width:600px;
+.ma-table th {
+  padding: 14px 10px;
+  font-weight: 700;
+  color: #818cf8;
+  white-space: nowrap;
+  text-align: center;
 }
 
-.month-title{
-  font-size:22px;
+.ma-th-name {
+  text-align: right !important;
+  padding-right: 20px !important;
+  min-width: 160px;
 }
 
+.ma-th-friday {
+  min-width: 70px;
+}
+
+.ma-friday-num {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #6366f1;
+}
+
+.ma-friday-date {
+  display: block;
+  font-size: 0.7rem;
+  color: #4b5a72;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.ma-th-total {
+  min-width: 80px;
+}
+
+/* ── Body rows ── */
+.ma-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: background 0.2s ease;
+  animation: rowFade 0.4s ease forwards;
+  opacity: 0;
+}
+
+@keyframes rowFade {
+  from { opacity: 0; transform: translateX(6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.ma-row:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.ma-row-perfect {
+  background: rgba(34, 197, 94, 0.04);
+}
+
+.ma-row-absent {
+  background: rgba(239, 68, 68, 0.03);
+}
+
+/* ── Name cell ── */
+.ma-td-name {
+  padding: 12px 10px 12px 20px;
+}
+
+.ma-student-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ma-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(99, 102, 241, 0.3);
+  flex-shrink: 0;
+}
+
+.ma-student-name {
+  display: block;
+  font-weight: 700;
+  color: #e5e7eb;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.ma-student-khadem {
+  display: block;
+  font-size: 0.7rem;
+  color: #4b5a72;
+  margin-top: 1px;
+}
+
+/* ── Check cells ── */
+.ma-td-check {
+  text-align: center;
+  padding: 12px 6px;
+}
+
+.ma-present {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ma-absent-dash {
+  color: #2d3a4e;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+/* ── Total cell ── */
+.ma-td-total {
+  text-align: center;
+  padding: 12px 10px;
+}
+
+.ma-total-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.ma-badge-perfect {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.ma-badge-partial {
+  background: rgba(99, 102, 241, 0.12);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.ma-badge-zero {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+/* ══════════════════════════════
+   MOBILE
+══════════════════════════════ */
+@media (max-width: 500px) {
+  .ma-container { padding: 80px 12px 40px; }
+
+  .ma-header { flex-direction: column; }
+
+  .ma-friday-control { width: 100%; }
+
+  .ma-summary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .ma-summary-val { font-size: 1.6rem; }
+
+  .ma-table { font-size: 0.78rem; }
+
+  .ma-th-name { min-width: 100px; }
+
+  .ma-student-name { font-size: 0.78rem; }
 }
