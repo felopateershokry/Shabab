@@ -200,9 +200,9 @@ function Dashboard() {
             })}
           </p>
         </div>
-        <button className="back-btn" onClick={() => navigate("/")}>
+        {/* <button className="back-btn" onClick={() => navigate("/")}>
           ← الرئيسية
-        </button>
+        </button> */}
       </div>
 
       {/* ── Stat Cards ── */}
