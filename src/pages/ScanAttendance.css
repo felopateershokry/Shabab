@@ -1,71 +1,284 @@
-/* NFCPage.css - Dark Mode Edition */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Amiri:wght@400;700&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
-
-:root {
-  --primary-dark: #1f1f2e;
-  --accent: #6366f1;
-  --accent-light: #818cf8;
-  --card-bg: rgba(30, 30, 45, 0.85);
-  --text-main: #f5f5f5;
-  --text-secondary: rgba(245, 245, 245, 0.7);
-}
-
+/* ============================================================
+   PAGE — full viewport, centered
+   ============================================================ */
 .nfc-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f1a, #1a1a2e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: 'Cairo', sans-serif;
-  color: var(--text-main);
-  padding: 20px;
+  direction: rtl;
+  position: relative;
+  overflow: hidden;
+
+  /* deep cathedral black */
+  background: #03050a;
 }
 
+/* ── layered atmosphere ── */
+.nfc-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    /* warm gold halo dead center */
+    radial-gradient(ellipse 70% 60% at 50% 50%,  rgba(201,168,76,0.13) 0%, transparent 55%),
+    /* cool teal hint bottom-left */
+    radial-gradient(ellipse 45% 40% at  0% 100%, rgba(34,211,238,0.04) 0%, transparent 60%),
+    /* violet hint top-right */
+    radial-gradient(ellipse 40% 35% at 100%  0%, rgba(168,85,247,0.04) 0%, transparent 60%);
+}
+
+/* fine dot mesh */
+.nfc-page::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ============================================================
+   CARD
+   ============================================================ */
 .nfc-card-container {
-  background: var(--card-bg);
-  backdrop-filter: blur(20px);
-  border-radius: 25px;
-  padding: 60px 40px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 64px 40px 56px;
+  width: 380px;
+  min-height: 500px;
+  justify-content: center;
+  border-radius: 32px;
   text-align: center;
-  max-width: 400px;
-  width: 100%;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  /* glass */
+  background: rgba(8, 14, 26, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+
+  /* layered borders / shadows */
+  border: 1px solid rgba(201,168,76,0.14);
+  box-shadow:
+    0 0 0 1px rgba(201,168,76,0.05),
+    0 2px 0  0  rgba(201,168,76,0.22) inset,
+    0 32px 80px rgba(0,0,0,0.6),
+    0 0 100px rgba(201,168,76,0.06);
+
+  animation: cardReveal 0.7s cubic-bezier(0.22,1,0.36,1) both;
 }
 
-.nfc-card-container:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+/* ── corner accents ── */
+.nfc-card-container::before,
+.nfc-card-container::after {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-color: rgba(201,168,76,0.35);
+  border-style: solid;
 }
 
-.nfc-icon {
+.nfc-card-container::before {
+  top: 14px; right: 14px;
+  border-width: 2px 2px 0 0;
+  border-radius: 0 8px 0 0;
+}
+
+.nfc-card-container::after {
+  bottom: 14px; left: 14px;
+  border-width: 0 0 2px 2px;
+  border-radius: 0 0 0 8px;
+}
+
+/* ============================================================
+   ICON AREA
+   ============================================================ */
+.nfc-icon-wrap {
+  position: relative;
   width: 130px;
-  margin-bottom: 30px;
-  filter: drop-shadow(0 0 10px var(--accent));
-  animation: bounce 2s infinite;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+/* ── pulse rings — nth-child targets the 3 divs ── */
+.nfc-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.45);
+  animation: waveOut 2.8s ease-out infinite;
 }
 
+.nfc-ring:nth-child(1) {
+  width: 72px;
+  height: 72px;
+  animation-delay: 0s;
+}
+
+.nfc-ring:nth-child(2) {
+  width: 100px;
+  height: 100px;
+  animation-delay: 0.7s;
+  border-color: rgba(201,168,76,0.28);
+}
+
+.nfc-ring:nth-child(3) {
+  width: 130px;
+  height: 130px;
+  animation-delay: 1.4s;
+  border-color: rgba(201,168,76,0.14);
+}
+
+/* ── gold glow blob behind icon ── */
+.nfc-icon-glow {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.5) 0%, transparent 70%);
+  filter: blur(12px);
+  animation: glowBreathe 3.5s ease-in-out infinite;
+}
+
+/* ── logo image ── */
+.nfc-icon {
+  position: relative;
+  z-index: 2;
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  border-radius: 18px;
+  filter:
+    drop-shadow(0 0 12px rgba(201,168,76,0.5))
+    drop-shadow(0 4px 20px rgba(0,0,0,0.5));
+  animation: iconFloat 4s ease-in-out infinite;
+}
+
+/* ============================================================
+   TEXT
+   ============================================================ */
 .nfc-title {
-  font-size: 2rem;
+  font-family: 'Amiri', serif;
+  font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 12px;
-  color: var(--text-main);
+  color: #f5f0e8;
+  line-height: 1.45;
+  margin: 4px 0 0;
+
+  /* subtle gold shimmer */
+  background: linear-gradient(135deg, #f5f0e8 30%, #e8c96f 55%, #f5f0e8 80%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: titleShimmer 6s linear infinite;
 }
 
 .nfc-subtitle {
-  font-size: 1rem;
-  color: var(--text-secondary);
+  font-size: 0.8rem;
+  color: rgba(245,240,232,0.35);
+  line-height: 1.7;
+  margin: 0;
 }
 
-/* Optional: glowing border on hover */
-.nfc-card-container:hover {
-  border: 1px solid var(--accent);
-  box-shadow: 0 20px 40px var(--accent-light);
+/* ============================================================
+   SCANNING BADGE
+   ============================================================ */
+.nfc-scanning {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 7px 18px;
+  border-radius: 30px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: rgba(201,168,76,0.8);
+
+  background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.2);
+  box-shadow: 0 0 16px rgba(201,168,76,0.06) inset;
+}
+
+.nfc-scanning-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #c9a84c;
+  box-shadow: 0 0 8px rgba(201,168,76,0.9), 0 0 16px rgba(201,168,76,0.4);
+  animation: dotPulse 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(36px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+@keyframes waveOut {
+  0%   { opacity: 0.8; transform: scale(0.82); }
+  70%  { opacity: 0.1; }
+  100% { opacity: 0;   transform: scale(1.18); }
+}
+
+@keyframes glowBreathe {
+  0%, 100% { opacity: 0.55; transform: scale(1);    }
+  50%       { opacity: 1;    transform: scale(1.28); }
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-6px);  }
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%       { opacity: 0.3; transform: scale(0.72); }
+}
+
+@keyframes titleShimmer {
+  from { background-position: 0% center; }
+  to   { background-position: 220% center; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 420px) {
+  .nfc-card-container {
+    padding: 52px 28px 44px;
+    border-radius: 26px;
+    gap: 16px;
+    width: 290px;
+    min-height: 450px;
+  }
+
+  .nfc-icon-wrap { width: 110px; height: 110px; }
+  .nfc-ring:nth-child(1) { width: 60px;  height: 60px; }
+  .nfc-ring:nth-child(2) { width: 84px;  height: 84px; }
+  .nfc-ring:nth-child(3) { width: 110px; height: 110px; }
+  .nfc-icon      { width: 58px; height: 58px; }
+  .nfc-title     { font-size: 1.1rem; }
+  .nfc-subtitle  { font-size: 0.76rem; }
+}
+
+@media (max-width: 340px) {
+  .nfc-card-container { padding: 36px 20px 32px; }
+  .nfc-title          { font-size: 1rem; }
 }

@@ -191,7 +191,7 @@ function Home() {
           <Link to="/scan" className="scan-btn-home">
             <div className="scan-btn-inner">
               <div className="scan-sweep" />
-              <div className="scan-icon-wrap">📷</div>
+              {/* <div className="scan-icon-wrap">📷</div> */}
               <span className="scan-label">مسح البطاقة</span>
             </div>
           </Link>
