@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./Single5odam.css";
+import "./SinglePage.css";
 import { db } from "../firebase";
 import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { assets } from "../assets/assets";

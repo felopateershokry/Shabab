@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap');
 
 /* ══════════════════════════════════════════
    BASE
@@ -11,23 +11,23 @@
   z-index: 1000;
   direction: rtl;
   font-family: "Cairo", sans-serif;
-  background: rgba(7, 10, 25, 0.6);
+  background: rgba(4, 6, 10, 0.65);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.08);
   transition: background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
 .navbar-scrolled {
-  background: rgba(7, 10, 25, 0.92);
-  border-bottom-color: rgba(99, 102, 241, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  background: rgba(4, 6, 10, 0.94);
+  border-bottom-color: rgba(201, 168, 76, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* خط أسفل الـ navbar */
+/* خط أعلى الـ navbar */
 .navbar-progress {
   height: 2px;
-  background: linear-gradient(90deg, #6366f1, #a855f7, #6366f1);
+  background: linear-gradient(90deg, transparent, #c9a84c, #e8c96f, #c9a84c, transparent);
   background-size: 200% 100%;
   animation: shimmer 3s linear infinite;
 }
@@ -67,8 +67,8 @@
   height: 36px;
   border-radius: 10px;
   overflow: hidden;
-  border: 1.5px solid rgba(99, 102, 241, 0.4);
-  background: rgba(99, 102, 241, 0.1);
+  border: 1.5px solid rgba(201, 168, 76, 0.35);
+  background: rgba(201, 168, 76, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,8 +76,8 @@
 }
 
 .navbar-logo:hover .logo-img-wrapper {
-  border-color: rgba(168, 85, 247, 0.6);
-  box-shadow: 0 0 14px rgba(99, 102, 241, 0.3);
+  border-color: rgba(232, 201, 111, 0.6);
+  box-shadow: 0 0 14px rgba(201, 168, 76, 0.25);
 }
 
 .logo-img-wrapper img {
@@ -95,13 +95,13 @@
 .logo-title {
   font-size: 0.95rem;
   font-weight: 800;
-  color: #f0f1f6;
+  color: #f5f0e8;
   letter-spacing: 0.3px;
 }
 
 .logo-sub {
   font-size: 0.65rem;
-  color: #818cf8;
+  color: #c9a84c;
   font-weight: 500;
 }
 
@@ -127,7 +127,7 @@
   padding: 6px 14px;
   font-size: 0.88rem;
   font-weight: 600;
-  color: #64748b;
+  color: rgba(245, 240, 232, 0.4);
   text-decoration: none;
   border-radius: 8px;
   transition: color 0.25s ease, background 0.25s ease;
@@ -135,13 +135,13 @@
 }
 
 .nav-links-desktop li a:hover {
-  color: #c4c9d4;
-  background: rgba(255, 255, 255, 0.05);
+  color: #e8c96f;
+  background: rgba(201, 168, 76, 0.07);
 }
 
 .nav-links-desktop li a.active {
-  color: #818cf8;
-  background: rgba(99, 102, 241, 0.1);
+  color: #e8c96f;
+  background: rgba(201, 168, 76, 0.1);
 }
 
 /* نقطة تحت الـ active link */
@@ -150,8 +150,9 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #818cf8;
+  background: #c9a84c;
   margin-top: 3px;
+  box-shadow: 0 0 6px rgba(201, 168, 76, 0.6);
 }
 
 /* ══════════════════════════════════════════
@@ -167,13 +168,13 @@
   align-items: center;
   gap: 8px;
   padding: 8px 18px;
-  background: linear-gradient(135deg, #6366f1, #a855f7);
-  color: #fff;
+  background: linear-gradient(135deg, #c9a84c, #b8872e);
+  color: #1a1200;
   border: none;
   border-radius: 10px;
   font-family: "Cairo", sans-serif;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.3s ease;
   overflow: hidden;
@@ -182,19 +183,17 @@
 
 .scan-cta-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 8px 20px rgba(201, 168, 76, 0.35);
 }
 
-.scan-cta-btn:active {
-  transform: translateY(0);
-}
+.scan-cta-btn:active { transform: translateY(0); }
 
 /* نبضة على زرار المسح */
 .scan-pulse {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #fff;
+  background: #1a1200;
   position: relative;
   flex-shrink: 0;
 }
@@ -204,7 +203,7 @@
   position: absolute;
   inset: -3px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(26, 18, 0, 0.4);
   animation: pulse-ring 1.5s ease infinite;
 }
 
@@ -224,25 +223,25 @@
   gap: 5px;
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(201, 168, 76, 0.05);
+  border: 1px solid rgba(201, 168, 76, 0.15);
   border-radius: 10px;
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
-  transition: background 0.25s ease;
+  transition: background 0.25s ease, border-color 0.25s ease;
 }
 
 .hamburger:hover {
-  background: rgba(99, 102, 241, 0.12);
-  border-color: rgba(99, 102, 241, 0.25);
+  background: rgba(201, 168, 76, 0.12);
+  border-color: rgba(201, 168, 76, 0.35);
 }
 
 .hamburger span {
   display: block;
   width: 18px;
   height: 2px;
-  background: #94a3b8;
+  background: rgba(245, 240, 232, 0.5);
   border-radius: 2px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: center;
@@ -250,7 +249,7 @@
 
 .hamburger.active span:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
-  background: #818cf8;
+  background: #c9a84c;
 }
 
 .hamburger.active span:nth-child(2) {
@@ -260,7 +259,7 @@
 
 .hamburger.active span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
-  background: #818cf8;
+  background: #c9a84c;
 }
 
 /* ══════════════════════════════════════════
@@ -277,7 +276,7 @@
 }
 
 .mobile-overlay.open {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   pointer-events: all;
 }
 
@@ -290,15 +289,14 @@
   right: 0;
   left: 0;
   z-index: 999;
-  background: rgba(10, 14, 30, 0.97);
+  background: rgba(4, 6, 10, 0.97);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
   padding: 16px 24px 24px;
   transform: translateY(-110%);
   opacity: 0;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.35s ease;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
   pointer-events: none;
 }
 
@@ -327,10 +325,7 @@
 }
 
 @keyframes slideInRight {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 .mobile-links li a {
@@ -340,20 +335,20 @@
   padding: 12px 14px;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #64748b;
+  color: rgba(245, 240, 232, 0.4);
   text-decoration: none;
   border-radius: 10px;
   transition: all 0.2s ease;
 }
 
 .mobile-links li a:hover {
-  color: #c4c9d4;
-  background: rgba(255, 255, 255, 0.05);
+  color: #e8c96f;
+  background: rgba(201, 168, 76, 0.07);
 }
 
 .mobile-links li a.active {
-  color: #818cf8;
-  background: rgba(99, 102, 241, 0.1);
+  color: #e8c96f;
+  background: rgba(201, 168, 76, 0.1);
 }
 
 .mobile-link-dot {
@@ -362,25 +357,25 @@
   border-radius: 50%;
   background: currentColor;
   flex-shrink: 0;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .mobile-links li a.active .mobile-link-dot {
   opacity: 1;
-  background: #818cf8;
-  box-shadow: 0 0 6px rgba(129, 140, 248, 0.6);
+  background: #c9a84c;
+  box-shadow: 0 0 6px rgba(201, 168, 76, 0.6);
 }
 
 .mobile-scan-btn {
   width: 100%;
   padding: 13px;
-  background: linear-gradient(135deg, #6366f1, #a855f7);
-  color: #fff;
+  background: linear-gradient(135deg, #c9a84c, #b8872e);
+  color: #1a1200;
   border: none;
   border-radius: 12px;
   font-family: "Cairo", sans-serif;
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -388,6 +383,7 @@
 .mobile-scan-btn:hover {
   opacity: 0.9;
   transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(201, 168, 76, 0.3);
 }
 
 /* ══════════════════════════════════════════
@@ -395,28 +391,21 @@
 ══════════════════════════════════════════ */
 @media (max-width: 768px) {
   .nav-links-desktop,
-  .navbar-cta {
-    display: none;
-  }
+  .navbar-cta { display: none; }
 
   .hamburger {
     display: flex;
-    margin-right: auto;   /* يدفع الهامبرغر لأقصى اليسار */
+    margin-right: auto;
   }
 
-  .mobile-overlay {
-    display: block;
-  }
+  .mobile-overlay { display: block; }
 }
 
 @media (min-width: 769px) {
   .mobile-menu,
-  .mobile-overlay {
-    display: none !important;
-  }
+  .mobile-overlay { display: none !important; }
 }
 
-/* صغر شوية على شاشات متوسطة */
 @media (max-width: 1024px) and (min-width: 769px) {
   .nav-links-desktop li a {
     padding: 6px 10px;

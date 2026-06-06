@@ -100,7 +100,7 @@ function ListPage() {
             placeholder="ابحث بالاسم أو الرقم…"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
+            className="search-input-id-name"
           />
 
           {/* khadem filter */}

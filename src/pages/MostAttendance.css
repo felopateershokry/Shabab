@@ -1,139 +1,355 @@
-:root{
-  --primary:#6366f1;
-  --primary-light:#818cf8;
-  --primary-dark:#4f46e5;
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap');
 
-  --text:#e5e7eb;
-  --muted:#9ca3af;
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root {
+  --most-deep:           #04060a;
+  --most-deep-2:         #080c14;
+  --most-card-bg:        rgba(14, 22, 38, 0.85);
+  --most-gold:           #c9a84c;
+  --most-gold-light:     #e8c96f;
+  --most-gold-glow:      rgba(201, 168, 76, 0.28);
+  --most-primary:        #6366f1;
+  --most-primary-light:  #818cf8;
+  --most-primary-glow:   rgba(99, 102, 241, 0.25);
+  --most-accent-green:   #4ade80;
+  --most-accent-red:     #f87171;
+  --most-text-primary:   #f5f0e8;
+  --most-text-secondary: rgba(245, 240, 232, 0.45);
+  --most-border:         rgba(201, 168, 76, 0.1);
+  --most-border-hover:   rgba(201, 168, 76, 0.32);
+  --most-radius-lg:      20px;
+  --most-radius-md:      14px;
+  --most-radius-sm:      10px;
 }
 
-/* Container */
+/* ============================================================
+   RESET / BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-.attendance-container {
-  padding: 30px 20px;
-  padding-top: 100px; /* بسبب الـNavbar الثابت */
-
-  font-family: 'Cairo', sans-serif;
+/* ============================================================
+   PAGE CONTAINER
+   ============================================================ */
+.most-attendance-container {
   min-height: 100vh;
+  padding: 100px 20px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  font-family: 'Cairo', sans-serif;
+  color: var(--most-text-primary);
   direction: rtl;
-  text-align: center;
 
-  background: radial-gradient(circle at top,
-  #1f2937,
-  #111827,
-  #020617);
-
-  color: var(--text);
+  background:
+    radial-gradient(ellipse 55% 35% at 10% 8%,  rgba(201, 168, 76, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 40% at 90% 95%, rgba(99, 102, 241, 0.06) 0%, transparent 60%),
+    var(--most-deep);
 }
 
+/* subtle dot grid */
+.most-attendance-container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
 
-/* Title */
-
-.attendance-title {
-  margin-bottom: 25px;
-  font-size: 26px;
+/* ============================================================
+   TITLE
+   ============================================================ */
+.most-attendance-title {
+  font-family: 'Amiri', serif;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
   font-weight: 700;
-
-  background: linear-gradient(90deg,#818cf8,#a78bfa);
+  background: linear-gradient(135deg, var(--most-gold-light) 0%, var(--most-gold) 45%, #fff8e1 70%, var(--most-gold-light) 100%);
   -webkit-background-clip: text;
-  color: white;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: most-shimmer 5s linear infinite, most-fade-down 0.6s ease-out both;
+  margin-bottom: 24px;
+  line-height: 1.2;
+  position: relative;
+  z-index: 2;
 }
 
-/* Table */
+.most-attendance-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--most-gold), transparent);
+  border-radius: 2px;
+  margin-top: 8px;
+  opacity: 0.6;
+}
 
-.attendance-table {
+/* ============================================================
+   TABLE WRAPPER
+   ============================================================ */
+.most-attendance-table-wrapper {
+  position: relative;
+  z-index: 2;
+  overflow-x: auto;
+  border-radius: var(--most-radius-lg);
+  border: 1px solid var(--most-border);
+  background: var(--most-card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: most-fade-up 0.7s ease-out 0.15s both;
+}
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+.most-attendance-table {
   width: 100%;
   border-collapse: collapse;
-
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-
-  border-radius: 12px;
-  overflow: hidden;
-
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.9rem;
 }
 
-/* Table header */
-
-.attendance-table thead {
-  background: linear-gradient(90deg,#6366f1,#8b5cf6);
+/* ── Head ── */
+.most-attendance-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 3;
 }
 
-.attendance-table th {
-  padding: 14px 15px;
-  color: white;
-  font-weight: 600;
-  font-size: 15px;
+.most-attendance-table thead tr {
+  background: rgba(201, 168, 76, 0.07);
+  border-bottom: 1px solid var(--most-border-hover);
 }
 
-/* Table cells */
-
-.attendance-table td {
-  padding: 13px 15px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  color: #d1d5db;
+.most-attendance-table th {
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.6px;
+  color: var(--most-gold-light);
+  text-align: right;
+  white-space: nowrap;
 }
 
-/* Zebra stripes */
-
-.attendance-table tbody tr:nth-child(even) {
-  background: rgba(255,255,255,0.03);
-}
-
-/* Hover effect */
-
-.attendance-table tbody tr:hover {
-  background: rgba(99,102,241,0.2);
-  transition: 0.25s;
-}
-
-/* No data */
-
-.no-data {
+.most-attendance-table th:first-child {
   text-align: center;
-  padding: 20px;
-  font-style: italic;
-  color: var(--muted);
 }
 
-/* Responsive */
-.visit-actions{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-.visit-btn{
-  background: linear-gradient(135deg, #818cf8, #4f46e5);
-  border:none;
-  padding:7px 14px;
-  border-radius:8px;
-  color:white;
-  font-weight:600;
-  cursor:pointer;
-  transition:0.2s;
+/* ── Body rows ── */
+.most-attendance-table tbody tr {
+  border-bottom: 1px solid var(--most-border);
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.visit-btn:hover{
-  transform:scale(1.05);
+.most-attendance-table tbody tr:last-child {
+  border-bottom: none;
 }
 
-.undo-btn{
-  background: linear-gradient(135deg, #bbbaba, #5f5e5e);
-  border:none;
-  padding:7px 14px;
-  border-radius:8px;
-  color:white;
-  font-weight:600;
-  cursor:pointer;
+.most-attendance-table tbody tr:hover {
+  background: rgba(201, 168, 76, 0.06);
 }
-@media (max-width: 600px) {
-  .attendance-table th,
-  .attendance-table td {
-    padding: 10px;
-    font-size: 14px;
-  }
- .disable1 {
-  display: none;
- }
+
+/* ── Cells ── */
+.most-attendance-table td {
+  padding: 13px 18px;
+  color: var(--most-text-primary);
+  text-align: right;
+  vertical-align: middle;
+  font-size: 0.88rem;
+}
+
+.most-attendance-table td:first-child {
+  text-align: center;
+  font-weight: 700;
+  color: var(--most-gold);
+  font-size: 0.82rem;
+  letter-spacing: 0.4px;
+}
+
+/* visit count cell — highlighted */
+.most-attendance-table td.most-visit-count-cell {
+  font-weight: 700;
+  color: var(--most-accent-green);
+}
+
+/* last visit cell */
+.most-attendance-table td.most-last-visit-cell {
+  color: var(--most-text-secondary);
+  font-size: 0.83rem;
+}
+
+/* ── Hidden on small screens ── */
+.most-disable-mobile {
+  /* toggled via media query below */
+}
+
+/* ============================================================
+   ACTION BUTTONS
+   ============================================================ */
+.most-visit-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.most-visit-btn,
+.most-undo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 16px;
+  border-radius: 50px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+/* Attend button — gold */
+.most-visit-btn {
+  background: rgba(201, 168, 76, 0.1);
+  border-color: var(--most-border-hover);
+  color: var(--most-gold-light);
+}
+
+.most-visit-btn:hover {
+  background: rgba(201, 168, 76, 0.2);
+  border-color: var(--most-gold);
+  color: var(--most-gold);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--most-gold-glow);
+}
+
+.most-visit-btn:active {
+  transform: scale(0.95);
+}
+
+/* Undo button — red tint */
+.most-undo-btn {
+  background: rgba(248, 113, 113, 0.08);
+  border-color: rgba(248, 113, 113, 0.3);
+  color: var(--most-accent-red);
+}
+
+.most-undo-btn:hover {
+  background: rgba(248, 113, 113, 0.16);
+  border-color: rgba(248, 113, 113, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(248, 113, 113, 0.2);
+}
+
+.most-undo-btn:active {
+  transform: scale(0.95);
+}
+
+/* ============================================================
+   EMPTY / NO-DATA ROW
+   ============================================================ */
+.most-no-data {
+  text-align: center !important;
+  padding: 50px 20px !important;
+  color: var(--most-text-secondary) !important;
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   RANK BADGE (optional: wrap rank number in a badge)
+   ============================================================ */
+.most-rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.most-rank-badge.most-rank-1 {
+  background: rgba(201, 168, 76, 0.18);
+  color: var(--most-gold-light);
+  border: 1px solid var(--most-gold);
+}
+
+.most-rank-badge.most-rank-2 {
+  background: rgba(148, 163, 184, 0.12);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.most-rank-badge.most-rank-3 {
+  background: rgba(180, 120, 60, 0.12);
+  color: #c47e4e;
+  border: 1px solid rgba(180, 120, 60, 0.3);
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes most-fade-down {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes most-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes most-shimmer {
+  from { background-position: 0% 50%; }
+  to   { background-position: 200% 50%; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* ── Large desktop ≥ 1100px ── */
+@media (min-width: 1100px) {
+  .most-attendance-container { padding: 110px 40px 60px; }
+}
+
+/* ── Tablet 501–768px ── */
+@media (max-width: 768px) and (min-width: 501px) {
+  .most-attendance-container { padding: 95px 16px 50px; }
+  .most-disable-mobile { display: none; }
+  .most-attendance-table th,
+  .most-attendance-table td { padding: 11px 12px; font-size: 0.83rem; }
+}
+
+/* ── Mobile ≤ 500px ── */
+@media (max-width: 500px) {
+  .most-attendance-container { padding: 90px 12px 44px; }
+  .most-attendance-title { font-size: 1.7rem; }
+  .most-disable-mobile { display: none; }
+  .most-attendance-table th,
+  .most-attendance-table td { padding: 10px 10px; font-size: 0.8rem; }
+  .most-visit-btn,
+  .most-undo-btn { padding: 6px 12px; font-size: 0.75rem; }
+  .most-disable1-mobile { display: none; }
+}
+
+/* ── Very small phones ≤ 360px ── */
+@media (max-width: 360px) {
+  .most-attendance-container { padding: 85px 10px 40px; }
+  .most-attendance-title { font-size: 1.45rem; }
+  .most-attendance-table th,
+  .most-attendance-table td { padding: 8px 8px; font-size: 0.76rem; }
+  .most-disable1-mobile { display: none; }
 }

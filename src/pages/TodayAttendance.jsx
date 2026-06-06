@@ -5,7 +5,6 @@ import "./TodayAttendance.css";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 
-
 function TodayAttendance() {
   const [attendees, setAttendees] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +12,7 @@ function TodayAttendance() {
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 
   useEffect(() => {
     const fetchTodayAttendance = async () => {
@@ -34,7 +33,6 @@ function TodayAttendance() {
           }))
           .filter((person) => {
             if (!Array.isArray(person.visits)) return false;
-
             return person.visits.some(
               (visit) => getDateString(visit) === todayStr,
             );
@@ -52,22 +50,23 @@ function TodayAttendance() {
     fetchTodayAttendance();
   }, [todayStr]);
 
-    if (loading) {
-      
-        return (
-          <div className="dashboard-loading">
-            <div className="loading-spinner" />
-            <p>جارٍ التحميل...</p>
-          </div>
-        );
+  if (loading) {
+    return (
+      <div className="today-loading">
+        <div className="today-loading-spinner" />
+        <p>جارٍ التحميل...</p>
+      </div>
+    );
   }
 
-    return (
-        <>
-            <Navbar />
-        <div className="attendance-container">
-          <h2 className="attendance-title">حضور اليوم - {todayStr}</h2>
-          <table className="attendance-table">
+  return (
+    <>
+      <Navbar />
+      <div className="today-attendance-container">
+        <h2 className="today-attendance-title">حضور اليوم - {todayStr}</h2>
+
+        <div className="today-attendance-table-wrapper">
+          <table className="today-attendance-table">
             <thead>
               <tr>
                 <th>م</th>
@@ -77,7 +76,10 @@ function TodayAttendance() {
             </thead>
             <tbody>
               {attendees.map((attendee, index) => (
-                <tr key={attendee.id} onClick={() => navigate(`/single-makhdom/${attendee.id}`)}>
+                <tr
+                  key={attendee.id}
+                  onClick={() => navigate(`/single-makhdom/${attendee.id}`)}
+                >
                   <td>{index + 1}</td>
                   <td>{attendee.name}</td>
                   <td>{todayStr}</td>
@@ -85,7 +87,7 @@ function TodayAttendance() {
               ))}
               {attendees.length === 0 && (
                 <tr>
-                  <td colSpan="3" className="no-data">
+                  <td colSpan="3" className="today-no-data">
                     لا يوجد حضور اليوم
                   </td>
                 </tr>
@@ -93,8 +95,9 @@ function TodayAttendance() {
             </tbody>
           </table>
         </div>
-      </>
-    );
+      </div>
+    </>
+  );
 }
 
 export default TodayAttendance;

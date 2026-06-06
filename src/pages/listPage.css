@@ -265,6 +265,42 @@ select.search-input option:hover {
   opacity: 0.4;
 }
 
+.search-input-id-name {
+  width: 100%;
+  max-width: 340px;
+  padding: 10px 18px;
+  border-radius: 50px;
+  font-family: "Cairo", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(201, 168, 76, 0.12);
+  color: #f5f0e8;
+  outline: none;
+  direction: rtl;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.search-input-id-name::placeholder {
+  color: rgba(245, 240, 232, 0.35);
+  font-weight: 400;
+}
+
+.search-input-id-name:focus {
+  border-color: #c9a84c;
+  background: rgba(201, 168, 76, 0.05);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+}
+
+@media (max-width: 500px) {
+  .search-input-id-name {
+    max-width: 100%;
+    font-size: 0.8rem;
+    padding: 9px 14px;
+  }
+}
+
+
 /* ============================================================
    ANIMATIONS
    ============================================================ */

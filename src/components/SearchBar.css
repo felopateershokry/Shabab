@@ -1,55 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ============================================================
+   CONTAINER
+   ============================================================ */
 .search-bar-container {
   position: relative;
   width: 100%;
-  margin: 25px auto; /* يخلي البحث في المنتصف أفقيًا */
+  max-width: 420px;
+  margin-bottom: 24px;
+  z-index: 2;
 }
 
+/* ============================================================
+   INPUT
+   ============================================================ */
 .search-input {
   width: 100%;
-  padding: 12px 45px 12px 18px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  font-size: 0.95rem;
-  color: #1f2937;
+  padding: 11px 44px 11px 18px;
+  border-radius: 50px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.87rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(201, 168, 76, 0.12);
+  color: #f5f0e8;
   outline: none;
-  transition: all 0.25s ease, box-shadow 0.25s ease;
-  background: #ffffff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  direction: rtl;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.search-input::placeholder {
+  color: rgba(245, 240, 232, 0.35);
+  font-weight: 400;
 }
 
 .search-input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 8px 20px rgba(37,99,235,0.15);
+  border-color: #c9a84c;
+  background: rgba(201, 168, 76, 0.05);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
 }
 
+.search-input:hover:not(:focus) {
+  border-color: rgba(201, 168, 76, 0.28);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ============================================================
+   CLEAR BUTTON
+   ============================================================ */
 .clear-search {
   position: absolute;
-  right: 14px;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1rem;
+  color: rgba(245, 240, 232, 0.35);
+  font-size: 0.75rem;
   cursor: pointer;
-  color: #64748b;
-  transition: color 0.25s ease, transform 0.25s ease;
+  line-height: 1;
+  padding: 4px;
+  border-radius: 50%;
+  transition: color 0.2s ease, background 0.2s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
 }
 
 .clear-search:hover {
-  color: #2563eb;
-  transform: scale(1.1);
+  color: #e8c96f;
+  background: rgba(201, 168, 76, 0.12);
 }
 
-@media (max-width: 480px) {
+.clear-search:active {
+  transform: translateY(-50%) scale(0.9);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
   .search-bar-container {
-    width: 100%;
-    margin: 15px auto;
+    max-width: 100%;
   }
+}
 
+@media (max-width: 500px) {
   .search-input {
-    padding: 10px 40px 10px 14px;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
+    padding: 10px 40px 10px 16px;
   }
+}
 
-  .clear-search {
-    right: 10px;
+@media (max-width: 360px) {
+  .search-input {
+    font-size: 0.78rem;
+    padding: 9px 36px 9px 14px;
   }
 }

@@ -1,155 +1,325 @@
-:root{
-  --primary:#6366f1;
-  --primary-light:#818cf8;
-  --primary-dark:#4f46e5;
-  --text:#e5e7eb;
-  --muted:#9ca3af;
-}
-body, html {
-  margin: 0;
-  padding: 0;
-  background: radial-gradient(circle at top, #1f2937, #111827, #020617);
-  font-family: 'Cairo', sans-serif;
-}
-/* Container */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap');
+
+/* ══════════════════════════════════════════════════
+   CONTAINER
+══════════════════════════════════════════════════ */
 .search-by-date-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 30px 20px;
-  padding-top: 90px; /* بسبب Navbar ثابت */
-  
-  font-family: 'Cairo', sans-serif;
-  min-height: 100vh;
   direction: rtl;
-  text-align: center;
-
-  background: radial-gradient(circle at top,
-    #1f2937,
-    #111827,
-    #020617);
-
-  color: var(--text);
+  min-height: 100vh;
+  padding: 100px 24px 60px;
+  font-family: "Cairo", sans-serif;
+  color: #f5f0e8;
+  position: relative;
+  background:
+    radial-gradient(ellipse 55% 35% at 10% 8%,  rgba(201,168,76,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 40% at 90% 95%, rgba(99,102,241,0.06) 0%, transparent 60%),
+    #04060a;
 }
 
-/* Title */
-.search-by-date-container h2 {
-  margin-bottom: 25px;
-  font-size: 26px;
+/* dot grid */
+.search-by-date-container::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (min-width: 900px) {
+  .search-by-date-container {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   TITLE
+══════════════════════════════════════════════════ */
+.search-by-date-container > h2 {
+  position: relative;
+  z-index: 1;
+  font-family: "Amiri", serif;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
   font-weight: 700;
-
-  background: linear-gradient(90deg,#818cf8,#a78bfa);
+  margin-bottom: 28px;
+  background: linear-gradient(135deg, #e8c96f 0%, #c9a84c 50%, #fff8e1 100%);
   -webkit-background-clip: text;
-  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: shimmer 5s linear infinite;
 }
 
-/* Inputs */
+.search-by-date-container > h2::after {
+  content: "";
+  display: block;
+  width: 52px;
+  height: 2px;
+  background: linear-gradient(90deg, #c9a84c, transparent);
+  border-radius: 2px;
+  margin-top: 8px;
+  opacity: 0.6;
+}
+
+@keyframes shimmer {
+  from { background-position: 0% 50%; }
+  to   { background-position: 200% 50%; }
+}
+
+/* ══════════════════════════════════════════════════
+   INPUTS CONTAINER
+══════════════════════════════════════════════════ */
 .inputs-container {
+  position: relative;
+  z-index: 1;
   display: flex;
-  gap: 20px;
   flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 20px;
+  align-items: flex-end;
+  gap: 14px;
+  padding: 24px;
+  border-radius: 18px;
+  background: rgba(14, 22, 38, 0.85);
+  border: 1px solid rgba(201,168,76,0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  margin-bottom: 28px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
 }
 
-.inputs-container div {
+/* top gold line */
+.inputs-container::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 15%; right: 15%;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  opacity: 0.5;
+  border-radius: 2px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Input groups ── */
+.inputs-container > div {
   display: flex;
   flex-direction: column;
+  gap: 7px;
+  flex: 1;
+  min-width: 160px;
+}
+
+.inputs-container label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #c9a84c;
+  letter-spacing: 0.3px;
 }
 
 .inputs-container input {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.2);
-  width: 150px;
-  background: rgba(255,255,255,0.05);
-  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 50px;
+  font-family: "Cairo", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,168,76,0.15);
+  color: #f5f0e8;
   outline: none;
-  transition: all 0.25s ease;
-  backdrop-filter: blur(5px);
+  direction: rtl;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+.inputs-container input::placeholder {
+  color: rgba(245,240,232,0.3);
+  font-size: 0.8rem;
 }
 
 .inputs-container input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 10px rgba(99,102,241,0.4);
+  border-color: #c9a84c;
+  background: rgba(201,168,76,0.05);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
 }
 
-/* Button */
+/* ── Search Button ── */
 .inputs-container button {
-  padding: 10px 20px;
-  border-radius: 12px;
+  position: relative;
+  padding: 11px 32px;
+  border-radius: 50px;
+  font-family: "Cairo", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
   border: none;
-  background-color: var(--primary);
-  color: #fff;
   cursor: pointer;
-  height: 42px;
-  margin-top: 22px;
-  transition: all 0.25s ease;
+  overflow: hidden;
+  background: linear-gradient(135deg, #c9a84c 0%, #b8872e 100%);
+  color: #1a1200;
+  letter-spacing: 0.3px;
+  align-self: flex-end;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+  box-shadow: 0 4px 18px rgba(201,168,76,0.3);
+  white-space: nowrap;
 }
+
+/* sweep shine */
+.inputs-container button::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -75%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.45s ease;
+}
+
+.inputs-container button:hover::after { left: 130%; }
 
 .inputs-container button:hover {
-  background-color: var(--primary-light);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 10px 28px rgba(201,168,76,0.42);
 }
 
-/* Table */
+.inputs-container button:active {
+  transform: scale(0.96);
+  box-shadow: none;
+}
+
+/* ══════════════════════════════════════════════════
+   TABLE
+══════════════════════════════════════════════════ */
 .result-table {
+  position: relative;
+  z-index: 1;
   width: 100%;
   border-collapse: collapse;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
+  font-size: 0.9rem;
+  background: rgba(14, 22, 38, 0.85);
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  border: 1px solid rgba(201,168,76,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  animation: fadeUp 0.6s 0.1s cubic-bezier(0.22,1,0.36,1) both;
 }
 
-.result-table thead {
-  background: linear-gradient(90deg,var(--primary),#8b5cf6);
+/* ── Head ── */
+.result-table thead tr {
+  background: rgba(201,168,76,0.07);
+  border-bottom: 1px solid rgba(201,168,76,0.15);
 }
 
 .result-table th {
-  padding: 14px 15px;
-  color: white;
-  font-weight: 600;
-  font-size: 15px;
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #c9a84c;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: 0.4px;
 }
 
-.result-table td {
-  padding: 13px 15px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  color: #d1d5db;
+.result-table th:first-child { text-align: right; }
+
+/* ── Body rows ── */
+.result-table tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  animation: rowSlide 0.4s ease forwards;
+  opacity: 0;
 }
 
-.result-table tbody tr:nth-child(even) {
-  background: rgba(255,255,255,0.03);
+.result-table tbody tr:nth-child(1)  { animation-delay: 0.04s; }
+.result-table tbody tr:nth-child(2)  { animation-delay: 0.08s; }
+.result-table tbody tr:nth-child(3)  { animation-delay: 0.12s; }
+.result-table tbody tr:nth-child(4)  { animation-delay: 0.16s; }
+.result-table tbody tr:nth-child(5)  { animation-delay: 0.20s; }
+.result-table tbody tr:nth-child(6)  { animation-delay: 0.24s; }
+.result-table tbody tr:nth-child(7)  { animation-delay: 0.28s; }
+.result-table tbody tr:nth-child(8)  { animation-delay: 0.32s; }
+.result-table tbody tr:nth-child(9)  { animation-delay: 0.36s; }
+.result-table tbody tr:nth-child(10) { animation-delay: 0.40s; }
+
+@keyframes rowSlide {
+  from { opacity: 0; transform: translateX(8px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
+
+.result-table tbody tr:last-child { border-bottom: none; }
 
 .result-table tbody tr:hover {
-  background: rgba(99,102,241,0.2);
-  transition: 0.25s;
+  background: rgba(201,168,76,0.05);
 }
 
-/* No data */
-.no-data {
+/* ── Cells ── */
+.result-table td {
+  padding: 13px 18px;
+  color: #d4cfc8;
   text-align: center;
-  padding: 20px;
-  font-style: italic;
-  color: var(--muted);
+  vertical-align: middle;
+  font-size: 0.88rem;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .result-table th,
-  .result-table td {
-    padding: 10px;
-    font-size: 14px;
+/* ID cell */
+.result-table td:first-child {
+  text-align: right;
+  font-size: 0.75rem;
+  color: rgba(201,168,76,0.6);
+  font-weight: 700;
+}
+
+/* Name cell */
+.result-table td:nth-child(2) {
+  font-weight: 700;
+  color: #f5f0e8;
+  text-align: right;
+}
+
+/* Date cell */
+.result-table td:nth-child(3) {
+  font-size: 0.82rem;
+  color: rgba(245,240,232,0.5);
+  direction: ltr;
+}
+
+/* ── Empty state ── */
+.result-table td[colspan] {
+  text-align: center !important;
+  padding: 48px 20px !important;
+  color: rgba(245,240,232,0.3) !important;
+  font-size: 0.9rem !important;
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════ */
+@media (max-width: 500px) {
+  .search-by-date-container {
+    padding: 85px 12px 50px;
   }
 
-  .inputs-container input {
-    width: 120px;
-    font-size: 14px;
+  .inputs-container {
+    padding: 18px 16px;
+    gap: 12px;
+  }
+
+  .inputs-container > div {
+    min-width: 100%;
   }
 
   .inputs-container button {
-    font-size: 14px;
-    height: 38px;
+    width: 100%;
+    padding: 11px;
+  }
+
+  .result-table th,
+  .result-table td {
+    padding: 11px 12px;
+    font-size: 0.8rem;
   }
 }

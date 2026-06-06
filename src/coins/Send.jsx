@@ -18,7 +18,7 @@ import Navbar from "../components/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { startNFC, stopNFC } from "../services/nfcService"; // ✅ مهم جدًا
+import { startNFC, stopNFC } from "../services/nfcService";
 
 function Send() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,23 +33,28 @@ function Send() {
   // =========================
   const fetchUsers = async () => {
     const snapshot = await getDocs(collection(db, "makhdom"));
-
-    const data = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
+    const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
     setUsers(data);
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchUsers();
-
-    // ✅ important cleanup (fix double scan forever bug)
     return () => {
       stopNFC();
     };
   }, []);
+
+  // =========================
+  // Filter users (declared early so helpers below can use it)
+  // =========================
+  const filteredUsers = users.filter((u) => {
+    const q = searchTerm.toLowerCase();
+    return (
+      u.name?.toLowerCase().includes(q) ||
+      u.customId?.toString().toLowerCase().includes(q)
+    );
+  });
 
   // =========================
   // Normalize UID
@@ -64,12 +69,10 @@ function Send() {
   // =========================
   const getAmount = () => {
     const amount = Number(coins);
-
     if (!amount || amount <= 0) {
       toast.error("اولا ادخل عدد صحيح أكبر من صفر");
       return null;
     }
-
     return amount;
   };
 
@@ -89,11 +92,7 @@ function Send() {
       await Promise.all(
         selected.map(async (user) => {
           const userRef = doc(db, "makhdom", user.id);
-
-          await updateDoc(userRef, {
-            coins: increment(amount),
-          });
-
+          await updateDoc(userRef, { coins: increment(amount) });
           await addDoc(collection(db, "transfers"), {
             fromId: 1,
             toId: user.customId || null,
@@ -106,11 +105,9 @@ function Send() {
         }),
       );
 
-      toast.success("تم ايداع " + amount + " نسر جنية");
-
+      toast.success(`تم ايداع ${amount} نسر جنية لـ ${selected.length} شخص`);
       setCoins("");
       setSelected([]);
-
       await fetchUsers();
     } catch (err) {
       console.error(err);
@@ -119,7 +116,7 @@ function Send() {
   };
 
   // =========================
-  // NFC Scan (FIXED)
+  // NFC Scan
   // =========================
   const startNFCScan = async () => {
     try {
@@ -130,17 +127,19 @@ function Send() {
         const user = users.find(
           (u) => normalizeUID(u.nfcUID) === normalizeUID(uid),
         );
-
         if (!user) {
           toast.error("مستخدم غير معروف");
           return;
         }
-
-        setSelected([user]);
-        toast.success(`Selected: ${user.name}`);
+        setSelected((prev) => {
+          const exists = prev.find((u) => u.id === user.id);
+          if (exists) return prev;
+          return [...prev, user];
+        });
+        toast.success(`تم تحديد: ${user.name}`);
       });
 
-      toast.success( "قرب البطاقة الآن");
+      toast.success("قرب البطاقة الآن");
     } catch (err) {
       console.error(err);
       toast.error(err.message || "خطأ في NFC");
@@ -148,38 +147,52 @@ function Send() {
   };
 
   // =========================
-  // Toggle select
+  // Toggle single row
   // =========================
   const toggleSelect = (user) => {
-    const exists = selected.find((u) => u.id === user.id);
-
-    if (exists) {
-      setSelected([]);
-    } else {
-      setSelected([user]);
-    }
+    setSelected((prev) => {
+      const exists = prev.find((u) => u.id === user.id);
+      if (exists) return prev.filter((u) => u.id !== user.id);
+      return [...prev, user];
+    });
   };
 
   // =========================
-  // Filter users
+  // Select all / clear all
   // =========================
-  const filteredUsers = users.filter((u) => {
-    const q = searchTerm.toLowerCase();
+  const allSelected =
+    filteredUsers.length > 0 &&
+    filteredUsers.every((u) => selected.find((s) => s.id === u.id));
 
-    return (
-      u.name?.toLowerCase().includes(q) ||
-      u.customId?.toString().toLowerCase().includes(q)
-    );
-  });
+  const toggleSelectAll = () => {
+    if (allSelected) {
+      setSelected((prev) =>
+        prev.filter((s) => !filteredUsers.find((u) => u.id === s.id)),
+      );
+    } else {
+      setSelected((prev) => {
+        const prevIds = new Set(prev.map((u) => u.id));
+        const toAdd = filteredUsers.filter((u) => !prevIds.has(u.id));
+        return [...prev, ...toAdd];
+      });
+    }
+  };
 
   return (
     <div className="send-container">
       <Navbar />
 
+      <div className="send-header">
+        <h2 className="send-title">إيداع</h2>
+        {selected.length > 0 && (
+          <span className="send-selected-badge">{selected.length} محدد</span>
+        )}
+      </div>
+
       <div className="search-wrapper">
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
-      
+
       <ToastContainer position="top-right" autoClose={3000} />
 
       {/* Controls */}
@@ -194,6 +207,12 @@ function Send() {
         <button onClick={sendCoins}>ايداع نسر جنية</button>
 
         <button onClick={startNFCScan}>Scan NFC</button>
+
+        {selected.length > 0 && (
+          <button className="btn-clear" onClick={() => setSelected([])}>
+            إلغاء التحديد
+          </button>
+        )}
       </div>
 
       {/* Table */}
@@ -204,31 +223,35 @@ function Send() {
               <th>الاسم</th>
               <th className="coins-th">ID</th>
               <th>نسر جنية</th>
-              <th className="coins-th">حدد</th>
+              <th className="coins-th">
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={toggleSelectAll}
+                  title="تحديد الكل"
+                />
+              </th>
             </tr>
           </thead>
 
           <tbody>
-            {filteredUsers.map((user) => (
-              <tr
-                key={user.id}
-                onClick={() => toggleSelect(user)}
-                className={
-                  selected.find((u) => u.id === user.id) ? "active" : ""
-                }
-              >
-                <td>{user.name}</td>
-                <td className="coins-th">{user.customId || "-"}</td>
-                <td>{user.coins || 0}</td>
-                <td className="coins-th">
-                  <input
-                    type="checkbox"
-                    checked={!!selected.find((u) => u.id === user.id)}
-                    readOnly
-                  />
-                </td>
-              </tr>
-            ))}
+            {filteredUsers.map((user) => {
+              const isSelected = !!selected.find((u) => u.id === user.id);
+              return (
+                <tr
+                  key={user.id}
+                  onClick={() => toggleSelect(user)}
+                  className={isSelected ? "active" : ""}
+                >
+                  <td>{user.name}</td>
+                  <td className="coins-th">{user.customId || "-"}</td>
+                  <td>{user.coins || 0}</td>
+                  <td className="coins-th">
+                    <input type="checkbox" checked={isSelected} readOnly />
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

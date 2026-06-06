@@ -43,6 +43,7 @@ function Recieve() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchUsers();
 
     // ✅ مهم جدًا يمنع أي NFC listener قديم
@@ -170,10 +171,14 @@ function Recieve() {
     <div className="send-container">
       <Navbar />
 
+      <div className="send-header">
+        <h2 className="send-title">سحب</h2>
+      </div>
+
       <div className="search-wrapper">
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
-      
+
       <ToastContainer position="top-right" autoClose={2500} />
 
       {/* Controls */}
@@ -185,12 +190,7 @@ function Recieve() {
           onChange={(e) => setCoins(e.target.value)}
         />
 
-        <button
-          onClick={handleManualWithdraw}
-          style={{ background: "#d9534f" }}
-        >
-          سحب نسر جنية
-        </button>
+        <button onClick={handleManualWithdraw}>سحب نسر جنية</button>
 
         <button onClick={startNFCScan}>Scan NFC</button>
       </div>

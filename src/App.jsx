@@ -40,7 +40,7 @@ function App() {
         <Route path="/month-attendance" element={<MonthAttendance />} />
         <Route path="/scan" element={<ScanAttendance />} />
         <Route path="/search-by-date" element={<SearchByDate />} />
-        <Route path="/profile/:customId" element={<Profile />} />
+        {/* <Route path="/profile/:customId" element={<Profile />} /> */}
         <Route path="/transfer" element={<Transfer />} />
         <Route path="/transfers" element={<Transfers />} />
         <Route path="/send-coins" element={<Send />} />

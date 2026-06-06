@@ -1,105 +1,261 @@
-:root{
-  --primary:#6366f1;
-  --primary-light:#818cf8;
-  --primary-dark:#4f46e5;
-  --text:#e5e7eb;
-  --muted:#9ca3af;
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap');
+
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root {
+  --today-deep:           #04060a;
+  --today-card-bg:        rgba(14, 22, 38, 0.85);
+  --today-gold:           #c9a84c;
+  --today-gold-light:     #e8c96f;
+  --today-gold-glow:      rgba(201, 168, 76, 0.28);
+  --today-accent-green:   #4ade80;
+  --today-text-primary:   #f5f0e8;
+  --today-text-secondary: rgba(245, 240, 232, 0.45);
+  --today-border:         rgba(201, 168, 76, 0.1);
+  --today-border-hover:   rgba(201, 168, 76, 0.32);
+  --today-radius-lg:      20px;
+  --today-radius-md:      14px;
 }
 
-/* Container */
-
-.attendance-container {
-  padding: 30px 20px;
-  padding-top: 90px; /* مهم بسبب الـNavbar الثابت */
-
-  font-family: 'Cairo', sans-serif;
+/* ============================================================
+   PAGE CONTAINER
+   ============================================================ */
+.today-attendance-container {
   min-height: 100vh;
+  padding: 100px 20px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  font-family: 'Cairo', sans-serif;
+  color: var(--today-text-primary);
   direction: rtl;
-  text-align: center;
 
-  background: radial-gradient(circle at top,
-  #1f2937,
-  #111827,
-  #020617);
-
-  color: #e5e7eb;
+  background:
+    radial-gradient(ellipse 55% 35% at 10% 8%,  rgba(201, 168, 76, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 40% at 90% 95%, rgba(99, 102, 241, 0.06) 0%, transparent 60%),
+    var(--today-deep);
 }
-/* Title */
 
-.attendance-title {
-  margin-bottom: 25px;
-  font-size: 26px;
+/* subtle dot grid */
+.today-attendance-container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================================
+   TITLE
+   ============================================================ */
+.today-attendance-title {
+  font-family: 'Amiri', serif;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
   font-weight: 700;
-
-  background: linear-gradient(90deg,#818cf8,#a78bfa);
+  background: linear-gradient(135deg, var(--today-gold-light) 0%, var(--today-gold) 45%, #fff8e1 70%, var(--today-gold-light) 100%);
   -webkit-background-clip: text;
-  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: today-shimmer 5s linear infinite, today-fade-down 0.6s ease-out both;
+  margin-bottom: 24px;
+  line-height: 1.2;
+  position: relative;
+  z-index: 2;
 }
 
-/* Table */
+.today-attendance-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--today-gold), transparent);
+  border-radius: 2px;
+  margin-top: 8px;
+  opacity: 0.6;
+}
 
-.attendance-table {
+/* ============================================================
+   TABLE WRAPPER
+   ============================================================ */
+.today-attendance-table-wrapper {
+  position: relative;
+  z-index: 2;
+  overflow-x: auto;
+  border-radius: var(--today-radius-lg);
+  border: 1px solid var(--today-border);
+  background: var(--today-card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: today-fade-up 0.7s ease-out 0.15s both;
+}
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+.today-attendance-table {
   width: 100%;
   border-collapse: collapse;
-
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-
-  border-radius: 12px;
-  overflow: hidden;
-
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.9rem;
 }
 
-/* Table header */
-
-.attendance-table thead {
-  background: linear-gradient(90deg,#6366f1,#8b5cf6);
+/* ── Head ── */
+.today-attendance-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 3;
 }
 
-.attendance-table th {
-  padding: 14px 15px;
-  color: white;
-  font-weight: 600;
-  font-size: 15px;
+.today-attendance-table thead tr {
+  background: rgba(201, 168, 76, 0.07);
+  border-bottom: 1px solid var(--today-border-hover);
 }
 
-/* Table cells */
-
-.attendance-table td {
-  padding: 13px 15px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  color: #d1d5db;
+.today-attendance-table th {
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.6px;
+  color: var(--today-gold-light);
+  text-align: right;
+  white-space: nowrap;
 }
 
-/* Zebra stripes */
-
-.attendance-table tbody tr:nth-child(even) {
-  background: rgba(255,255,255,0.03);
-}
-
-/* Hover */
-
-.attendance-table tbody tr:hover {
-  background: rgba(99,102,241,0.2);
-  transition: 0.25s;
-}
-
-/* No data */
-
-.no-data {
+.today-attendance-table th:first-child {
   text-align: center;
-  padding: 20px;
-  font-style: italic;
-  color: var(--muted);
+  width: 60px;
 }
 
-/* Responsive */
+/* ── Body rows ── */
+.today-attendance-table tbody tr {
+  border-bottom: 1px solid var(--today-border);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
 
-@media (max-width: 600px) {
-  .attendance-table th,
-  .attendance-table td {
-    padding: 10px;
-    font-size: 14px;
-  }
+.today-attendance-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.today-attendance-table tbody tr:hover {
+  background: rgba(201, 168, 76, 0.06);
+}
+
+/* ── Cells ── */
+.today-attendance-table td {
+  padding: 13px 18px;
+  color: var(--today-text-primary);
+  text-align: right;
+  vertical-align: middle;
+  font-size: 0.88rem;
+}
+
+/* index column */
+.today-attendance-table td:first-child {
+  text-align: center;
+  font-weight: 700;
+  color: var(--today-gold);
+  font-size: 0.82rem;
+}
+
+/* date column */
+.today-attendance-table td:last-child {
+  color: var(--today-text-secondary);
+  font-size: 0.83rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.3px;
+}
+
+/* ============================================================
+   EMPTY / NO-DATA ROW
+   ============================================================ */
+.today-no-data {
+  text-align: center !important;
+  padding: 50px 20px !important;
+  color: var(--today-text-secondary) !important;
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   LOADING STATE
+   ============================================================ */
+.today-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 16px;
+  font-family: 'Cairo', sans-serif;
+  color: var(--today-text-secondary);
+  background: var(--today-deep);
+  font-size: 0.9rem;
+}
+
+.today-loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--today-border);
+  border-top-color: var(--today-gold);
+  border-radius: 50%;
+  animation: today-spin 0.8s linear infinite;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes today-fade-down {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes today-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes today-shimmer {
+  from { background-position: 0% 50%; }
+  to   { background-position: 200% 50%; }
+}
+
+@keyframes today-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* ── Large desktop ≥ 1100px ── */
+@media (min-width: 1100px) {
+  .today-attendance-container { padding: 110px 40px 60px; }
+}
+
+/* ── Tablet 501–768px ── */
+@media (max-width: 768px) and (min-width: 501px) {
+  .today-attendance-container { padding: 95px 16px 50px; }
+  .today-attendance-table th,
+  .today-attendance-table td { padding: 11px 12px; font-size: 0.83rem; }
+}
+
+/* ── Mobile ≤ 500px ── */
+@media (max-width: 500px) {
+  .today-attendance-container { padding: 90px 12px 44px; }
+  .today-attendance-title { font-size: 1.7rem; }
+  .today-attendance-table th,
+  .today-attendance-table td { padding: 10px 10px; font-size: 0.8rem; }
+}
+
+/* ── Very small phones ≤ 360px ── */
+@media (max-width: 360px) {
+  .today-attendance-container { padding: 85px 10px 40px; }
+  .today-attendance-title { font-size: 1.45rem; }
+  .today-attendance-table th,
+  .today-attendance-table td { padding: 8px 8px; font-size: 0.76rem; }
 }

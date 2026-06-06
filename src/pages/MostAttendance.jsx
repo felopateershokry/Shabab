@@ -125,85 +125,89 @@ function MostAttendance() {
     <>
       <Navbar />
 
-      <div className="attendance-container">
-        <h2 className="attendance-title">الترتيب حسب عدد الحضور</h2>
+      <div className="most-attendance-container">
+        <h2 className="most-attendance-title">الترتيب حسب عدد الحضور</h2>
 
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-        <table className="attendance-table">
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>الاسم</th>
-              <th className="disable1">عدد الحضور</th>
-              <th className="disable1">اخر حضور</th>
-              <th>حضور اليوم</th>
-            </tr>
-          </thead>
+        <div className="most-attendance-table-wrapper">
+          <table className="most-attendance-table">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>الاسم</th>
+                <th className="most-disable-mobile">عدد الحضور</th>
+                <th className="most-disable-mobile">اخر حضور</th>
+                <th>حضور اليوم</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {filteredStudents.map((student) => {
-              const visitedToday = student.visits?.some(
-                (v) => getDateString(v) === today,
-              );
+            <tbody>
+              {filteredStudents.map((student) => {
+                const visitedToday = student.visits?.some(
+                  (v) => getDateString(v) === today,
+                );
 
-              const lastVisitValue =
-                student.visits?.[student.visits.length - 1];
+                const lastVisitValue =
+                  student.visits?.[student.visits.length - 1];
 
-              const lastVisit = lastVisitValue
-                ? getDateString(lastVisitValue)
-                : null;
+                const lastVisit = lastVisitValue
+                  ? getDateString(lastVisitValue)
+                  : null;
 
-              return (
-                <tr
-                  key={student.id}
-                  onClick={() => navigate(`/single-makhdom/${student.id}`)}
-                >
-                  <td>{student.customId}</td>
+                return (
+                  <tr
+                    key={student.id}
+                    onClick={() => navigate(`/single-makhdom/${student.id}`)}
+                  >
+                    <td>{student.customId}</td>
 
-                  <td>{student.name}</td>
+                    <td>{student.name}</td>
 
-                  <td className="disable1">{student.visitCount}</td>
+                    <td className="most-disable-mobile most-visit-count-cell">
+                      {student.visitCount}
+                    </td>
 
-                  <td className="disable1">
-                    {lastVisit ? lastVisit : "لم يحضر"}
-                  </td>
+                    <td className="most-disable-mobile most-last-visit-cell">
+                      {lastVisit ? lastVisit : "لم يحضر"}
+                    </td>
 
-                  <td>
-                    <div
-                      className="visit-actions"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {!visitedToday ? (
-                        <button
-                          onClick={(e) => addVisit(e, student)}
-                          className="visit-btn"
-                        >
-                          حضور
-                        </button>
-                      ) : (
-                        <button
-                          onClick={(e) => undoVisit(e, student)}
-                          className="undo-btn"
-                        >
-                          تراجع
-                        </button>
-                      )}
-                    </div>
+                    <td>
+                      <div
+                        className="most-visit-actions"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {!visitedToday ? (
+                          <button
+                            onClick={(e) => addVisit(e, student)}
+                            className="most-visit-btn"
+                          >
+                            حضور
+                          </button>
+                        ) : (
+                          <button
+                            onClick={(e) => undoVisit(e, student)}
+                            className="most-undo-btn"
+                          >
+                            تراجع
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+
+              {filteredStudents.length === 0 && (
+                <tr>
+                  <td colSpan="5" className="most-no-data">
+                    لا يوجد نتائج
                   </td>
                 </tr>
-              );
-            })}
-
-            {filteredStudents.length === 0 && (
-              <tr>
-                <td colSpan="5" className="no-data">
-                  لا يوجد نتائج
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

@@ -1,245 +1,358 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root {
+  --send-deep:           #04060a;
+  --send-card-bg:        rgba(14, 22, 38, 0.85);
+  --send-gold:           #c9a84c;
+  --send-gold-light:     #e8c96f;
+  --send-gold-glow:      rgba(201, 168, 76, 0.28);
+  --send-accent-green:   #4ade80;
+  --send-accent-red:     #f87171;
+  --send-text-primary:   #f5f0e8;
+  --send-text-secondary: rgba(245, 240, 232, 0.45);
+  --send-border:         rgba(201, 168, 76, 0.1);
+  --send-border-hover:   rgba(201, 168, 76, 0.32);
+  --send-radius-lg:      20px;
+  --send-radius-md:      14px;
+}
+
+/* ============================================================
+   PAGE CONTAINER
+   ============================================================ */
 .send-container {
   min-height: 100vh;
-  width: 100%;
-  box-sizing: border-box;
+  padding: 100px 20px 60px;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  font-family: 'Cairo', sans-serif;
+  color: var(--send-text-primary);
+  direction: rtl;
 
-  color: white;
-
-  padding: 110px 20px 25px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-
-  background: radial-gradient(circle at top, #111827, #0b1220);
+  background:
+    radial-gradient(ellipse 55% 35% at 10% 8%,  rgba(201, 168, 76, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 40% at 90% 95%, rgba(99, 102, 241, 0.06) 0%, transparent 60%),
+    var(--send-deep);
 }
 
-/* ================= SEARCH ================= */
+/* dot grid */
+.send-container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
 
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+.send-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  animation: send-fade-down 0.6s ease-out both;
+}
+
+.send-title {
+  font-family: 'Amiri', serif;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--send-gold-light) 0%, var(--send-gold) 45%, #fff8e1 70%, var(--send-gold-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: send-shimmer 5s linear infinite;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.send-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--send-gold), transparent);
+  border-radius: 2px;
+  margin-top: 8px;
+  opacity: 0.6;
+}
+
+.send-selected-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--send-accent-green);
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  animation: send-fade-up 0.3s ease-out both;
+}
+
+/* ============================================================
+   SEARCH WRAPPER
+   ============================================================ */
 .search-wrapper {
-  width: 100%;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 20px;
 }
 
-/* ================= COINS BOX ================= */
-
+/* ============================================================
+   COINS BOX (controls row)
+   ============================================================ */
 .coins-box {
+  position: relative;
+  z-index: 2;
   display: flex;
-  gap: 12px;
   flex-wrap: wrap;
   align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 18px 20px;
+  background: var(--send-card-bg);
+  border: 1px solid var(--send-border);
+  border-radius: var(--send-radius-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.coins-box input {
+.coins-box input[type="number"] {
   flex: 1;
-  min-width: 220px;
-
-  padding: 14px;
-
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-
-  outline: none;
-
-  background: rgba(255, 255, 255, 0.06);
-  color: white;
-
-  font-size: 15px;
-
-  backdrop-filter: blur(10px);
-
-  transition: 0.2s;
-}
-
-.coins-box input:focus {
-  border-color: #22c55e;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
-}
-
-.coins-box button {
-  padding: 14px 18px;
-
-  border: none;
-  border-radius: 14px;
-
-  cursor: pointer;
-
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: white;
-
-  font-weight: 600;
-  font-size: 14px;
-
   min-width: 160px;
+  padding: 10px 16px;
+  border-radius: 50px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.87rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--send-border);
+  color: var(--send-text-primary);
+  outline: none;
+  direction: rtl;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  appearance: none;
+  -moz-appearance: textfield;
+}
 
-  transition: 0.25s ease;
+.coins-box input[type="number"]::-webkit-outer-spin-button,
+.coins-box input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.coins-box input[type="number"]::placeholder {
+  color: var(--send-text-secondary);
+  font-weight: 400;
+}
+
+.coins-box input[type="number"]:focus {
+  border-color: var(--send-gold);
+  background: rgba(201, 168, 76, 0.05);
+  box-shadow: 0 0 0 3px var(--send-gold-glow);
+}
+
+/* shared button base */
+.coins-box button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid var(--send-border-hover);
+  background: rgba(201, 168, 76, 0.08);
+  color: var(--send-gold-light);
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
 }
 
 .coins-box button:hover {
+  background: rgba(201, 168, 76, 0.18);
+  border-color: var(--send-gold);
+  color: var(--send-gold);
   transform: translateY(-2px);
-  filter: brightness(1.1);
+  box-shadow: 0 6px 18px var(--send-gold-glow);
 }
 
 .coins-box button:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
+  box-shadow: none;
 }
 
-/* ================= TABLE CONTAINER ================= */
+/* withdraw button — red override (inline style on Recieve.jsx overrides this, kept as fallback) */
+.coins-box button.btn-withdraw {
+  background: rgba(248, 113, 113, 0.08);
+  border-color: rgba(248, 113, 113, 0.3);
+  color: var(--send-accent-red);
+}
 
+.coins-box button.btn-withdraw:hover {
+  background: rgba(248, 113, 113, 0.16);
+  border-color: rgba(248, 113, 113, 0.6);
+  color: var(--send-accent-red);
+  box-shadow: 0 6px 18px rgba(248, 113, 113, 0.2);
+}
+
+/* clear selection button */
+.coins-box button.btn-clear {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(245, 240, 232, 0.15);
+  color: var(--send-text-secondary);
+}
+
+.coins-box button.btn-clear:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(245, 240, 232, 0.3);
+  color: var(--send-text-primary);
+  box-shadow: none;
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   TABLE CONTAINER
+   ============================================================ */
 .table-container {
-  width: 100%;
-  max-height: 70vh;
-
+  position: relative;
+  z-index: 2;
   overflow-x: auto;
-  overflow-y: auto;
-
-  border-radius: 18px;
+  border-radius: var(--send-radius-lg);
+  border: 1px solid var(--send-border);
+  background: var(--send-card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: send-fade-up 0.7s ease-out 0.1s both;
 }
-
-/* scrollbar */
-.table-container::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-}
-
-/* ================= TABLE ================= */
 
 .table-container table {
   width: 100%;
-  min-width: 650px;
-
   border-collapse: collapse;
-
-  table-layout: fixed; /* ⭐ FIX ALIGNMENT */
-
-  border-radius: 18px;
-  overflow: hidden;
-
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(14px);
-
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.88rem;
 }
 
-/* ================= HEADER (FIXED ABOVE ROWS) ================= */
-
-.table-container thead {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-
-  background: rgba(15, 20, 35, 0.95);
-  backdrop-filter: blur(12px);
+/* head */
+.table-container thead tr {
+  background: rgba(201, 168, 76, 0.07);
+  border-bottom: 1px solid var(--send-border-hover);
 }
 
-.table-container thead th {
-  padding: 16px;
-
-  font-size: 13px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-
-  color: rgba(255, 255, 255, 0.85);
-
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-
-  text-align: center;
-}
-
-/* ================= TABLE CELLS ================= */
-
-.table-container td {
-  padding: 14px;
-
-  text-align: center;
-  vertical-align: middle;
-
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.9);
-
-  overflow: hidden;
-  text-overflow: ellipsis;
+.table-container th {
+  padding: 13px 18px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.6px;
+  color: var(--send-gold-light);
+  text-align: right;
   white-space: nowrap;
 }
 
-/* ================= COLUMN FIX (IMPORTANT FOR YOUR IMAGE ISSUE) ================= */
-
-/* الاسم */
-.table-container thead th:nth-child(1),
-.table-container td:nth-child(1) {
-  width: 35%;
-  text-align: right;
-}
-
-/* ID */
-.table-container thead th:nth-child(2),
-.table-container td:nth-child(2) {
-  width: 20%;
-}
-
-/* نسر جنسه / coins */
-.table-container thead th:nth-child(3),
-.table-container td:nth-child(3) {
-  width: 25%;
-}
-
-/* checkbox */
-.table-container thead th:nth-child(4),
-.table-container td:nth-child(4) {
-  width: 20%;
-}
-
-/* checkbox styling */
-.table-container td input[type="checkbox"] {
-  transform: scale(1.2);
-  cursor: pointer;
-}
-
-/* ================= ROWS ================= */
-
+/* body rows */
 .table-container tbody tr {
+  border-bottom: 1px solid var(--send-border);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
+}
+
+.table-container tbody tr:last-child {
+  border-bottom: none;
 }
 
 .table-container tbody tr:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(201, 168, 76, 0.05);
 }
 
+/* selected row */
 .table-container tbody tr.active {
-  background: rgba(34, 197, 94, 0.18);
-  box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.3);
+  background: rgba(201, 168, 76, 0.1);
+  border-color: rgba(201, 168, 76, 0.25);
 }
 
-/* ================= MOBILE ================= */
+.table-container tbody tr.active td {
+  color: var(--send-gold-light);
+}
 
-@media (max-width: 768px) {
-  .send-container {
-    padding: 100px 14px 20px;
-  }
+/* cells */
+.table-container td {
+  padding: 12px 18px;
+  color: var(--send-text-primary);
+  text-align: right;
+  vertical-align: middle;
+}
 
-  .coins-box {
-    flex-direction: column;
-    align-items: stretch;
-  }
+/* hide on mobile */
+.table-container .coins-th {
+  /* hidden via media query below */
+}
 
-  .coins-box button {
-    width: 100%;
-  }
+/* checkbox */
+.table-container input[type="checkbox"] {
+  accent-color: var(--send-gold);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
 
-  .table-container table {
-    min-width: 100%;
-  }
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes send-fade-down {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-  .table-container tbody th, .table-container tbody td {
-    font-size: 12px;
-    padding: 10px;
-  }
-  .coins-th {
-    display: none; /* إخفاء عمود ID و Coins في الموبايل */
-  }
+@keyframes send-shimmer {
+  from { background-position: 0% 50%; }
+  to   { background-position: 200% 50%; }
+}
+
+@keyframes send-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (min-width: 1100px) {
+  .send-container { padding: 110px 40px 60px; }
+}
+
+@media (max-width: 768px) and (min-width: 501px) {
+  .send-container { padding: 95px 16px 50px; }
+  .coins-th { display: none; }
+  .table-container th,
+  .table-container td { padding: 11px 12px; font-size: 0.83rem; }
+}
+
+@media (max-width: 500px) {
+  .send-container { padding: 90px 12px 44px; }
+  .coins-th { display: none; }
+  .coins-box { padding: 14px; gap: 8px; }
+  .coins-box input[type="number"] { min-width: 100%; }
+  .coins-box button { flex: 1; justify-content: center; font-size: 0.8rem; padding: 9px 14px; }
+  .table-container th,
+  .table-container td { padding: 10px 10px; font-size: 0.8rem; }
+}
+
+@media (max-width: 360px) {
+  .send-container { padding: 85px 10px 40px; }
+  .coins-box button { font-size: 0.74rem; padding: 8px 10px; }
+  .table-container th,
+  .table-container td { padding: 8px 8px; font-size: 0.76rem; }
 }
